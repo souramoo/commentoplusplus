@@ -6,6 +6,15 @@
   "website": "https://commento.io",
   "keywords": ["goalang", "commento", "privacy"],
   "buildpacks": [{"url": "heroku/go"}],
+  "addons": [
+    {
+      "plan": "heroku-postgresql",
+      "as": "COMMENTO_POSTGRES"
+    },
+    {
+      "plan": "papertrail:choklad"
+    }
+  ],
   "env": {
     "COMMENTO_FORBID_NEW_OWNERS": {
       "description": "Used to disable new dashboard registrations. Useful if you are the only person using Commento on your server. Does not impact the creation of accounts for your readers. Defaults to false.",
