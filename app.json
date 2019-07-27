@@ -8,8 +8,7 @@
   "stack": "container",
   "addons": [
     {
-      "plan": "heroku-postgresql",
-      "as": "COMMENTO_POSTGRES"
+      "plan": "heroku-postgresql"
     },
     {
       "plan": "papertrail:choklad"
