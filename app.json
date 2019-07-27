@@ -14,6 +14,7 @@
       "plan": "papertrail:choklad"
     }
   ],
+  "success_url": "/login",
   "env": {
     "COMMENTO_FORBID_NEW_OWNERS": {
       "description": "Used to disable new dashboard registrations. Useful if you are the only person using Commento on your server. Does not impact the creation of accounts for your readers. Defaults to false.",
