@@ -264,7 +264,9 @@
     }
     get(cdn + "/i18n/" + chosen + ".json", function(resp) {
       for (var key in resp) {
-        strings[key] = resp[key];
+        if (!(key in strings)) {
+          strings[key] = resp[key];
+        }
       }
       call(callback);
     });
