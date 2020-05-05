@@ -5,7 +5,7 @@ end_of_line: lf
 [*.go]
 indent_style = tab
 
-[*.js]
+[*.{js,json}]
 indent_style = space
 indent_size = 2
 

@@ -92,6 +92,8 @@
   var sortPolicy = "score-desc";
   var selfHex = undefined;
   var mobileView = null;
+  var locale = navigator && navigator.language;
+  var strings = global.strings || {};
 
 
   function $(id) {
@@ -237,6 +239,38 @@
   }
 
 
+  function i18n(key) {
+    return key in strings ? strings[key] : key;
+  }
+
+
+  function i18nLoad(callback) {
+    if (!locale || !LOCALES) {
+      call(callback);
+      return;
+    }
+    var chosen;
+    for (var i = 0; i < LOCALES.length; i++) {
+      if (locale === LOCALES[i]) {
+        chosen = locale;
+        break;
+      } else if (!chosen && locale.substring(0, 2) === LOCALES[i]) {
+        chosen = LOCALES[i];
+      }
+    }
+    if (!chosen) {
+      call(callback);
+      return;
+    }
+    get(cdn + "/i18n/" + chosen + ".json", function(resp) {
+      for (var key in resp) {
+        strings[key] = resp[key];
+      }
+      call(callback);
+    });
+  }
+
+
   function commenterTokenGet() {
     var commenterToken = cookieGet("commentoCommenterToken");
     if (commenterToken === undefined) {
@@ -294,9 +328,9 @@
     classAdd(logoutButton, "profile-button");
 
     name.innerText = commenter.name;
-    notificationSettingsButton.innerText = "Notification Settings";
-    profileEditButton.innerText = "Edit Profile";
-    logoutButton.innerText = "Logout";
+    notificationSettingsButton.innerText = i18n("Notification Settings");
+    profileEditButton.innerText = i18n("Edit Profile");
+    logoutButton.innerText = i18n("Logout");
 
     onclick(logoutButton, global.logout);
     onclick(notificationSettingsButton, notificationSettings, email.unsubscribeSecretHex);
@@ -494,18 +528,18 @@
 
     classAdd(markdownHelp, "markdown-help");
 
-    boldLeft.innerHTML = "<b>bold</b>";
-    boldRight.innerHTML = "surround text with <pre>**two asterisks**</pre>";
-    italicsLeft.innerHTML = "<i>italics</i>";
-    italicsRight.innerHTML = "surround text with <pre>*asterisks*</pre>";
-    codeLeft.innerHTML = "<pre>code</pre>";
-    codeRight.innerHTML = "surround text with <pre>`backticks`</pre>";
-    strikethroughLeft.innerHTML = "<strike>strikethrough</strike>";
-    strikethroughRight.innerHTML = "surround text with <pre>~~two tilde characters~~</pre>";
-    hyperlinkLeft.innerHTML = "<a href=\"https://example.com\">hyperlink</a>";
-    hyperlinkRight.innerHTML = "<pre>[hyperlink](https://example.com)</pre> or just a bare URL";
-    quoteLeft.innerHTML = "<blockquote>quote</blockquote>";
-    quoteRight.innerHTML = "prefix with <pre>&gt;</pre>";
+    boldLeft.innerHTML = i18n("<b>bold</b>");
+    boldRight.innerHTML = i18n("surround text with <pre>**two asterisks**</pre>");
+    italicsLeft.innerHTML = i18n("<i>italics</i>");
+    italicsRight.innerHTML = i18n("surround text with <pre>*asterisks*</pre>");
+    codeLeft.innerHTML = i18n("<pre>code</pre>");
+    codeRight.innerHTML = i18n("surround text with <pre>`backticks`</pre>");
+    strikethroughLeft.innerHTML = i18n("<strike>strikethrough</strike>");
+    strikethroughRight.innerHTML = i18n("surround text with <pre>~~two tilde characters~~</pre>");
+    hyperlinkLeft.innerHTML = i18n("<a href=\"https://example.com\">hyperlink</a>");
+    hyperlinkRight.innerHTML = i18n("<pre>[hyperlink](https://example.com)</pre> or just a bare URL");
+    quoteLeft.innerHTML = i18n("<blockquote>quote</blockquote>");
+    quoteRight.innerHTML = i18n("prefix with <pre>&gt;</pre>");
 
     markdownButton = removeAllEventListeners(markdownButton);
     onclick(markdownButton, markdownHelpHide, id);
@@ -568,17 +602,17 @@
     classAdd(markdownButton, "markdown-button");
     classAdd(textareaSuperContainer, "button-margin");
 
-    attrSet(textarea, "placeholder", "Add a comment");
+    attrSet(textarea, "placeholder", i18n("Add a comment"));
     attrSet(anonymousCheckbox, "type", "checkbox");
     attrSet(anonymousCheckboxLabel, "for", ID_ANONYMOUS_CHECKBOX + id);
 
-    anonymousCheckboxLabel.innerText = "Comment anonymously";
+    anonymousCheckboxLabel.innerText = i18n("Comment anonymously");
     if (edit === true) {
-      submitButton.innerText = "Save Changes";
+      submitButton.innerText = i18n("Save Changes");
     } else {
-      submitButton.innerText = "Add Comment";
+      submitButton.innerText = i18n("Add Comment");
     }
-    markdownButton.innerHTML = "<b>M &#8595;</b> &nbsp; Markdown";
+    markdownButton.innerHTML = i18n("<b>M &#8595;</b> &nbsp; Markdown");
 
     if (anonymousOnly) {
       anonymousCheckbox.checked = true;
@@ -608,9 +642,9 @@
 
 
   var sortPolicyNames = {
-    "score-desc": "Upvotes",
-    "creationdate-desc": "Newest",
-    "creationdate-asc": "Oldest",
+    "score-desc": i18n("Upvotes"),
+    "creationdate-desc": i18n("Newest"),
+    "creationdate-asc": i18n("Oldest"),
   };
 
 
@@ -669,7 +703,7 @@
     classAdd(loginText, "login-text");
     classAdd(commentsArea, "comments");
 
-    loginText.innerText = "Login";
+    loginText.innerText = i18n("Login");
     commentsArea.innerHTML = "";
 
     onclick(loginText, global.loginBoxShow, null);
@@ -688,7 +722,7 @@
 
     if (isLocked || isFrozen) {
       if (isAuthenticated || chosenAnonymous) {
-        append(mainArea, messageCreate("This thread is locked. You cannot add new comments."));
+        append(mainArea, messageCreate(i18n("This thread is locked. You cannot add new comments.")));
         remove($(ID_LOGIN));
       } else {
         append(mainArea, login);
@@ -759,9 +793,9 @@
 
       var message = "";
       if (resp.state === "unapproved") {
-        message = "Your comment is under moderation.";
+        message = i18n("Your comment is under moderation.");
       } else if (resp.state === "flagged") {
-        message = "Your comment was flagged as spam and is under moderation.";
+        message = i18n("Your comment was flagged as spam and is under moderation.");
       }
 
       if (message !== "") {
@@ -799,7 +833,7 @@
         classAdd(replyButton, "option-reply");
         classRemove(replyButton, "option-cancel");
 
-        replyButton.title = "Reply to this comment";
+        replyButton.title = i18n("Reply to this comment");
 
         onclick(replyButton, global.replyShow, id)
       } else {
@@ -855,26 +889,26 @@
     if (elapsed < msJustNow) {
       return "just now";
     } else if (elapsed < msMinutesAgo) {
-      return Math.round(elapsed / msPerSecond) + " seconds ago";
+      return Math.round(elapsed / msPerSecond) + i18n(" seconds ago");
     } else if (elapsed < msHoursAgo) {
-      return Math.round(elapsed / msPerMinute) + " minutes ago";
-    } else if (elapsed < msDaysAgo ) {
-      return Math.round(elapsed / msPerHour ) + " hours ago";
+      return Math.round(elapsed / msPerMinute) + i18n(" minutes ago");
+    } else if (elapsed < msDaysAgo) {
+      return Math.round(elapsed / msPerHour) + i18n(" hours ago");
     } else if (elapsed < msMonthsAgo) {
-      return Math.round(elapsed / msPerDay) + " days ago";
+      return Math.round(elapsed / msPerDay) + i18n(" days ago");
     } else if (elapsed < msYearsAgo) {
-      return Math.round(elapsed / msPerMonth) + " months ago";
+      return Math.round(elapsed / msPerMonth) + i18n(" months ago");
     } else {
-      return Math.round(elapsed / msPerYear ) + " years ago";
+      return Math.round(elapsed / msPerYear) + i18n(" years ago");
     }
   }
 
 
   function scorify(score) {
     if (score !== 1) {
-      return score + " points";
+      return score + i18n(" points");
     } else {
-      return score + " point";
+      return score + i18n(" point");
     }
   }
 
@@ -968,27 +1002,27 @@
       contents.id = ID_CONTENTS + comment.commentHex;
       name.id = ID_NAME + comment.commentHex;
 
-      collapse.title = "Collapse children";
-      upvote.title = "Upvote";
-      downvote.title = "Downvote";
-      edit.title = "Edit";
-      reply.title = "Reply";
-      approve.title = "Approve";
-      remove.title = "Remove";
+      collapse.title = i18n("Collapse children");
+      upvote.title = i18n("Upvote");
+      downvote.title = i18n("Downvote");
+      edit.title = i18n("Edit");
+      reply.title = i18n("Reply");
+      approve.title = i18n("Approve");
+      remove.title = i18n("Remove");
       if (stickyCommentHex === comment.commentHex) {
         if (isModerator) {
-          sticky.title = "Unsticky";
+          sticky.title = i18n("Unsticky");
         } else {
-          sticky.title = "This comment has been stickied";
+          sticky.title = i18n("This comment has been stickied");
         }
       } else {
-        sticky.title = "Sticky";
+        sticky.title = i18n("Sticky");
       }
-      timeago.title = comment.creationDate.toString();
+      timeago.title = comment.creationDate.toLocaleDateString(locale);
 
       card.style["borderLeft"] = "2px solid " + color;
       if (comment.deleted) {
-        name.innerText = "[deleted]";
+        name.innerText = i18n("[deleted]");
       } else {
         name.innerText = commenter.name;
       }
@@ -1185,7 +1219,7 @@
 
 
   global.commentDelete = function(commentHex) {
-    if (!confirm("Are you sure you want to delete this comment?")) {
+    if (!confirm(i18n("Are you sure you want to delete this comment?"))) {
       return;
     }
 
@@ -1203,7 +1237,7 @@
       }
 
       var text = $(ID_TEXT + commentHex);
-      text.innerText = "[deleted]";
+      text.innerText = i18n("[deleted]");
     });
   }
 
@@ -1319,16 +1353,16 @@
       classAdd(editButton, "option-edit");
       classRemove(editButton, "option-cancel");
 
-      editButton.title = "Edit comment";
+      editButton.title = i18n("Edit comment");
 
       editButton = removeAllEventListeners(editButton);
       onclick(editButton, global.editShow, id)
 
       var message = "";
       if (resp.state === "unapproved") {
-        message = "Your comment is under moderation.";
+        message = i18n("Your comment is under moderation.");
       } else if (resp.state === "flagged") {
-        message = "Your comment was flagged as spam and is under moderation.";
+        message = i18n("Your comment was flagged as spam and is under moderation.");
       }
 
       if (message !== "") {
@@ -1355,7 +1389,7 @@
     classRemove(editButton, "option-edit");
     classAdd(editButton, "option-cancel");
 
-    editButton.title = "Cancel edit";
+    editButton.title = i18n("Cancel edit");
 
     editButton = removeAllEventListeners(editButton);
     onclick(editButton, global.editCollapse, id);
@@ -1373,7 +1407,7 @@
     classAdd(editButton, "option-edit");
     classRemove(editButton, "option-cancel");
 
-    editButton.title = "Edit comment";
+    editButton.title = i18n("Edit comment");
 
     editButton = removeAllEventListeners(editButton);
     onclick(editButton, global.editShow, id)
@@ -1394,7 +1428,7 @@
     classRemove(replyButton, "option-reply");
     classAdd(replyButton, "option-cancel");
 
-    replyButton.title = "Cancel reply";
+    replyButton.title = i18n("Cancel reply");
 
     replyButton = removeAllEventListeners(replyButton);
     onclick(replyButton, global.replyCollapse, id);
@@ -1411,7 +1445,7 @@
     classAdd(replyButton, "option-reply");
     classRemove(replyButton, "option-cancel");
 
-    replyButton.title = "Reply to this comment";
+    replyButton.title = i18n("Reply to this comment");
 
     replyButton = removeAllEventListeners(replyButton);
     onclick(replyButton, global.replyShow, id)
@@ -1429,7 +1463,7 @@
     classRemove(button, "option-collapse");
     classAdd(button, "option-uncollapse");
 
-    button.title = "Expand children";
+    button.title = i18n("Expand children");
 
     button = removeAllEventListeners(button);
     onclick(button, global.commentUncollapse, id);
@@ -1447,7 +1481,7 @@
     classRemove(button, "option-uncollapse");
     classAdd(button, "option-collapse");
 
-    button.title = "Collapse children";
+    button.title = i18n("Collapse children");
 
     button = removeAllEventListeners(button);
     onclick(button, global.commentCollapse, id);
@@ -1648,12 +1682,12 @@
     classAdd(close, "login-box-close");
     classAdd(root, "root-min-height");
 
-    forgotLink.innerText = "Forgot your password?";
-    loginLink.innerText = "Don't have an account? Sign up.";
-    emailSubtitle.innerText = "Login with your email address";
-    emailButton.innerText = "Continue";
-    oauthSubtitle.innerText = "Proceed with social login";
-    ssoSubtitle.innerText = "Proceed with " + parent.location.host + " authentication";
+    forgotLink.innerText = i18n("Forgot your password?");
+    loginLink.innerText = i18n("Don't have an account? Sign up.");
+    emailSubtitle.innerText = i18n("Login with your email address");
+    emailButton.innerText = i18n("Continue");
+    oauthSubtitle.innerText = i18n("Proceed with social login");
+    ssoSubtitle.innerText = i18n("Proceed with ") + parent.location.host + i18n(" authentication");
 
     onclick(emailButton, global.passwordAsk, id);
     onclick(forgotLink, global.forgotPassword, id);
@@ -1662,7 +1696,7 @@
 
     attrSet(loginBoxContainer, "style", "display: none; opacity: 0;");
     attrSet(emailInput, "name", "email");
-    attrSet(emailInput, "placeholder", "Email address");
+    attrSet(emailInput, "placeholder", i18n("Email address"));
     attrSet(emailInput, "type", "text");
 
     var numOauthConfigured = 0;
@@ -1689,7 +1723,7 @@
       classAdd(button, "button");
       classAdd(button, "sso-button");
 
-      button.innerText = "Single Sign-On";
+      button.innerText = i18n("Single Sign-On");
 
       onclick(button, global.commentoAuth, {"provider": "sso", "id": id});
 
@@ -1766,7 +1800,7 @@
     remove($(ID_LOGIN_BOX_LOGIN_LINK_CONTAINER));
     remove($(ID_LOGIN_BOX_FORGOT_LINK_CONTAINER));
 
-    emailSubtitle.innerText = "Create an account";
+    emailSubtitle.innerText = i18n("Create an account");
     popupBoxType = "signup";
     global.passwordAsk(id);
     $(ID_LOGIN_BOX_EMAIL_INPUT).focus();
@@ -1864,18 +1898,18 @@
       order = ["name", "website", "password"];
       fid = [ID_LOGIN_BOX_NAME_INPUT, ID_LOGIN_BOX_WEBSITE_INPUT, ID_LOGIN_BOX_PASSWORD_INPUT];
       type = ["text", "text", "password"];
-      placeholder = ["Real Name", "Website (Optional)", "Password"];
+      placeholder = [i18n("Real Name"), i18n("Website (Optional)"), i18n("Password")];
     } else {
       order = ["password"];
       fid = [ID_LOGIN_BOX_PASSWORD_INPUT];
       type = ["password"];
-      placeholder = ["Password"];
+      placeholder = [i18n("Password")];
     }
 
     if (popupBoxType === "signup") {
-      subtitle.innerText = "Finish the rest of your profile to complete."
+      subtitle.innerText = i18n("Finish the rest of your profile to complete.")
     } else {
-      subtitle.innerText = "Enter your password to log in."
+      subtitle.innerText = i18n("Enter your password to log in.")
     }
 
     for (var i = 0; i < order.length; i++) {
@@ -2009,9 +2043,9 @@
     classAdd(modTools, "mod-tools");
 
     if (isLocked) {
-      lock.innerHTML = "Unlock Thread";
+      lock.innerHTML = i18n("Unlock Thread");
     } else {
-      lock.innerHTML = "Lock Thread";
+      lock.innerHTML = i18n("Lock Thread");
     }
 
     onclick(lock, global.threadLockToggle);
@@ -2097,6 +2131,11 @@
         noFonts = attrGet(scripts[i], "data-no-fonts");
 
         hideDeleted = attrGet(scripts[i], "data-hide-deleted");
+
+        var loc = attrGet(scripts[i], "data-locale");
+        if (loc !== undefined) {
+          locale = loc;
+        }
       }
     }
   }
@@ -2171,11 +2210,13 @@
 
     dataTagsLoad();
 
-    if (autoInit === "true" || autoInit === undefined) {
-      global.main(undefined);
-    } else if (autoInit !== "false") {
-      console.log("[commento] error: invalid value for data-auto-init; allowed values: true, false");
-    }
+    i18nLoad(function() {
+      if (autoInit === "true" || autoInit === undefined) {
+        global.main(undefined);
+      } else if (autoInit !== "false") {
+        console.log("[commento] error: invalid value for data-auto-init; allowed values: true, false");
+      }
+    });
   }
 
 

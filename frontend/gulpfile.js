@@ -1,10 +1,13 @@
 "use strict";
 
+const path = require('path');
+const through2 = require('through2');
 const gulp = require("gulp");
 const sass = require("gulp-sass");
 const sourcemaps = require("gulp-sourcemaps");
 const cleanCss = require("gulp-clean-css");
 const htmlMinifier = require("gulp-html-minifier");
+const jsonminify = require('gulp-jsonminify');
 const uglify = require("gulp-uglify");
 const concat = require("gulp-concat");
 const rename = require("gulp-rename");
@@ -21,6 +24,8 @@ const imagesGlob = imagesDir + "**/*";
 const jsDir = "js/";
 const jsGlob = jsDir + "*.js";
 const htmlGlob = "./*.html";
+const i18nDir = "i18n/";
+const i18nGlob = i18nDir + "*.json";
 
 const jsCompileMap = {
   "js/jquery.js": ["node_modules/jquery/dist/jquery.min.js"],
@@ -99,6 +104,27 @@ const jsCompileMap = {
   ],
 };
 
+const locales = [];
+function initLocales() {
+  return through2.obj(function (file, _, cb) {
+    locales.push(path.basename(file.path, path.extname(file.path)))
+    this.push(file);
+    cb();
+  });
+}
+function prependLocales() {
+  return through2.obj(function (file, _, cb) {
+    if (path.basename(file.path) === 'commento.js') {
+      file.contents = Buffer.concat([
+        Buffer.from("var LOCALES = " + JSON.stringify(locales) + ";\n\n"),
+        file.contents,
+      ]);
+    }
+    this.push(file);
+    cb();
+  });
+}
+
 gulp.task("scss-devel", function (done) {
   let res = gulp.src(scssSrc)
     .pipe(sourcemaps.init())
@@ -150,11 +176,25 @@ gulp.task("images-prod", function (done) {
   done();
 });
 
+gulp.task("i18n-devel", function (done) {
+  gulp.src([i18nGlob])
+    .pipe(initLocales().on('end', done))
+    .pipe(gulp.dest(develPath + i18nDir));
+});
+
+gulp.task("i18n-prod", function (done) {
+  gulp.src([i18nGlob])
+    .pipe(initLocales().on('end', done))
+    .pipe(jsonminify())
+    .pipe(gulp.dest(prodPath + i18nDir));
+});
+
 gulp.task("js-devel", function (done) {
   for (let outputFile in jsCompileMap) {
     gulp.src(jsCompileMap[outputFile])
       .pipe(sourcemaps.init())
       .pipe(concat(outputFile))
+      .pipe(prependLocales())
       .pipe(rename(outputFile))
       .pipe(sourcemaps.write())
       .pipe(gulp.dest(develPath))
@@ -166,6 +206,7 @@ gulp.task("js-prod", function (done) {
   for (let outputFile in jsCompileMap) {
     gulp.src(jsCompileMap[outputFile])
       .pipe(concat(outputFile))
+      .pipe(prependLocales())
       .pipe(rename(outputFile))
       .pipe(uglify())
       .pipe(gulp.dest(prodPath))
@@ -181,5 +222,5 @@ gulp.task("lint", function (done) {
   return res;
 });
 
-gulp.task("devel", gulp.parallel("scss-devel", "html-devel", "fonts-devel", "images-devel", "lint", "js-devel"));
-gulp.task("prod", gulp.parallel("scss-prod", "html-prod", "fonts-prod", "images-prod", "lint", "js-prod"));
+gulp.task("devel", gulp.parallel("scss-devel", "html-devel", "fonts-devel", "images-devel", "lint", gulp.series("i18n-devel", "js-devel")));
+gulp.task("prod", gulp.parallel("scss-prod", "html-prod", "fonts-prod", "images-prod", "lint", gulp.series("i18n-prod", "js-prod")));
