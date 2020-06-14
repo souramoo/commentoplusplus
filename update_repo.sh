@@ -30,7 +30,7 @@ git commit -m "[skip ci] Updates from GitLab"
 
 echo Removing new origin back to github
 git remote rm origin
-git remote add origin https://github.com/sm-test-star/commento-heroku.git
+git remote add origin https://github.com/souramoo/commento-heroku.git
 
 echo Pushing back changes...
 git push --set-upstream origin master
