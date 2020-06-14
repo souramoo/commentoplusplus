@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  nightly:
+  build:
     docker:
       - image: circleci/golang:1.9
 
