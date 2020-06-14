@@ -1,10 +1,17 @@
 version: 2
 jobs:
-  build:
+  nightly:
     docker:
       - image: circleci/golang:1.9
 
     working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - autoupdate
     steps:
       - checkout
       - add_ssh_keys:
