@@ -2070,7 +2070,7 @@
     
     attrSet(loginBoxContainer, "style", "");
 
-    window.location.hash = ID_LOGIN_BOX_CONTAINER;
+    // window.location.hash = ID_LOGIN_BOX_CONTAINER;
 
     $(ID_LOGIN_BOX_EMAIL_INPUT).focus();
   }
