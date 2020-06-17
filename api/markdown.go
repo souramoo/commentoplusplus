@@ -11,6 +11,7 @@ var extensions int
 
 func markdownRendererCreate() error {
 	policy = bluemonday.UGCPolicy()
+	policy.AddTargetBlankToFullyQualifiedLinks(true)
 
 	extensions = 0
 	extensions |= blackfriday.EXTENSION_AUTOLINK
