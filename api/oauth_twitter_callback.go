@@ -67,7 +67,6 @@ func twitterCallbackHandler(w http.ResponseWriter, r *http.Request) {
 	name := res.Name
 	link := res.getLinkURL()
 	photo := res.getImageURL()
-	fmt.Fprintf(w, "Debug: %s\n", photo)
 
 	c, err := commenterGetByEmail("twitter", email)
 	if err != nil && err != errorNoSuchCommenter {
@@ -97,7 +96,7 @@ func twitterCallbackHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//fmt.Fprintf(w, "<html><script>window.parent.close()</script></html>")
+	fmt.Fprintf(w, "<html><script>window.parent.close()</script></html>")
 }
 
 // response from Twitter API.
