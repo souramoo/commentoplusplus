@@ -27,7 +27,7 @@ func commenterPhotoHandler(w http.ResponseWriter, r *http.Request) {
 	} else if c.Provider == "github" {
 		url += "&s=38"
 	} else if c.Provider == "twitter" {
-		url += "?size=normal"
+		// url += "?size=normal"
 	} else if c.Provider == "gitlab" {
 		url += "?width=38"
 	}
