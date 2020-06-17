@@ -10,8 +10,8 @@ func domainViewRecord(domain string, commenterHex string) {
 		views  (domain, commenterHex, viewDate)
 		VALUES ($1,     $2,           $3      );
 	`
-	_, err := db.Exec(statement, domain, commenterHex, time.Now().UTC())
-	if err != nil {
-		logger.Warningf("cannot insert views: %v", err)
-	}
+	// _, err := db.Exec(statement, domain, commenterHex, time.Now().UTC())
+	// if err != nil {
+	// 	logger.Warningf("cannot insert views: %v", err)
+	// }
 }
