@@ -727,7 +727,7 @@
   }
 
 
-  global.commentNew = function(id, commenterToken, callback) {
+  global.commentNew = function(id, commenterToken, callback, dontAppendCard) {
     var textareaSuperContainer = $(ID_SUPER_CONTAINER + id);
     var textarea = $(ID_TEXTAREA + id);
     var replyButton = $(ID_REPLY + id);
@@ -790,21 +790,22 @@
       }, "root");
 
       commentsMap[resp.commentHex] = comment;
+      if (!dontAppendCard) {
+        if (id !== "root") {
+          textareaSuperContainer.replaceWith(newCard);
 
-      if (id !== "root") {
-        textareaSuperContainer.replaceWith(newCard);
+          shownReply[id] = false;
 
-        shownReply[id] = false;
+          classAdd(replyButton, "option-reply");
+          classRemove(replyButton, "option-cancel");
 
-        classAdd(replyButton, "option-reply");
-        classRemove(replyButton, "option-cancel");
+          replyButton.title = "Reply to this comment";
 
-        replyButton.title = "Reply to this comment";
-
-        onclick(replyButton, global.replyShow, id)
-      } else {
-        textarea.value = "";
-        insertAfter($(ID_PRE_COMMENTS_AREA), newCard);
+          onclick(replyButton, global.replyShow, id)
+        } else {
+          textarea.value = "";
+          insertAfter($(ID_PRE_COMMENTS_AREA), newCard);
+        }
       }
 
       call(callback);
@@ -1565,7 +1566,7 @@
               global.commentNew(id, resp.commenterToken, function() {
                 global.loginBoxClose();
                 commentsGet(commentsRender);
-              });
+              }, true);
             } else {
               global.loginBoxClose();
               commentsGet(commentsRender);
