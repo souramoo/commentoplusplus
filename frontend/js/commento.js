@@ -806,6 +806,10 @@
           textarea.value = "";
           insertAfter($(ID_PRE_COMMENTS_AREA), newCard);
         }
+      } else {
+        if (id === "root") {
+          textarea.value = "";
+        }
       }
 
       call(callback);
