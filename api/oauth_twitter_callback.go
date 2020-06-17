@@ -52,6 +52,10 @@ func twitterCallbackHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Error: status %d: %s\n", resp.StatusCode, msg)
 		return
 	}
+	
+	
+	msg, _ := ioutil.ReadAll(resp.Body)
+	fmt.Fprintf(w, "Debug: %s\n", msg)
 
 	var res twitterOAuthReponse
 	if err = json.NewDecoder(resp.Body).Decode(&res); err != nil {
@@ -67,8 +71,6 @@ func twitterCallbackHandler(w http.ResponseWriter, r *http.Request) {
 	name := res.Name
 	link := res.getLinkURL()
 	photo := res.getImageURL()
-	
-	fmt.Fprintf(w, "Debug: %s\n", resp.Body)
 
 	c, err := commenterGetByEmail("twitter", email)
 	if err != nil && err != errorNoSuchCommenter {
