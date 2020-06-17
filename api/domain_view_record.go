@@ -1,8 +1,8 @@
 package main
 
-import (
-	"time"
-)
+//import (
+//	"time"
+//)
 
 func domainViewRecord(domain string, commenterHex string) {
 	statement := `
