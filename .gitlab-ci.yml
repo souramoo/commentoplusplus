@@ -62,7 +62,7 @@ go-fmt:
     - tags
   script:
     - cd api
-    - test -z $(go fmt)
+    - test -z "$(go fmt)"
 
 docker-registry-master:
   stage: docker-registry-master
