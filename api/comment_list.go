@@ -212,6 +212,7 @@ func commentListApprovals(domain string) ([]comment, map[string]commenter, error
 
 	statement := `
 		SELECT
+			path,
 			commentHex,
 			commenterHex,
 			markdown,
@@ -223,7 +224,7 @@ func commentListApprovals(domain string) ([]comment, map[string]commenter, error
 			creationDate
 		FROM comments
 		WHERE
-			comments.domain = $1 AND
+			comments.domain = $1 AND deleted = false AND
 			( state = 'unapproved' OR state = 'flagged' );
 	`
 
@@ -245,6 +246,7 @@ func commentListApprovals(domain string) ([]comment, map[string]commenter, error
 	for rows.Next() {
 		c := comment{}
 		if err = rows.Scan(
+			&c.Path,
 			&c.CommentHex,
 			&c.CommenterHex,
 			&c.Markdown,
