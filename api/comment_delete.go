@@ -72,3 +72,46 @@ func commentDeleteHandler(w http.ResponseWriter, r *http.Request) {
 
 	bodyMarshal(w, response{"success": true})
 }
+
+func commentOwnerDeleteHandler(w http.ResponseWriter, r *http.Request) {
+        type request struct {
+                OwnerToken *string `json:"ownerToken"`
+                CommentHex     *string `json:"commentHex"`
+        }
+
+        var x request
+        if err := bodyUnmarshal(r, &x); err != nil {
+                bodyMarshal(w, response{"success": false, "message": err.Error()})
+                return
+        }
+
+        domain, _, err := commentDomainPathGet(*x.CommentHex)
+        if err != nil {
+                bodyMarshal(w, response{"success": false, "message": err.Error()})
+                return
+        }
+
+        o, err := ownerGetByOwnerToken(*x.OwnerToken)
+        if err != nil {
+                bodyMarshal(w, response{"success": false, "message": err.Error()})
+                return
+        }
+
+        isOwner, err := domainOwnershipVerify(o.OwnerHex, domain)
+        if err != nil {
+                bodyMarshal(w, response{"success": false, "message": err.Error()})
+                return
+        }
+
+        if !isOwner {
+                bodyMarshal(w, response{"success": false, "message": errorNotAuthorised.Error()})
+                return
+        }
+
+        if err = commentDelete(*x.CommentHex); err != nil {
+                bodyMarshal(w, response{"success": false, "message": err.Error()})
+                return
+        }
+
+        bodyMarshal(w, response{"success": true})
+}
