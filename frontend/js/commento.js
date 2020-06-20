@@ -810,6 +810,11 @@
         commenterHex = "anonymous";
       }
 
+      if (commenterHex === "anonymous" && $(ID_GUEST_DETAILS_INPUT + id).value.trim().length > 0) {
+        commenterHex = id;
+        commenters[id] = { provider: "anon", name: $(ID_GUEST_DETAILS_INPUT + id).value.trim(), photo: "undefined" };
+      }
+
       var comment = {
         "commentHex": resp.commentHex,
         "commenterHex": commenterHex,
@@ -2280,9 +2285,9 @@
 
 
   function init() {
-    window.setInterval(function(){
-      commentsGet(commentsRender, true)
-    }, 5000)
+    //window.setInterval(function(){
+    //  commentsGet(commentsRender, true)
+    //}, 5000)
     if (initted) {
       return;
     }
