@@ -83,7 +83,7 @@ const jsCompileMap = {
     "js/utils.js",
     "js/logout.js"
   ],
-  "js/commento.js": ["js/commento.js"],
+  "js/commento.js": ["js/commento.js", "js/morphdom.js"],
   "js/count.js": ["js/count.js"],
   "js/unsubscribe.js": [
     "js/constants.js",

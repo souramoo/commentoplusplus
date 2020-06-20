@@ -10,7 +10,6 @@
   //     the user may have their own window.post defined. We don't want to
   //     override that.
 
-
   var ID_ROOT = "commento";
   var ID_MAIN_AREA = "commento-main-area";
   var ID_LOGIN = "commento-login";
@@ -398,7 +397,7 @@
   }
 
 
-  function commentsGet(callback) {
+  function commentsGet(callback, casualMode) {
     var json = {
       "commenterToken": commenterTokenGet(),
       "domain": parent.location.host,
@@ -406,11 +405,14 @@
     };
 
     post(origin + "/api/comment/list", json, function(resp) {
-      if (!resp.success) {
-        errorShow(resp.message);
-        return;
-      } else {
-        errorHide();
+      if(!casualMode) {
+        if (!resp.success) {
+          errorShow(resp.message);
+          return;
+        } else {
+          errorHide();
+        }
+        sortPolicy = resp.defaultSortPolicy;
       }
 
       requireIdentification = resp.requireIdentification;
@@ -423,8 +425,6 @@
       comments = resp.comments;
       commenters = Object.assign({}, commenters, resp.commenters)
       configuredOauths = resp.configuredOauths;
-
-      sortPolicy = resp.defaultSortPolicy;
 
       call(callback);
     });
@@ -618,11 +618,11 @@
     classRemove($(ID_SORT_POLICY + sortPolicy), "sort-policy-button-selected");
 
     var commentsArea = $(ID_COMMENTS_AREA);
-    commentsArea.innerHTML = "";
     sortPolicy = policy;
     var cards = commentsRecurse(parentMap(comments), "root");
+
     if (cards) {
-      append(commentsArea, cards);
+      diffAppend(commentsArea, cards);
     }
 
     classAdd($(ID_SORT_POLICY + policy), "sort-policy-button-selected");
@@ -794,14 +794,14 @@
       if (id !== "root") {
         textareaSuperContainer.replaceWith(newCard);
 
-        shownReply[id] = false;
+        delete shownReply[id];
 
         classAdd(replyButton, "option-reply");
         classRemove(replyButton, "option-cancel");
 
         replyButton.title = "Reply to this comment";
 
-        onclick(replyButton, global.replyShow, id)
+        onclick(replyButton, global.replyShow, id);
       } else {
         textarea.value = "";
         insertAfter($(ID_PRE_COMMENTS_AREA), newCard);
@@ -1204,6 +1204,8 @@
 
       var text = $(ID_TEXT + commentHex);
       text.innerText = "[deleted]";
+      var card = $(ID_CARD + commentHex);
+      card.parentNode. removeChild(card)
     });
   }
 
@@ -1272,6 +1274,7 @@
         classRemove(downvote, "downvoted");
         score.innerText = scorify(parseInt(score.innerText.replace(/[^\d-.]/g, "")) - newDirection + oldDirection);
         upDownOnclickSet(upvote, downvote, commentHex, oldDirection);
+        commentsGet(commentsRender, true);
         return;
       } else {
         errorHide();
@@ -1338,17 +1341,18 @@
   }
 
 
-  global.editShow = function(id) {
+  global.editShow = function(id, noAdd) {
     if (id in shownEdit && shownEdit[id]) {
       return;
     }
 
     var text = $(ID_TEXT + id);
     shownEdit[id] = true;
-    text.replaceWith(textareaCreate(id, true));
-
-    var textarea = $(ID_TEXTAREA + id);
-    textarea.value = commentsMap[id].markdown;
+    if(!noAdd) {
+      text.replaceWith(textareaCreate(id, true));
+      var textarea = $(ID_TEXTAREA + id);
+      textarea.value = commentsMap[id].markdown;
+    }
 
     var editButton = $(ID_EDIT + id);
 
@@ -1380,13 +1384,17 @@
   }
 
 
-  global.replyShow = function(id) {
+  global.replyShow = function(id, noAdd) {
     if (id in shownReply && shownReply[id]) {
       return;
     }
 
     var text = $(ID_TEXT + id);
-    insertAfter(text, textareaCreate(id));
+
+    if(!noAdd) {
+      insertAfter(text, textareaCreate(id));
+    }
+
     shownReply[id] = true;
 
     var replyButton = $(ID_REPLY + id);
@@ -1405,6 +1413,10 @@
     var replyButton = $(ID_REPLY + id);
     var el = $(ID_SUPER_CONTAINER + id);
 
+    if (!el) {
+      global.replyShow(id)
+      return
+    }
     el.remove();
     delete shownReply[id];
 
@@ -1477,11 +1489,37 @@
 
   function commentsRender() {
     var commentsArea = $(ID_COMMENTS_AREA);
-    commentsArea.innerHTML = ""
-
     var cards = commentsRecurse(parentMap(comments), "root");
+
     if (cards) {
-      append(commentsArea, cards);
+      diffAppend(commentsArea, cards);
+    }
+  }
+
+  function diffAppend(originalHost, newCards) {
+    if(originalHost.children.length === 0) {
+      originalHost.innerHTML = "<div></div>"
+    }
+    morphdom(originalHost.children[0], newCards, {
+      onBeforeNodeDiscarded: function() {
+        return false;
+      },
+      onBeforeNodeAdded: function(n) {
+        var id = n.id.split("-")[3]
+        if (id in shownEdit) {
+          return false;
+        }
+        return n;
+      },
+    });
+
+    for(var i in shownReply) {
+      shownReply[i] = false;
+      global.replyShow(i, true);
+    }
+    for(var i in shownEdit) {
+      shownEdit[i] = false;
+      global.editShow(i, true);
     }
   }
 
@@ -2166,8 +2204,8 @@
 
   function init() {
     window.setInterval(function(){
-      commentsGet(commentsRender)
-    }, 2000)
+      commentsGet(commentsRender, true)
+    }, 5000)
     if (initted) {
       return;
     }
