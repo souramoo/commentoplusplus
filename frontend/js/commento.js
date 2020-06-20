@@ -1970,7 +1970,7 @@
       attrSet(fieldInput, "type", type[i]);
       attrSet(fieldInput, "placeholder", placeholder[i]);
 
-      if(order[i] == "website") {
+      if(order[i] === "website") {
         attrSet(fieldInput, "autocomplete", "false");
       }
 
