@@ -620,6 +620,7 @@
 
     append(textareaContainer, textarea);
     append(textareaSuperContainer, textareaContainer);
+    append(textareaSuperContainer, guestNameContainer);
     append(anonymousCheckboxContainer, anonymousCheckbox);
     append(anonymousCheckboxContainer, anonymousCheckboxLabel);
     append(textareaSuperContainer, submitButton);
@@ -627,7 +628,6 @@
       append(textareaSuperContainer, anonymousCheckboxContainer);
       append(guestNameContainer, guestName);
     }
-    append(textareaSuperContainer, guestNameContainer);
     append(textareaSuperContainer, markdownButton);
 
     return textareaSuperContainer;
