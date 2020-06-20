@@ -424,6 +424,17 @@
       stickyCommentHex = resp.attributes.stickyCommentHex;
 
       comments = resp.comments.concat(ownComments);
+      // remove duplicates if own comment then got approved
+      var uniqSet = {}, commLen = comments.length;
+      for(var i=0, i < commLen; i++) {
+        uniqSet[comments[i].commentHex] = comments[i];
+      }
+
+      comments = new Array();
+      for(var key in obj) {
+        comments.push(uniqSet[key]);
+      }
+
       commentsMap = parentMap(comments)
       commenters = Object.assign({}, commenters, resp.commenters)
       configuredOauths = resp.configuredOauths;
