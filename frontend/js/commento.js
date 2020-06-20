@@ -431,7 +431,7 @@
       }
 
       comments = new Array();
-      for(var key in obj) {
+      for(var key in uniqSet) {
         comments.push(uniqSet[key]);
       }
 
