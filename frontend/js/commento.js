@@ -426,7 +426,7 @@
       comments = resp.comments.concat(ownComments);
       // remove duplicates if own comment then got approved
       var uniqSet = {}, commLen = comments.length;
-      for(var i=0, i < commLen; i++) {
+      for(var i=0; i < commLen; i++) {
         uniqSet[comments[i].commentHex] = comments[i];
       }
 
