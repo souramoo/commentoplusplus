@@ -641,6 +641,7 @@
 
     append(textareaContainer, textarea);
     append(textareaSuperContainer, textareaContainer);
+    append(textareaSuperContainer, guestNameContainer);
     append(anonymousCheckboxContainer, anonymousCheckbox);
     append(anonymousCheckboxContainer, anonymousCheckboxLabel);
     append(textareaSuperContainer, submitButton);
@@ -648,7 +649,6 @@
       append(textareaSuperContainer, anonymousCheckboxContainer);
       append(guestNameContainer, guestName);
     }
-    append(textareaSuperContainer, guestNameContainer);
     append(textareaSuperContainer, markdownButton);
 
     return textareaSuperContainer;
@@ -820,6 +820,11 @@
       var commenterHex = selfHex;
       if (commenterHex === undefined || commenterToken === "anonymous") {
         commenterHex = "anonymous";
+      }
+      
+      if (commenterHex === "anonymous" && $(ID_GUEST_DETAILS_INPUT + id).value.trim().length > 0) {
+        commenterHex = id;
+        commenters[id] = { provider: "anon", name: $(ID_GUEST_DETAILS_INPUT + id).value.trim(), photo: "undefined" };
       }
 
       if (commenterHex === "anonymous" && $(ID_GUEST_DETAILS_INPUT + id).value.trim().length > 0) {
