@@ -1428,6 +1428,7 @@
     if(!noAdd) {
       text.replaceWith(textareaCreate(id, true));
       var textarea = $(ID_TEXTAREA + id);
+      parentMap(comments)
       textarea.value = commentsMap[id].markdown;
     }
 
@@ -2314,6 +2315,9 @@
       wsUri[0] = ( location.protocol === "https:" ? "wss" : "ws" )
       wsUri = wsUri.join(":")
       var conn = new WebSocket(wsUri + "/ws");
+      conn.onopen = function () {
+        conn.send(parent.location.host + pageId) // subscribe to this page
+      }
       conn.onmessage = function () {
         commentsGet(commentsRender, true)
       };

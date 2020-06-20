@@ -40,6 +40,9 @@ type Client struct {
 	// The websocket connection.
 	conn *websocket.Conn
 
+	// the page they're on
+	url string
+
 	// Buffered channel of outbound messages.
 	send chan []byte
 }
@@ -66,7 +69,7 @@ func (c *Client) readPump() {
 			break
 		}
 		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
-//		c.hub.broadcast <- message
+		c.url = string(message)
 	}
 }
 
@@ -88,6 +91,11 @@ func (c *Client) writePump() {
 			if !ok {
 				// The hub closed the channel.
 				c.conn.WriteMessage(websocket.CloseMessage, []byte{})
+				return
+			}
+
+			// not for this url
+			if string(message) != c.url {
 				return
 			}
 

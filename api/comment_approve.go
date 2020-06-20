@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-func commentApprove(commentHex string) error {
+func commentApprove(commentHex string, url string) error {
 	if commentHex == "" {
 		return errorMissingField
 	}
@@ -21,7 +21,7 @@ func commentApprove(commentHex string) error {
 		return errorInternal
 	}
 
-	hub.broadcast <- []byte("approved_comment")
+	hub.broadcast <- []byte(url)
 
 	return nil
 }
@@ -44,7 +44,7 @@ func commentApproveHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	domain, _, err := commentDomainPathGet(*x.CommentHex)
+	domain, path, err := commentDomainPathGet(*x.CommentHex)
 	if err != nil {
 		bodyMarshal(w, response{"success": false, "message": err.Error()})
 		return
@@ -61,7 +61,7 @@ func commentApproveHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = commentApprove(*x.CommentHex); err != nil {
+	if err = commentApprove(*x.CommentHex, domain + path); err != nil {
 		bodyMarshal(w, response{"success": false, "message": err.Error()})
 		return
 	}

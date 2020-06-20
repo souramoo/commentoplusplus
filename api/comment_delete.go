@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-func commentDelete(commentHex string) error {
+func commentDelete(commentHex string, url string) error {
 	if commentHex == "" {
 		return errorMissingField
 	}
@@ -21,7 +21,7 @@ func commentDelete(commentHex string) error {
 		return errorNoSuchComment
 	}
 
-	hub.broadcast <- []byte("deleted_comment")
+	hub.broadcast <- []byte(url)
 
 	return nil
 }
@@ -50,7 +50,7 @@ func commentDeleteHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	domain, _, err := commentDomainPathGet(*x.CommentHex)
+	domain, path, err := commentDomainPathGet(*x.CommentHex)
 	if err != nil {
 		bodyMarshal(w, response{"success": false, "message": err.Error()})
 		return
@@ -67,7 +67,7 @@ func commentDeleteHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = commentDelete(*x.CommentHex); err != nil {
+	if err = commentDelete(*x.CommentHex, domain + path); err != nil {
 		bodyMarshal(w, response{"success": false, "message": err.Error()})
 		return
 	}
