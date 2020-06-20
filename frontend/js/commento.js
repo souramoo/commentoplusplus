@@ -84,6 +84,7 @@
   var stickyCommentHex = "none";
   var shownReply = {};
   var shownEdit = {};
+  var collapsed = {};
   var configuredOauths = {};
   var anonymousOnly = false;
   var popupBoxType = "login";
@@ -1266,6 +1267,14 @@
     }
 
     score.innerText = scorify(parseInt(score.innerText.replace(/[^\d-.]/g, "")) + newDirection - oldDirection);
+    // update comments
+    for(var i in comments) {
+      if(comments[i].commentHex === commentHex) {
+        comments[i].score = comments[i].score + newDirection - oldDirection
+      }
+    }
+    commentsMap = parentMap(comments);
+    commentsRender();
 
     post(origin + "/api/comment/vote", json, function(resp) {
       if (!resp.success) {
@@ -1274,7 +1283,6 @@
         classRemove(downvote, "downvoted");
         score.innerText = scorify(parseInt(score.innerText.replace(/[^\d-.]/g, "")) - newDirection + oldDirection);
         upDownOnclickSet(upvote, downvote, commentHex, oldDirection);
-        commentsGet(commentsRender, true);
         return;
       } else {
         errorHide();
@@ -1433,6 +1441,7 @@
   global.commentCollapse = function(id) {
     var children = $(ID_CHILDREN + id);
     var button = $(ID_COLLAPSE + id);
+    collapsed[id] = true;
 
     if (children) {
       classAdd(children, "hidden");
@@ -1451,6 +1460,7 @@
   global.commentUncollapse = function(id) {
     var children = $(ID_CHILDREN + id);
     var button = $(ID_COLLAPSE + id);
+    delete collapsed[id];
 
     if (children) {
       classRemove(children, "hidden");
@@ -1502,7 +1512,6 @@
     }
     morphdom(originalHost.children[0], newCards, {
       onBeforeNodeDiscarded: function(n) {
-        // console.log(n.innerHTML)
         if(n.innerHTML.indexOf("textarea") > -1) {
           return false;
         }
@@ -1517,6 +1526,9 @@
       },
     });
 
+    for(var i in collapsed) {
+      global.commentCollapse(i);
+    }
     for(var i in shownReply) {
       shownReply[i] = false;
       global.replyShow(i, true);
