@@ -1970,6 +1970,10 @@
       attrSet(fieldInput, "type", type[i]);
       attrSet(fieldInput, "placeholder", placeholder[i]);
 
+      if(order[i] == "website") {
+        attrSet(fieldInput, "autocomplete", "false");
+      }
+
       append(field, fieldInput);
       append(fieldContainer, field);
 
