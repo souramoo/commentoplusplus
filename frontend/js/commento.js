@@ -173,6 +173,14 @@
     }, false);
   }
 
+  function onenterkey(node, f, arg) {
+    node.addEventListener("keypress", function(e) {
+      if (e.key === "Enter") {
+        f(arg);
+      }
+    }, false);
+  }
+
 
   function onload(node, f, arg) {
     node.addEventListener("load", function() {
@@ -1597,6 +1605,19 @@
     append(root, loginBoxContainer);
   }
 
+  global.nextInput = function(myself, callback) {
+    return function(id) {
+      var allInputs = Array.prototype.slice.call(document.querySelectorAll(".commento-input"));
+      var index = allInputs.indexOf(myself);
+      if(index >= allInputs.length - 1) {
+        callback(id);
+      } else {
+        console.log(allInputs[index + 1])
+        allInputs[index+1].focus();
+      }
+    }
+  }
+
 
   global.popupRender = function(id) {
     var loginBoxContainer = $(ID_LOGIN_BOX_CONTAINER);
@@ -1661,6 +1682,7 @@
     ssoSubtitle.innerText = "Proceed with " + parent.location.host + " authentication";
 
     onclick(emailButton, global.passwordAsk, id);
+    onenterkey(emailInput, global.nextInput(emailInput, global.passwordAsk), id);
     onclick(forgotLink, global.forgotPassword, id);
     onclick(loginLink, global.popupSwitch, id);
     onclick(close, global.loginBoxClose);
@@ -1908,11 +1930,15 @@
 
         if (popupBoxType === "signup") {
           onclick(fieldButton, global.signup, id);
+          onenterkey(fieldInput, global.signup, id);
         } else {
           onclick(fieldButton, global.login, id);
+          onenterkey(fieldInput, global.login, id);
         }
 
         append(field, fieldButton);
+      } else {
+        onenterkey(fieldInput, global.nextInput(fieldInput, null), id);
       }
 
       append(loginBox, fieldContainer);
