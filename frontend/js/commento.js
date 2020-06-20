@@ -2350,6 +2350,10 @@
         window.document.title = "(*) " + initialTitle;
         commentsGet(commentsRender, true)
       };
+      // update times every 60 secs or so
+      window.setInterval(function(){
+        commentsRender()
+      }, 60000)
     } else {
       window.setInterval(function(){
         commentsGet(commentsRender, true)
