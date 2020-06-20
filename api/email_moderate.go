@@ -32,15 +32,9 @@ func emailModerateHandler(w http.ResponseWriter, r *http.Request) {
 	`
 	row := db.QueryRow(statement, commentHex)
 
-	var domain string
-	if err = row.Scan(&domain); err != nil {
+	var domain, path string
+	if err = row.Scan(&domain, &path); err != nil {
 		// TODO: is this the only error?
-		fmt.Fprintf(w, "error: no such comment found (perhaps it has been deleted?)")
-		return
-	}
-
-	var path string
-	if err = row.Scan(&path); err != nil {
 		fmt.Fprintf(w, "error: no such comment found (perhaps it has been deleted?)")
 		return
 	}
