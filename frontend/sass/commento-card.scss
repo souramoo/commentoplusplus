@@ -55,6 +55,18 @@
     line-height: 17px;
   }
 
+  .commento-anonymous::after {
+    content: "Anonymous";
+    text-transform: uppercase;
+    font-size: 10px;
+    background: $gray-7;
+    color: white;
+    margin-left: 8px;
+    padding: 2px 6px 2px 6px;
+    border-radius: 100px;
+    line-height: 17px;
+  }
+
   .commento-subtitle {
     display: block;
     color: #999;
