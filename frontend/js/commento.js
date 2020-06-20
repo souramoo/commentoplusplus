@@ -74,6 +74,7 @@
   var autoInit;
   var isAuthenticated = false;
   var comments = [];
+  var ownComments = [];
   var commentsMap = {};
   var commenters = {};
   var requireIdentification = true;
@@ -422,7 +423,7 @@
       isLocked = resp.attributes.isLocked;
       stickyCommentHex = resp.attributes.stickyCommentHex;
 
-      comments = resp.comments;
+      comments = resp.comments.concat(ownComments);
       commentsMap = parentMap(comments)
       commenters = Object.assign({}, commenters, resp.commenters)
       configuredOauths = resp.configuredOauths;
@@ -788,6 +789,7 @@
       };
 
       comments.push(comment);
+      ownComments.push(comment);
       commentsMap = parentMap(comments)
 
       if (id !== "root") {
@@ -1026,7 +1028,7 @@
         classAdd(name, "flagged");
       }
       if (comment.justAdded) {
-        attrSet(card, "data-just-added", "true");
+        classAdd(card, "highlight");
       }
       classAdd(header, "header");
       classAdd(name, "name");
@@ -1516,7 +1518,7 @@
     }
     morphdom(originalHost.children[0], newCards, {
       onBeforeNodeDiscarded: function(n) {
-        if(n.innerHTML.indexOf("textarea") > -1 || n.innerHTML.indexOf("data-just-added")) {
+        if(n.innerHTML.indexOf("textarea") > -1) {
           return false;
         }
         return true;

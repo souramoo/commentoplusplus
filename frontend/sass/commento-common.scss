@@ -38,3 +38,16 @@ blockquote {
   margin-left: 5px;
   margin-right: 5px;
 }
+
+@keyframes yellowfade {
+  from {
+    background: $yellow-3;
+  }
+  to {
+    background: transparent;
+  }
+}
+
+.commento-highlight {
+  animation: yellowfade 1s;
+}
