@@ -92,7 +92,6 @@
   var selfHex = undefined;
   var mobileView = null;
 
-
   function $(id) {
     return document.getElementById(id);
   }
@@ -423,6 +422,7 @@
       stickyCommentHex = resp.attributes.stickyCommentHex;
 
       comments = resp.comments;
+      commentsMap = parentMap(comments)
       commenters = Object.assign({}, commenters, resp.commenters)
       configuredOauths = resp.configuredOauths;
 
@@ -619,7 +619,7 @@
 
     var commentsArea = $(ID_COMMENTS_AREA);
     sortPolicy = policy;
-    var cards = commentsRecurse(parentMap(comments), "root");
+    var cards = commentsRecurse(commentsMap, "root");
 
     if (cards) {
       diffAppend(commentsArea, cards);
@@ -778,21 +778,18 @@
         "commenterHex": commenterHex,
         "markdown": markdown,
         "html": resp.html,
-        "parentHex": "root",
+        "parentHex": id,
         "score": 0,
         "state": "approved",
         "direction": 0,
         "creationDate": new Date(),
       };
 
-      var newCard = commentsRecurse({
-        "root": [comment]
-      }, "root");
-
-      commentsMap[resp.commentHex] = comment;
+      comments.push(comment);
+      commentsMap = parentMap(comments)
 
       if (id !== "root") {
-        textareaSuperContainer.replaceWith(newCard);
+        textareaSuperContainer.remove();
 
         delete shownReply[id];
 
@@ -804,10 +801,12 @@
         onclick(replyButton, global.replyShow, id);
       } else {
         textarea.value = "";
-        insertAfter($(ID_PRE_COMMENTS_AREA), newCard);
       }
 
+      commentsRender()
+      window.location.hash = ID_CARD + resp.commentHex;
       call(callback);
+
     });
   }
 
@@ -1205,7 +1204,8 @@
       var text = $(ID_TEXT + commentHex);
       text.innerText = "[deleted]";
       var card = $(ID_CARD + commentHex);
-      card.parentNode. removeChild(card)
+      card.parentNode.removeChild(card)
+      delete commentMap[commentHex]
     });
   }
 
@@ -1489,7 +1489,7 @@
 
   function commentsRender() {
     var commentsArea = $(ID_COMMENTS_AREA);
-    var cards = commentsRecurse(parentMap(comments), "root");
+    var cards = commentsRecurse(commentsMap, "root");
 
     if (cards) {
       diffAppend(commentsArea, cards);
@@ -1501,8 +1501,12 @@
       originalHost.innerHTML = "<div></div>"
     }
     morphdom(originalHost.children[0], newCards, {
-      onBeforeNodeDiscarded: function() {
-        return false;
+      onBeforeNodeDiscarded: function(n) {
+        // console.log(n.innerHTML)
+        if(n.innerHTML.indexOf("textarea") > -1) {
+          return false;
+        }
+        return true;
       },
       onBeforeNodeAdded: function(n) {
         var id = n.id.split("-")[3]
