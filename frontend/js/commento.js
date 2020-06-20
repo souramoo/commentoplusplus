@@ -76,6 +76,7 @@
   var autoInit;
   var isAuthenticated = false;
   var comments = [];
+  var ownComments = [];
   var commentsMap = {};
   var commenters = {};
   var requireIdentification = true;
@@ -432,7 +433,18 @@
       isLocked = resp.attributes.isLocked;
       stickyCommentHex = resp.attributes.stickyCommentHex;
 
-      comments = resp.comments;
+      comments = resp.comments.concat(ownComments);
+      // remove duplicates if own comment then got approved
+      var uniqSet = {}, commLen = comments.length;
+      for(var i=0; i < commLen; i++) {
+        uniqSet[comments[i].commentHex] = comments[i];
+      }
+
+      comments = new Array();
+      for(var key in uniqSet) {
+        comments.push(uniqSet[key]);
+      }
+
       commentsMap = parentMap(comments)
       commenters = Object.assign({}, commenters, resp.commenters)
       configuredOauths = resp.configuredOauths;
@@ -825,9 +837,11 @@
         "state": "approved",
         "direction": 0,
         "creationDate": new Date(),
+        "justAdded": true
       };
 
       comments.push(comment);
+      ownComments.push(comment);
       commentsMap = parentMap(comments)
 
       if (id !== "root") {
@@ -1067,6 +1081,9 @@
       }
       if (comment.state === "flagged") {
         classAdd(name, "flagged");
+      }
+      if (comment.justAdded) {
+        classAdd(card, "highlight");
       }
       classAdd(header, "header");
       classAdd(name, "name");
