@@ -2316,10 +2316,28 @@
     });
   }
 
-
   var initted = false;
+  var initialTitle = window.document.title;
+
+  function activityWatcher() {
+    function activity(){
+      window.document.title = initialTitle;
+    }
+
+    var activityEvents = [
+      "mousedown", "mousemove", "keydown",
+      "scroll", "touchstart"
+    ];
+    activityEvents.forEach(function(eventName) {
+      document.addEventListener(eventName, activity, true);
+    });
+  }
 
   function init() {
+    if (initted) {
+      return;
+    }
+
     if(window["WebSocket"]) {
       var wsUri = origin.split(":")
       wsUri[0] = ( location.protocol === "https:" ? "wss" : "ws" )
@@ -2329,6 +2347,7 @@
         conn.send(parent.location.host + pageId) // subscribe to this page
       }
       conn.onmessage = function () {
+        window.document.title = "(*) " + initialTitle;
         commentsGet(commentsRender, true)
       };
     } else {
@@ -2336,9 +2355,8 @@
         commentsGet(commentsRender, true)
       }, 5000)
     }
-    if (initted) {
-      return;
-    }
+    activityWatcher();
+
     initted = true;
 
     dataTagsLoad();
