@@ -6,6 +6,21 @@ This repo is set up to pull updates from the [GitLab master of Commento](https:/
 
 Source: https://gitlab.com/commento/commento/
 
+### Now with all my patches out of the box!
+
+Changes from upstream:
+- [FIXED: Twitter profile photo bug](https://gitlab.com/commento/commento/-/merge_requests/159)
+- [FIXED: Duplicate comment bug on login](https://gitlab.com/commento/commento/-/merge_requests/160)
+- [FIXED: Add target="_blank" to all external links, while also adding "noopener" to prevent XSS](https://gitlab.com/commento/commento/-/merge_requests/161)
+- [FIXED: Allow anchor links onto same page](https://gitlab.com/commento/commento/-/merge_requests/162)
+- [NEW FEATURE: Comment moderation dashboard, to approve/delete comments across your entire domain from one place](https://gitlab.com/commento/commento/-/merge_requests/163)
+- [NEW FEATURE: MathJax support hook, will plug in to any MathJax library included on the same page commento is on](https://gitlab.com/commento/commento/-/merge_requests/164)
+- [NEW FEATURE: Press enter to log in after entering your password](https://gitlab.com/commento/commento/-/merge_requests/167)
+- [NEW FEATURE: Auto refreshing comments](https://gitlab.com/commento/commento/-/merge_requests/168)
+
+(Have sent in merge requests, don't know when they'll be accepted, so here's a ready to use version!)
+
+
 ### Commento
 
 ##### [Homepage](https://commento.io) &nbsp;&ndash;&nbsp; [Demo](https://demo.commento.io) &nbsp;&ndash;&nbsp; [Documentation](https://docs.commento.io) &nbsp;&ndash;&nbsp; [Contributing](https://docs.commento.io/contributing/) &nbsp;&ndash;&nbsp; [#commento on Freenode](http://webchat.freenode.net/?channels=%23commento)
