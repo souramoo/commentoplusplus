@@ -39,12 +39,6 @@ func emailModerateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var path string
-	if err = row.Scan(&path); err != nil {
-		fmt.Fprintf(w, "error: no such comment found (perhaps it has been deleted?)")
-		return
-	}
-
 	isModerator, err := isDomainModerator(domain, e.Email)
 	if err != nil {
 		logger.Errorf("error checking if %s is a moderator: %v", e.Email, err)
