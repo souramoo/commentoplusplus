@@ -784,6 +784,7 @@
         "state": "approved",
         "direction": 0,
         "creationDate": new Date(),
+        "justAdded": true
       };
 
       comments.push(comment);
@@ -1023,6 +1024,9 @@
       }
       if (comment.state === "flagged") {
         classAdd(name, "flagged");
+      }
+      if (comment.justAdded) {
+        attrSet(card, "data-just-added", "true");
       }
       classAdd(header, "header");
       classAdd(name, "name");
@@ -1512,7 +1516,7 @@
     }
     morphdom(originalHost.children[0], newCards, {
       onBeforeNodeDiscarded: function(n) {
-        if(n.innerHTML.indexOf("textarea") > -1) {
+        if(n.innerHTML.indexOf("textarea") > -1 || n.innerHTML.indexOf("data-just-added")) {
           return false;
         }
         return true;
