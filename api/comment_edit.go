@@ -23,6 +23,8 @@ func commentEdit(commentHex string, markdown string) (string, error) {
 		return "", errorNoSuchComment
 	}
 
+	hub.broadcast <- []byte("edit_comment")
+
 	return html, nil
 }
 

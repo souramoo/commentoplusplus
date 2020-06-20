@@ -2234,11 +2234,20 @@
 
   var initted = false;
 
-
   function init() {
-    window.setInterval(function(){
-      commentsGet(commentsRender, true)
-    }, 5000)
+    if(window["WebSocket"]) {
+      var wsUri = origin.split(":")
+      wsUri[0] = "ws"
+      wsUri = wsUri.join(":")
+      var conn = new WebSocket(wsUri + "/ws");
+      conn.onmessage = function () {
+        commentsGet(commentsRender, true)
+      };
+    } else {
+      window.setInterval(function(){
+        commentsGet(commentsRender, true)
+      }, 5000)
+    }
     if (initted) {
       return;
     }
