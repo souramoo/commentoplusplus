@@ -87,7 +87,7 @@ func commentOwnerDeleteHandler(w http.ResponseWriter, r *http.Request) {
                 return
         }
 
-        domain, _, err := commentDomainPathGet(*x.CommentHex)
+        domain, path, err := commentDomainPathGet(*x.CommentHex)
         if err != nil {
                 bodyMarshal(w, response{"success": false, "message": err.Error()})
                 return
@@ -110,7 +110,7 @@ func commentOwnerDeleteHandler(w http.ResponseWriter, r *http.Request) {
                 return
         }
 
-        if err = commentDelete(*x.CommentHex); err != nil {
+        if err = commentDelete(*x.CommentHex, domain + path); err != nil {
                 bodyMarshal(w, response{"success": false, "message": err.Error()})
                 return
         }
