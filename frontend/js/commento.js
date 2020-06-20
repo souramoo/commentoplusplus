@@ -616,7 +616,7 @@
     attrSet(anonymousCheckbox, "type", "checkbox");
     attrSet(anonymousCheckboxLabel, "for", ID_ANONYMOUS_CHECKBOX + id);
     attrSet(guestName, "type", "text");
-    attrSet(guestName, "placeholder", "Name (optional)");
+    attrSet(guestName, "placeholder", "Your Name (optional)");
 
     anonymousCheckboxLabel.innerText = "Comment anonymously";
     if (edit === true) {
