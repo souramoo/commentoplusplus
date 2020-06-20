@@ -770,5 +770,4 @@ function morphdomFactory(morphAttrs) {
 
 var morphdom = morphdomFactory(morphAttrs);
 
-module = []
-module.exports = morphdom
+exports = morphdom
