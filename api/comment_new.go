@@ -46,6 +46,8 @@ func commentNew(commenterHex string, domain string, path string, parentHex strin
 		return "", errorInternal
 	}
 
+	hub.broadcast <- []byte("new_comment")
+
 	return commentHex, nil
 }
 

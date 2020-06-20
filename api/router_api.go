@@ -1,8 +1,12 @@
 package main
 
 import (
+	"net/http"
+
 	"github.com/gorilla/mux"
 )
+
+var hub *Hub;
 
 func apiRouterInit(router *mux.Router) error {
 	router.HandleFunc("/api/owner/new", ownerNewHandler).Methods("POST")
@@ -66,6 +70,12 @@ func apiRouterInit(router *mux.Router) error {
 	router.HandleFunc("/api/comment/owner/delete", commentOwnerDeleteHandler).Methods("POST")
 
 	router.HandleFunc("/api/page/update", pageUpdateHandler).Methods("POST")
+
+	hub = newHub()
+	go hub.run()
+	router.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+		serveWs(hub, w, r)
+	})
 
 	return nil
 }

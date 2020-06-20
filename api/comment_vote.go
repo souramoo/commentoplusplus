@@ -40,6 +40,8 @@ func commentVote(commenterHex string, commentHex string, direction int) error {
 		return errorInternal
 	}
 
+	hub.broadcast <- []byte("vote_comment")
+
 	return nil
 }
 

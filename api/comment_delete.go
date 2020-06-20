@@ -21,6 +21,8 @@ func commentDelete(commentHex string) error {
 		return errorNoSuchComment
 	}
 
+	hub.broadcast <- []byte("deleted_comment")
+
 	return nil
 }
 

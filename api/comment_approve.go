@@ -21,6 +21,8 @@ func commentApprove(commentHex string) error {
 		return errorInternal
 	}
 
+	hub.broadcast <- []byte("approved_comment")
+
 	return nil
 }
 
