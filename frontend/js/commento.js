@@ -423,17 +423,20 @@
       isLocked = resp.attributes.isLocked;
       stickyCommentHex = resp.attributes.stickyCommentHex;
 
-      comments = resp.comments.concat(ownComments);
-      // remove duplicates if own comment then got approved
-      var uniqSet = {}, commLen = comments.length;
-      for(var i=0; i < commLen; i++) {
-        uniqSet[comments[i].commentHex] = comments[i];
+      comments = resp.comments
+
+      var i = ownComments.length;
+      while (i--) {
+        // if in comments, delete from owncomments
+        for(var j in comments){
+          if(comments[j].commentHex === ownComments[i].commentHex) {
+            ownComments.splice(i, 1)
+            break;
+          }
+        }
       }
 
-      comments = new Array();
-      for(var key in uniqSet) {
-        comments.push(uniqSet[key]);
-      }
+      comments.concat(ownComments);
 
       commentsMap = parentMap(comments)
       commenters = Object.assign({}, commenters, resp.commenters)
@@ -1376,6 +1379,7 @@
     if(!noAdd) {
       text.replaceWith(textareaCreate(id, true));
       var textarea = $(ID_TEXTAREA + id);
+      parentMap(comments)
       textarea.value = commentsMap[id].markdown;
     }
 
@@ -2240,6 +2244,9 @@
       wsUri[0] = "ws"
       wsUri = wsUri.join(":")
       var conn = new WebSocket(wsUri + "/ws");
+      conn.onopen = function () {
+        conn.send(parent.location.host + pageId) // subscribe to this page
+      }
       conn.onmessage = function () {
         commentsGet(commentsRender, true)
       };
