@@ -441,12 +441,13 @@
         for(var j in comments){
           if(comments[j].commentHex === ownComments[i].commentHex) {
             ownComments.splice(i, 1)
+            console.log(comments[j])
+            comments[j].justAdded = true;
             break;
           }
         }
       }
-
-      comments.concat(ownComments);
+      comments = comments.concat(ownComments);
 
       commentsMap = parentMap(comments)
       commenters = Object.assign({}, commenters, resp.commenters)
@@ -1395,6 +1396,8 @@
       textarea.innerHTML = commentsMap[id].html;
       textarea.id = ID_TEXT + id;
       delete shownEdit[id];
+
+      classAdd($(ID_CARD + id), "highlight")
 
       classAdd(editButton, "option-edit");
       classRemove(editButton, "option-cancel");
