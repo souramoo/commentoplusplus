@@ -2311,7 +2311,7 @@
   function init() {
     if(window["WebSocket"]) {
       var wsUri = origin.split(":")
-      wsUri[0] = "ws"
+      wsUri[0] = "wss"
       wsUri = wsUri.join(":")
       var conn = new WebSocket(wsUri + "/ws");
       conn.onmessage = function () {
