@@ -735,7 +735,7 @@
   }
 
 
-  global.commentNew = function(id, commenterToken, callback, dontAppendCard) {
+  global.commentNew = function(id, commenterToken, callback) {
     var textareaSuperContainer = $(ID_SUPER_CONTAINER + id);
     var textarea = $(ID_TEXTAREA + id);
     var replyButton = $(ID_REPLY + id);
@@ -1615,7 +1615,7 @@
               global.commentNew(id, resp.commenterToken, function() {
                 global.loginBoxClose();
                 commentsGet(commentsRender);
-              }, true);
+              });
             } else {
               global.loginBoxClose();
               commentsGet(commentsRender);
