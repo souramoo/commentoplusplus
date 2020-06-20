@@ -824,7 +824,7 @@
       
       if (commenterHex === "anonymous" && $(ID_GUEST_DETAILS_INPUT + id).value.trim().length > 0) {
         commenterHex = id;
-        commenters[id] = { provider: "anon", name: $(ID_GUEST_DETAILS_INPUT + id).value.trim(), photo: "undefined" };
+        commenters[id] = { provider: "anon", name: $(ID_GUEST_DETAILS_INPUT + id).value.trim(), photo: "undefined", link: "" };
       }
 
       if (commenterHex === "anonymous" && $(ID_GUEST_DETAILS_INPUT + id).value.trim().length > 0) {
