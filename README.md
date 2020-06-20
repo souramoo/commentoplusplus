@@ -11,6 +11,9 @@ Source: https://gitlab.com/commento/commento/
 ### Now with all my patches out of the box!
 
 Changes from upstream:
+- [NEW FEATURE: Auto refreshing comments with WebSockets for push updates](https://gitlab.com/commento/commento/-/merge_requests/168)
+- NEW FEATURE: Window title updates when there's new activity
+- [NEW FEATURE: Guests can leave their name](https://gitlab.com/commento/commento/-/merge_requests/169)
 - [FIXED: Twitter profile photo bug](https://gitlab.com/commento/commento/-/merge_requests/159)
 - [FIXED: Duplicate comment bug on login](https://gitlab.com/commento/commento/-/merge_requests/160)
 - [FIXED: Add target="_blank" to all external links, while also adding "noopener" to prevent XSS](https://gitlab.com/commento/commento/-/merge_requests/161)
@@ -18,8 +21,6 @@ Changes from upstream:
 - [NEW FEATURE: Comment moderation dashboard, to approve/delete comments across your entire domain from one place](https://gitlab.com/commento/commento/-/merge_requests/163)
 - [NEW FEATURE: MathJax support hook, will plug in to any MathJax library included on the same page commento is on](https://gitlab.com/commento/commento/-/merge_requests/164)
 - [NEW FEATURE: Press enter to log in after entering your password](https://gitlab.com/commento/commento/-/merge_requests/167)
-- [NEW FEATURE: Auto refreshing comments](https://gitlab.com/commento/commento/-/merge_requests/168)
-- [NEW FEATURE: Guests can leave their name](https://gitlab.com/commento/commento/-/merge_requests/169)
 - [FIXED: Deleted comments not returned in array](https://gitlab.com/commento/commento/-/merge_requests/170)
 
 (Have sent in merge requests, don't know when they'll be accepted, so here's a ready to use version!)
