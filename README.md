@@ -17,6 +17,8 @@ Changes from upstream:
 - [NEW FEATURE: MathJax support hook, will plug in to any MathJax library included on the same page commento is on](https://gitlab.com/commento/commento/-/merge_requests/164)
 - [NEW FEATURE: Press enter to log in after entering your password](https://gitlab.com/commento/commento/-/merge_requests/167)
 - [NEW FEATURE: Auto refreshing comments](https://gitlab.com/commento/commento/-/merge_requests/168)
+- [NEW FEATURE: Guests can leave their name](https://gitlab.com/commento/commento/-/merge_requests/169)
+- [FIXED: Deleted comments not returned in array](https://gitlab.com/commento/commento/-/merge_requests/170)
 
 (Have sent in merge requests, don't know when they'll be accepted, so here's a ready to use version!)
 
