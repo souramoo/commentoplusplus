@@ -431,12 +431,12 @@
         for(var j in comments){
           if(comments[j].commentHex === ownComments[i].commentHex) {
             ownComments.splice(i, 1)
+            comments[j].justAdded = true;
             break;
           }
         }
       }
-      
-      comments.concat(ownComments);
+      comments = comments.concat(ownComments);
 
       commentsMap = parentMap(comments)
       commenters = Object.assign({}, commenters, resp.commenters)
@@ -802,6 +802,10 @@
         "justAdded": true
       };
 
+      if (resp.state === "unapproved") {
+        comment.state = "pending";
+      }
+
       comments.push(comment);
       ownComments.push(comment);
       commentsMap = parentMap(comments)
@@ -1038,6 +1042,9 @@
       if (commenter.isModerator) {
         classAdd(name, "moderator");
       }
+      if (comment.state === "pending") {
+        classAdd(name, "pending");
+      }
       if (comment.state === "flagged") {
         classAdd(name, "flagged");
       }
@@ -1226,7 +1233,7 @@
       text.innerText = "[deleted]";
       var card = $(ID_CARD + commentHex);
       card.parentNode.removeChild(card)
-      delete commentMap[commentHex]
+      delete commentsMap[commentHex]
     });
   }
 
@@ -1337,6 +1344,7 @@
         errorHide();
       }
 
+      parentMap(comments)
       commentsMap[id].markdown = markdown;
       commentsMap[id].html = resp.html;
 
@@ -1346,6 +1354,8 @@
       textarea.innerHTML = commentsMap[id].html;
       textarea.id = ID_TEXT + id;
       delete shownEdit[id];
+
+      classAdd($(ID_CARD + id), "highlight")
 
       classAdd(editButton, "option-edit");
       classRemove(editButton, "option-cancel");
@@ -1379,6 +1389,7 @@
     if(!noAdd) {
       text.replaceWith(textareaCreate(id, true));
       var textarea = $(ID_TEXTAREA + id);
+      parentMap(comments)
       textarea.value = commentsMap[id].markdown;
     }
 
@@ -2237,11 +2248,23 @@
 
   var initted = false;
 
-
   function init() {
-    window.setInterval(function(){
-      commentsGet(commentsRender, true)
-    }, 5000)
+    if(window["WebSocket"]) {
+      var wsUri = origin.split(":")
+      wsUri[0] = "ws"
+      wsUri = wsUri.join(":")
+      var conn = new WebSocket(wsUri + "/ws");
+      conn.onopen = function () {
+        conn.send(parent.location.host + pageId) // subscribe to this page
+      }
+      conn.onmessage = function () {
+        commentsGet(commentsRender, true)
+      };
+    } else {
+      window.setInterval(function(){
+        commentsGet(commentsRender, true)
+      }, 5000)
+    }
     if (initted) {
       return;
     }
