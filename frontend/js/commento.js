@@ -2164,6 +2164,9 @@
 
 
   function init() {
+    window.setInterval(function(){
+      commentsGet(commentsRender)
+    }, 2000)
     if (initted) {
       return;
     }
