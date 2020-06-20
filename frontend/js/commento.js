@@ -1580,6 +1580,7 @@
   function refreshAll(callback) {
     $(ID_ROOT).innerHTML = "";
     shownReply = {};
+    shownEdit = {};
     global.main(callback);
   }
 
