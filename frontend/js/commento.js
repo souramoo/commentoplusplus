@@ -2285,9 +2285,9 @@
 
 
   function init() {
-    //window.setInterval(function(){
-    //  commentsGet(commentsRender, true)
-    //}, 5000)
+    window.setInterval(function(){
+      commentsGet(commentsRender, true)
+    }, 5000)
     if (initted) {
       return;
     }
