@@ -431,7 +431,6 @@
         for(var j in comments){
           if(comments[j].commentHex === ownComments[i].commentHex) {
             ownComments.splice(i, 1)
-            console.log(comments[j])
             comments[j].justAdded = true;
             break;
           }
@@ -803,6 +802,10 @@
         "justAdded": true
       };
 
+      if (resp.state === "unapproved") {
+        comment.state = "pending";
+      }
+
       comments.push(comment);
       ownComments.push(comment);
       commentsMap = parentMap(comments)
@@ -1039,6 +1042,9 @@
       if (commenter.isModerator) {
         classAdd(name, "moderator");
       }
+      if (comment.state === "pending") {
+        classAdd(name, "pending");
+      }
       if (comment.state === "flagged") {
         classAdd(name, "flagged");
       }
@@ -1227,7 +1233,7 @@
       text.innerText = "[deleted]";
       var card = $(ID_CARD + commentHex);
       card.parentNode.removeChild(card)
-      delete commentMap[commentHex]
+      delete commentsMap[commentHex]
     });
   }
 
@@ -1338,6 +1344,7 @@
         errorHide();
       }
 
+      parentMap(comments)
       commentsMap[id].markdown = markdown;
       commentsMap[id].html = resp.html;
 
