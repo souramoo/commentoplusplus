@@ -800,6 +800,11 @@
       if (commenterHex === undefined || commenterToken === "anonymous") {
         commenterHex = "anonymous";
       }
+      
+      if (commenterHex === "anonymous" && $(ID_GUEST_DETAILS_INPUT + id).value.trim().length > 0) {
+        commenterHex = id;
+        commenters[id] = { provider: "anon", name: $(ID_GUEST_DETAILS_INPUT + id).value.trim(), photo: "undefined" };
+      }
 
       var comment = {
         "commentHex": resp.commentHex,
