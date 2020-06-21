@@ -305,7 +305,7 @@
 
     name.innerText = commenter.name;
     notificationSettingsButton.innerText = "Notification Settings";
-    profileEditButton.innerText = "Edit Profile";
+    profileEditButton.innerText = "Settings";
     logoutButton.innerText = "Logout";
 
     onclick(logoutButton, global.logout);
