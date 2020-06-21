@@ -844,7 +844,9 @@
         message = "Your comment was flagged as spam and is under moderation.";
       }
 
-      errorShow(messageCreate(message));
+      if(message !== "") {
+        errorShow(message);
+      }
       
       var commenterHex = selfHex;
       if (commenterHex === undefined || commenterToken === "anonymous") {
