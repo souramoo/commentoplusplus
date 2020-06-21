@@ -488,7 +488,11 @@
 
   function errorShow(message) {
     if (message !== "") {
-      append($(ID_NOTICE_CONTAINER), messageCreate(message));
+      var messageEl = messageCreate(message);
+      append($(ID_NOTICE_CONTAINER), messageEl);
+      setTimeout(function(){
+        messageEl.remove(); 
+      }, 5000)
     }
   }
 
@@ -840,9 +844,7 @@
         message = "Your comment was flagged as spam and is under moderation.";
       }
 
-      if (message !== "") {
-        append($(ID_NOTICE_CONTAINER), messageCreate(message));
-      }
+      errorShow(messageCreate(message));
       
       var commenterHex = selfHex;
       if (commenterHex === undefined || commenterToken === "anonymous") {
@@ -1452,9 +1454,7 @@
         message = "Your comment was flagged as spam and is under moderation.";
       }
 
-      if (message !== "") {
-        append($(ID_NOTICE_CONTAINER), messageCreate(message));
-      }
+      errorShow(messageCreate(message));
     });
   }
 
