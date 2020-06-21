@@ -335,7 +335,7 @@
     if (commenter.provider === "commento") {
       append(loggedContainer, profileEditButton);
     }
-    append(loggedContainer, notificationSettingsButton);
+    // append(loggedContainer, notificationSettingsButton);
     prepend(root, loggedContainer);
 
     isAuthenticated = true;
