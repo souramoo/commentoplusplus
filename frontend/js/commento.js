@@ -77,6 +77,7 @@
   var hideDeleted;
   var autoInit;
   var isAuthenticated = false;
+  var firstFetch = true;
   var comments = [];
   var ownComments = [];
   var justAdded = {};
@@ -438,7 +439,21 @@
       isLocked = resp.attributes.isLocked;
       stickyCommentHex = resp.attributes.stickyCommentHex;
 
+      var existingCommentHexes = [];
+      for(var i in comments) {
+        existingCommentHexes.push(comments[i].commentHex);
+      }
+
       comments = resp.comments;
+
+      if(!firstFetch) {
+        // if a new comment added since page loaded, highlight it
+        for(var j in comments) {
+          if(existingCommentHexes.indexOf(comments[j].commentHex) === -1) {
+            justAdded[comments[j].commentHex] = true;
+          }
+        }
+      }
 
       var i = ownComments.length;
       while (i--) {
@@ -446,7 +461,7 @@
         for(var j in comments){
           if(comments[j].commentHex === ownComments[i].commentHex) {
             ownComments.splice(i, 1)
-            justAdded[commentHex] = true;
+            justAdded[comments[j].commentHex] = true;
             break;
           }
         }
@@ -465,6 +480,7 @@
         }
       }
 
+      firstFetch = false;
       call(callback);
     });
   }
@@ -882,7 +898,8 @@
       }
 
       commentsRender()
-      $(ID_CARD + resp.commentHex).scrollIntoView({behavior: "smooth"});
+      var y = $(ID_CARD + resp.commentHex).getBoundingClientRect().top + window.pageYOffset - 40;
+      window.scrollTo({top: y, behavior: "smooth"});
       // window.location.hash = ID_CARD + resp.commentHex;
       call(callback);
 
@@ -1927,7 +1944,7 @@
     emailSubtitle.innerText = "Create an account";
     popupBoxType = "signup";
     global.passwordAsk(id);
-    $(ID_LOGIN_BOX_EMAIL_INPUT).focus();
+    // $(ID_LOGIN_BOX_EMAIL_INPUT).focus();
   }
 
 
@@ -2079,11 +2096,11 @@
       append(loginBox, fieldContainer);
     }
 
-    if (popupBoxType === "signup") {
+    /*if (popupBoxType === "signup") {
       $(ID_LOGIN_BOX_NAME_INPUT).focus();
     } else {
       $(ID_LOGIN_BOX_PASSWORD_INPUT).focus();
-    }
+    }*/
   }
 
 
@@ -2239,7 +2256,7 @@
     // window.location.hash = ID_LOGIN_BOX_CONTAINER;
     $(ID_LOGIN_BOX_CONTAINER).scrollIntoView({ behavior: "smooth" })
 
-    $(ID_LOGIN_BOX_EMAIL_INPUT).focus();
+    //$(ID_LOGIN_BOX_EMAIL_INPUT).focus();
   }
 
 
@@ -2277,7 +2294,7 @@
           return;
         }
 
-        classAdd(el, "highlighted-card");
+        classAdd(el, "highlight");
         el.scrollIntoView({ behavior: "smooth" });
       } else if (window.location.hash.startsWith("#commento")) {
         root.scrollIntoView({ behavior: "smooth" });
