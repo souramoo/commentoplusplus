@@ -25,8 +25,7 @@ func commentList(commenterHex string, domain string, path string, includeUnappro
 		FROM comments
 		WHERE
 			comments.domain = $1 AND
-			comments.path = $2 AND
-			comments.deleted = false
+			comments.path = $2
 	`
 
 	if !includeUnapproved {
