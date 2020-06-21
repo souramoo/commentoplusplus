@@ -13,6 +13,10 @@ Source: https://gitlab.com/commento/commento/
 Changes from upstream:
 - [NEW FEATURE: Auto refreshing comments with WebSockets for push updates](https://gitlab.com/commento/commento/-/merge_requests/168)
 - NEW FEATURE: Window title updates when there's new activity
+- NEW FEATURE: Permalinks, and a subtle yellow highlight animation for new comments when they come in live
+- NEW FEATURE: Smooth scrolling
+- NEW FEATURE: Hide +/- if no children
+- NEW FEATURE: Errors now slide down from the top rather than the ugly error system before
 - [NEW FEATURE: Guests can leave their name](https://gitlab.com/commento/commento/-/merge_requests/169)
 - [FIXED: Twitter profile photo bug](https://gitlab.com/commento/commento/-/merge_requests/159)
 - [FIXED: Duplicate comment bug on login](https://gitlab.com/commento/commento/-/merge_requests/160)

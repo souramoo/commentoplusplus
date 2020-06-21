@@ -1036,6 +1036,7 @@
       var sticky = create("button");
       var children = commentsRecurse(parentMap, comment.commentHex);
       var contents = create("div");
+      var permalink = create("a");
       var color = colorGet(comment.commenterHex + "-" + commenter.name);
       var name;
       if (commenter.link !== "undefined" && commenter.link !== "https://undefined" && commenter.link !== "") {
@@ -1066,6 +1067,11 @@
       }
       contents.id = ID_CONTENTS + comment.commentHex;
       name.id = ID_NAME + comment.commentHex;
+      permalink.href = "#commento-" + comment.commentHex;
+      permalink.innerText = "permalink";
+      permalink.onclick = function() {
+        window.location.hash = "#commento-" + comment.commentHex; loadHash(); commentsRender(); 
+      }
 
       collapse.title = "Collapse children";
       upvote.title = "Upvote";
@@ -1135,6 +1141,7 @@
       }
       classAdd(header, "header");
       classAdd(name, "name");
+      classAdd(permalink, "permalink");
       classAdd(subtitle, "subtitle");
       classAdd(timeago, "timeago");
       classAdd(score, "score");
@@ -1239,6 +1246,7 @@
       append(header, name);
       append(header, subtitle);
       append(body, text);
+      append(body, permalink);
       append(contents, body);
       if (mobileView) {
         append(contents, options);
@@ -2289,7 +2297,13 @@
   function loadHash() {
     if (window.location.hash) {
       if (window.location.hash.startsWith("#commento-")) {
-        var el = $(ID_CARD + window.location.hash.split("-")[1]);
+        var cardId = "";
+        if (window.location.hash.startsWith("#commento-comment-card")) {
+          cardId = window.location.hash.split("-")[3];
+        } else {
+          cardId = window.location.hash.split("-")[1];
+        }
+        var el = $(ID_CARD + cardId);
         if (el === null) {
           return;
         }
