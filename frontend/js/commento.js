@@ -778,8 +778,10 @@
       remove($(ID_LOGIN));
     }
 
-    if (isLocked || isFrozen) {
+    if (isLocked) {
       append(mainArea, messageCreate("This thread is locked. You cannot add new comments."));
+    } else if (isFrozen) {
+      append(mainArea, messageCreate("This domain is frozen. Comments have been disabled."));
     } else {
       append(mainArea, textareaCreate("root"));
     }
