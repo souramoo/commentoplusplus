@@ -1,6 +1,10 @@
 # Commento++
 
+![Commento++ in action](https://i.imgur.com/x4IA22n.gif)
+
 DEMO: https://demo.souradip.com/chat.html
+
+Commento++ is a platform that you can embed in your website to allow your readers to add comments. It's reasonably fast lightweight. Supports markdown, import from Disqus, voting, automated spam detection, moderation tools, sticky comments, thread locking, OAuth login, single sign-on, and email notifications.
 
 ### Modified to Run on Heroku in Docker Container and autoupdate with GitLab upstream
 
@@ -8,7 +12,7 @@ DEMO: https://demo.souradip.com/chat.html
 
 This repo is set up to pull updates from the [GitLab master of Commento](https://gitlab.com/commento/commento/) and merge them with [fidiego's heroku deploy script](https://github.com/fidiego/commento-heroku). It's also set to autodeploy when there's a new commit onto my heroku, so my version should stay constantly updated ;)
 
-Source: https://gitlab.com/commento/commento/
+Original source: https://gitlab.com/commento/commento/
 
 ### Now with all my patches out of the box!
 
@@ -31,12 +35,10 @@ Changes from upstream:
 
 (Have sent in merge requests, don't know when they'll be accepted, so here's a ready to use version!)
 
-
-### Commento
+### Commento (original description)
 
 ##### [Homepage](https://commento.io) &nbsp;&ndash;&nbsp; [Demo](https://demo.commento.io) &nbsp;&ndash;&nbsp; [Documentation](https://docs.commento.io) &nbsp;&ndash;&nbsp; [Contributing](https://docs.commento.io/contributing/) &nbsp;&ndash;&nbsp; [#commento on Freenode](http://webchat.freenode.net/?channels=%23commento)
 
-Commento is a platform that you can embed in your website to allow your readers to add comments. It's reasonably fast lightweight. Supports markdown, import from Disqus, voting, automated spam detection, moderation tools, sticky comments, thread locking, OAuth login, single sign-on, and email notifications.
 
 ###### How is this different from Disqus, Facebook Comments, and the rest?
 
