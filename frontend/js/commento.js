@@ -2388,18 +2388,18 @@
     var conn = new WebSocket(wsUri + "/ws");
     conn.onopen = function () {
       conn.send(parent.location.host + pageId) // subscribe to this page
-      clearInterval(connectWs);
+      clearInterval(connectInterval);
     }
     conn.onmessage = function () {
       window.document.title = "(*) " + initialTitle;
       commentsGet(commentsRender, true)
     };
     conn.onclose = function() {
-      console.log('Socket is closed. Reconnect will be attempted with an exponential backoff.', e.reason);
+      console.log("Socket is closed. Reconnect will be attempted with an exponential backoff.", e.reason);
       connectInterval = setInterval(connectWs, 1000);
     }
     conn.onerror = function(err) {
-      console.error('Socket encountered error: ', err.message, 'Closing socket');
+      console.error("Socket encountered error: ", err.message, "Closing socket");
       conn.close();
     };
   }
