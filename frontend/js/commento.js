@@ -2379,23 +2379,38 @@
     });
   }
 
+  var connectInterval = -1;
+
+  function connectWs() {
+    var wsUri = origin.split(":")
+    wsUri[0] = ( location.protocol === "https:" ? "wss" : "ws" )
+    wsUri = wsUri.join(":")
+    var conn = new WebSocket(wsUri + "/ws");
+    conn.onopen = function () {
+      conn.send(parent.location.host + pageId) // subscribe to this page
+      clearInterval(connectWs);
+    }
+    conn.onmessage = function () {
+      window.document.title = "(*) " + initialTitle;
+      commentsGet(commentsRender, true)
+    };
+    conn.onclose = function() {
+      console.log('Socket is closed. Reconnect will be attempted with an exponential backoff.', e.reason);
+      connectInterval = setInterval(connectWs, 1000);
+    }
+    conn.onerror = function(err) {
+      console.error('Socket encountered error: ', err.message, 'Closing socket');
+      conn.close();
+    };
+  }
+
   function init() {
     if (initted) {
       return;
     }
 
     if(window["WebSocket"]) {
-      var wsUri = origin.split(":")
-      wsUri[0] = ( location.protocol === "https:" ? "wss" : "ws" )
-      wsUri = wsUri.join(":")
-      var conn = new WebSocket(wsUri + "/ws");
-      conn.onopen = function () {
-        conn.send(parent.location.host + pageId) // subscribe to this page
-      }
-      conn.onmessage = function () {
-        window.document.title = "(*) " + initialTitle;
-        commentsGet(commentsRender, true)
-      };
+      connectWs();
       // update times every 60 secs or so
       window.setInterval(function(){
         commentsRender()
