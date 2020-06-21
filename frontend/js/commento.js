@@ -286,6 +286,8 @@
     var name;
     if (commenter.link !== "undefined") {
       name = create("a");
+      name.target = "_blank"
+      name.rel = "nofollow noopener"
     } else {
       name = create("div");
     }
