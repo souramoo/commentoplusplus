@@ -33,9 +33,9 @@
   var ID_MOD_TOOLS_LOCK_BUTTON = "commento-mod-tools-lock-button";
   var ID_ERROR = "commento-error";
   var ID_LOGGED_CONTAINER = "commento-logged-container";
-  var ID_PRE_COMMENTS_AREA = "commento-pre-comments-area";
   var ID_COMMENTS_AREA = "commento-comments-area";
   var ID_SUPER_CONTAINER = "commento-textarea-super-container-";
+  var ID_NOTICE_CONTAINER = "commento-notice-container";
   var ID_TEXTAREA_CONTAINER = "commento-textarea-container-";
   var ID_TEXTAREA = "commento-textarea-";
   var ID_ANONYMOUS_CHECKBOX = "commento-anonymous-checkbox-";
@@ -65,6 +65,8 @@
   var ID_MARKDOWN_HELP = "commento-markdown-help-";
   var ID_FOOTER = "commento-footer";
 
+  var initted = false;
+  var initialTitle = window.document.title;
 
   var origin = "[[[.Origin]]]";
   var cdn = "[[[.CdnPrefix]]]";
@@ -83,7 +85,7 @@
   var requireIdentification = true;
   var isModerator = false;
   var isFrozen = false;
-  var chosenAnonymous = false;
+  //var chosenAnonymous = false;
   var isLocked = false;
   var stickyCommentHex = "none";
   var shownReply = {};
@@ -723,12 +725,13 @@
     var login = create("div");
     var loginText = create("div");
     var mainArea = $(ID_MAIN_AREA);
-    var preCommentsArea = create("div");
+    var noticeArea = create("div");
     var commentsArea = create("div");
 
     login.id = ID_LOGIN;
-    preCommentsArea.id = ID_PRE_COMMENTS_AREA;
+    noticeArea.id = ID_NOTICE_CONTAINER;
     commentsArea.id = ID_COMMENTS_AREA;
+    append(mainArea, noticeArea);
 
     classAdd(login, "login");
     classAdd(loginText, "login-text");
@@ -751,28 +754,21 @@
       anonymousOnly = true;
     }
 
-    if (isLocked || isFrozen) {
-      if (isAuthenticated || chosenAnonymous) {
-        append(mainArea, messageCreate("This thread is locked. You cannot add new comments."));
-        remove($(ID_LOGIN));
-      } else {
-        append(mainArea, login);
-        append(mainArea, textareaCreate("root"));
-      }
+    if (!isAuthenticated) {
+      append(mainArea, login);
     } else {
-      if (!isAuthenticated) {
-        append(mainArea, login);
-      } else {
-        remove($(ID_LOGIN));
-      }
+      remove($(ID_LOGIN));
+    }
+
+    if (isLocked || isFrozen) {
+      append(mainArea, messageCreate("This thread is locked. You cannot add new comments."));
+    } else {
       append(mainArea, textareaCreate("root"));
     }
 
     if (comments.length > 0) {
       append(mainArea, sortPolicyBox());
     }
-
-    append(mainArea, preCommentsArea);
 
     append(mainArea, commentsArea);
     append(root, mainArea);
@@ -831,7 +827,7 @@
       }
 
       if (message !== "") {
-        prepend($(ID_SUPER_CONTAINER + id), messageCreate(message));
+        append($(ID_NOTICE_CONTAINER), messageCreate(message));
       }
       
       var commenterHex = selfHex;
@@ -886,7 +882,8 @@
       }
 
       commentsRender()
-      window.location.hash = ID_CARD + resp.commentHex;
+      $(ID_CARD + resp.commentHex).scrollIntoView({behavior: "smooth"});
+      // window.location.hash = ID_CARD + resp.commentHex;
       call(callback);
 
     });
@@ -1177,16 +1174,18 @@
         attrSet(name, "href", commenter.link);
       }
 
-      append(options, collapse);
+      if(children) {
+        append(options, collapse);
+      }
 
-      if (!comment.deleted) {
+      if (!comment.deleted  && (!isFrozen && !isLocked)) {
         append(options, downvote);
         append(options, upvote);
       }
 
       if (comment.commenterHex === selfHex) {
         append(options, edit);
-      } else if (!comment.deleted) {
+      } else if (!comment.deleted && (!isFrozen && !isLocked)) {
         append(options, reply);
       }
 
@@ -1439,7 +1438,7 @@
       }
 
       if (message !== "") {
-        prepend($(ID_SUPER_CONTAINER + id), messageCreate(message));
+        append($(ID_NOTICE_CONTAINER), messageCreate(message));
       }
     });
   }
@@ -1650,7 +1649,7 @@
 
 
   function submitAnonymous(id) {
-    chosenAnonymous = true;
+    //chosenAnonymous = true;
     global.commentNew(id, "anonymous");
   }
 
@@ -1726,14 +1725,6 @@
         }
       }, 250);
     });
-  }
-
-
-  function refreshAll(callback) {
-    $(ID_ROOT).innerHTML = "";
-    shownReply = {};
-    shownEdit = {};
-    global.main(callback);
   }
 
 
@@ -2130,7 +2121,7 @@
     lock.disabled = true;
     pageUpdate(function() {
       lock.disabled = false;
-      refreshAll();
+      refreshAll(commentsRender);
     });
   }
 
@@ -2246,6 +2237,7 @@
     attrSet(loginBoxContainer, "style", "");
 
     // window.location.hash = ID_LOGIN_BOX_CONTAINER;
+    $(ID_LOGIN_BOX_CONTAINER).scrollIntoView({ behavior: "smooth" })
 
     $(ID_LOGIN_BOX_EMAIL_INPUT).focus();
   }
@@ -2286,9 +2278,9 @@
         }
 
         classAdd(el, "highlighted-card");
-        el.scrollIntoView(true);
+        el.scrollIntoView({ behavior: "smooth" });
       } else if (window.location.hash.startsWith("#commento")) {
-        root.scrollIntoView(true);
+        root.scrollIntoView({ behavior: "smooth" });
       }
     }
   }
@@ -2315,6 +2307,7 @@
     errorElementCreate();
 
     mainAreaCreate();
+    modToolsCreate();
 
     var footer = footerLoad();
     cssLoad(cdn + "/css/commento.css", loadCssOverride);
@@ -2334,8 +2327,12 @@
     });
   }
 
-  var initted = false;
-  var initialTitle = window.document.title;
+  function refreshAll(callback) {
+    root.innerHTML = "";
+    shownReply = {};
+    shownEdit = {};
+    global.main(callback)
+  }
 
   function activityWatcher() {
     function activity(){

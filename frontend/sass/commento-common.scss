@@ -62,6 +62,33 @@ blockquote {
   }
 }
 
+#commento-notice-container {
+  position: fixed;
+  top: 0;
+  padding: 0;
+  margin: 0;
+  z-index: 2;
+  left: 0;
+  width: 100%;
+}
+
+@keyframes slide-down {
+      0% { opacity: 0; transform: translateY(-100%); }   
+     30% { opacity: 1; transform: translateY(0); }
+     70% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-100%); }   
+}
+
+#commento-notice-container .commento-moderation-notice {
+  margin-top: 0 !important;
+  padding: 18px 0 9px;
+  background: $red-1;
+  color: $red-7 !important;
+  opacity:0;
+  transform: translateY(-100%);
+  animation: slide-down 5s;
+}
+
 .commento-clear {
   clear: both;
 }
