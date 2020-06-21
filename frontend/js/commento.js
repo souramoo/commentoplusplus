@@ -529,7 +529,7 @@
     strikethroughLeft.innerHTML = "<strike>strikethrough</strike>";
     strikethroughRight.innerHTML = "surround text with <pre>~~two tilde characters~~</pre>";
     hyperlinkLeft.innerHTML = "<a href=\"https://example.com\">hyperlink</a>";
-    hyperlinkRight.innerHTML = "<pre>[hyperlink](https://example.com)</pre> or just a bare URL";
+    hyperlinkRight.innerHTML = "<pre>[link](https://example.com)</pre> or just a bare URL";
     quoteLeft.innerHTML = "<blockquote>quote</blockquote>";
     quoteRight.innerHTML = "prefix with <pre>&gt;</pre>";
 
