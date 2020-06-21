@@ -1024,6 +1024,8 @@
       var name;
       if (commenter.link !== "undefined" && commenter.link !== "https://undefined" && commenter.link !== "") {
         name = create("a");
+        name.target = "_blank"
+        name.rel = "nofollow noopener"
       } else {
         name = create("div");
       }
