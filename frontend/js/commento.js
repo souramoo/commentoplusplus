@@ -486,12 +486,10 @@
   }
 
 
-  function errorShow(text) {
-    var el = $(ID_ERROR);
-
-    el.innerText = text;
-
-    attrSet(el, "style", "display: block;");
+  function errorShow(message) {
+    if (message !== "") {
+      append($(ID_NOTICE_CONTAINER), messageCreate(message));
+    }
   }
 
 
