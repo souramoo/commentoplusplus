@@ -41,7 +41,7 @@ blockquote {
 
 @keyframes yellowfade {
   from {
-    background: $yellow-3;
+    background: $yellow-0;
   }
   to {
     background: transparent;
@@ -62,6 +62,14 @@ blockquote {
   }
 }
 
-#commento-pre-comments-area {
+.commento-clear {
   clear: both;
+}
+
+.commento-avatar-img {
+  margin-right: 0 !important;
+}
+
+.commento-options {
+  width: auto !important;
 }

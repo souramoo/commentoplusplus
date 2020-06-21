@@ -77,6 +77,7 @@
   var isAuthenticated = false;
   var comments = [];
   var ownComments = [];
+  var justAdded = {};
   var commentsMap = {};
   var commenters = {};
   var requireIdentification = true;
@@ -433,7 +434,7 @@
       isLocked = resp.attributes.isLocked;
       stickyCommentHex = resp.attributes.stickyCommentHex;
 
-      comments = resp.comments
+      comments = resp.comments;
 
       var i = ownComments.length;
       while (i--) {
@@ -441,7 +442,7 @@
         for(var j in comments){
           if(comments[j].commentHex === ownComments[i].commentHex) {
             ownComments.splice(i, 1)
-            comments[j].justAdded = true;
+            justAdded[commentHex] = true;
             break;
           }
         }
@@ -451,6 +452,14 @@
       commentsMap = parentMap(comments)
       commenters = Object.assign({}, commenters, resp.commenters)
       configuredOauths = resp.configuredOauths;
+
+      // remove any just added highlights
+      var cards = $(".commento-card");
+      if(cards) {
+        for(var i in cards) {
+          removeClass(cards[i], "highlight")
+        }
+      }
 
       call(callback);
     });
@@ -591,6 +600,7 @@
     var markdownButton = create("a");
     var guestNameContainer = create("div");
     var guestName = create("input");
+    var clearBr = create("br");
 
     textareaSuperContainer.id = ID_SUPER_CONTAINER + id;
     textareaContainer.id = ID_TEXTAREA_CONTAINER + id;
@@ -611,6 +621,7 @@
     classAdd(guestName, "guest-details");
     classAdd(guestNameContainer, "guest-details-container");
     classAdd(guestNameContainer, "round-check");
+    classAdd(clearBr, "clear");
 
     attrSet(textarea, "placeholder", "Add a comment");
     attrSet(anonymousCheckbox, "type", "checkbox");
@@ -653,6 +664,7 @@
       append(guestNameContainer, guestName);
     }
     append(textareaSuperContainer, markdownButton);
+    append(textareaSuperContainer, clearBr);
 
     return textareaSuperContainer;
   }
@@ -845,7 +857,6 @@
         "state": "approved",
         "direction": 0,
         "creationDate": new Date(),
-        "justAdded": true
       };
 
       if (resp.state === "unapproved") {
@@ -854,6 +865,7 @@
 
       comments.push(comment);
       ownComments.push(comment);
+      justAdded[resp.commentHex] = true;
       commentsMap = parentMap(comments)
 
       if (id !== "root") {
@@ -1097,8 +1109,9 @@
       if (comment.state === "flagged") {
         classAdd(name, "flagged");
       }
-      if (comment.justAdded) {
+      if (justAdded[comment.commentHex]) {
         classAdd(card, "highlight");
+        delete justAdded[comment.commentHex];
       }
       classAdd(header, "header");
       classAdd(name, "name");
@@ -1404,7 +1417,7 @@
       textarea.id = ID_TEXT + id;
       delete shownEdit[id];
 
-      classAdd($(ID_CARD + id), "highlight")
+      justAdded[id] = true;
 
       classAdd(editButton, "option-edit");
       classRemove(editButton, "option-cancel");
@@ -1558,7 +1571,7 @@
 
   function parentMap(comments) {
     var m = {};
-    comments.forEach(function(comment) {
+    comments.forEach(function(comment, index) {
       var parentHex = comment.parentHex;
       if (!(parentHex in m)) {
         m[parentHex] = [];
@@ -1570,6 +1583,7 @@
       commentsMap[comment.commentHex] = {
         "html": comment.html,
         "markdown": comment.markdown,
+        "index": index
       };
     });
 
