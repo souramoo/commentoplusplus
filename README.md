@@ -8,7 +8,7 @@ Commento++ is a platform that you can embed in your website to allow your reader
 
 ### Modified to Run on Heroku in Docker Container and autoupdate with GitLab upstream
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/souramoo/commentoplusplus)
 
 This repo is set up to pull updates from the [GitLab master of Commento](https://gitlab.com/commento/commento/) and merge them with [fidiego's heroku deploy script](https://github.com/fidiego/commento-heroku). It's also set to autodeploy when there's a new commit onto my heroku, so my version should stay constantly updated ;)
 
