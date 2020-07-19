@@ -2,7 +2,7 @@
 
 Source: https://gitlab.com/commento/commento/
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/fidiego/commento-heroku)
 
 ### Commento
 
