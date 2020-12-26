@@ -424,7 +424,7 @@
     post(origin + "/api/comment/list", json, function(resp) {
       if(!casualMode) {
         if (!resp.success) {
-          errorShow(resp.message);
+          errorShow(resp.message, true);
           return;
         } else {
           errorHide();
@@ -486,13 +486,17 @@
   }
 
 
-  function errorShow(message) {
+  function errorShow(message, critical) {
     if (message !== "") {
       var messageEl = messageCreate(message);
-      append($(ID_NOTICE_CONTAINER), messageEl);
-      setTimeout(function(){
-        messageEl.remove(); 
-      }, 5000)
+      if(!critical) {
+        append($(ID_NOTICE_CONTAINER), messageEl);
+        setTimeout(function(){
+          messageEl.remove(); 
+        }, 5000)
+      } else {
+        append($(ID_ROOT), messageEl);
+      }
     }
   }
 

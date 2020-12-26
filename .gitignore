@@ -1,5 +1,6 @@
 build
 devel.env
+run_devel.sh
 
 # Ignoring for IDE-specific files
 .idea/*
