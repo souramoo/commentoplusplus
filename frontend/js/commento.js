@@ -1234,14 +1234,9 @@
       onclick(remove, global.commentDelete, comment.commentHex);
       onclick(sticky, global.commentSticky, comment.commentHex);
 
-      if (isAuthenticated) {
-        var upDown = upDownOnclickSet(upvote, downvote, comment.commentHex, comment.direction);
-        upvote = upDown[0];
-        downvote = upDown[1];
-      } else {
-        onclick(upvote, global.loginBoxShow, null);
-        onclick(downvote, global.loginBoxShow, null);
-      }
+      var upDown = upDownOnclickSet(upvote, downvote, comment.commentHex, comment.direction);
+      upvote = upDown[0];
+      downvote = upDown[1];
 
       onclick(reply, global.replyShow, comment.commentHex);
 
@@ -1408,6 +1403,10 @@
 
 
   global.vote = function(data) {
+    if (!isAuthenticated) {
+      global.loginBoxShow(null)
+      return;
+    }
     var commentHex = data[0];
     var oldDirection = data[1][0];
     var newDirection = data[1][1];
@@ -1513,8 +1512,9 @@
         message = i18n("Your comment was flagged as spam and is under moderation.");
       }
 
-      if(message != "")
+      if(message !== "") {
         errorShow(message);
+      }
     });
   }
 
