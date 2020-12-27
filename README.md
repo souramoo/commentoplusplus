@@ -1,14 +1,14 @@
 # Commento++
 
-##### 💬 Try it out and deploy your own
+### 💬 Try it out and deploy your own
 [LIVE DEMO](https://demo.souradip.com/chat.html)
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/souramoo/commentoplusplus)
 
-##### ❓ About
+### ❓ About
 Commento++ is a free, open source, fast & lightweight comments box that you can embed in your static website instead of Disqus.
 
-##### ⚡ Features
+### ⚡ Features
 - Markdown support
 - Import from Disqus
 - Voting
@@ -20,13 +20,13 @@ Commento++ is a free, open source, fast & lightweight comments box that you can 
 - Hot-reloading of comments
 - Email notifications.
 
-##### 🤝 Support
+### 🤝 Support
 Please [(donate)](https://paypal.me/souramoo) if you find my work helpful (this will always remain free and open source)!
 
-##### 📷 Screenshots
+### 📷 Screenshots
 ![Commento++ in action](https://i.imgur.com/x4IA22n.gif)
 
-###### 🤔 How is this different from Disqus, Facebook Comments, and the rest?
+### 🤔 How is this different from Disqus, Facebook Comments, and the rest?
 
 - 🐱‍👤  Respects your privacy and no adverts
 - 💄 Prettier comments box compared to other FOSS alternatives
@@ -34,10 +34,13 @@ Please [(donate)](https://paypal.me/souramoo) if you find my work helpful (this 
 - 🕐 One click to deploy your own instance to a free Heroku account in seconds
 - 🔌 You can self-host too for maximum control!
 
-###### Get started
+### Get started
 
 To start you just need to launch an instance. The button below will work for a free Heroku account:
+
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/souramoo/commentoplusplus)
+
+Otherwise, most of the below is the same as documented at https://docs.commento.io
 
 If you want to self-host, you will need a PostgreSQL server handy and then:
 1) Use this repo's Dockerfile if you're into that kind of thing
@@ -63,7 +66,7 @@ Once you have created an account in your commento instance, it should give you i
 ```
 
 
-###### More options to configure commento's frontend
+### More options to configure commento's frontend
 
 You can add the following to commento's script tag:
 
@@ -80,7 +83,7 @@ e.g. Usage example:
 <script defer src="https://chat.mookerj.ee/js/commento.js" data-no-websockets="true"></script>
 ```
 
-###### How is this different to the original Commento?
+### How is this different to the original Commento?
 Original source is from @adtac at https://gitlab.com/commento/commento/ - this fork is largely a result of me getting carried away fixing a lot of bugs but the original maintainer seemingly disappearing!
 
 (Inconclusive) list of changes from upstream:
