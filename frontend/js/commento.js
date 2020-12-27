@@ -2393,7 +2393,6 @@
     wsUri[0] = ( location.protocol === "https:" ? "wss" : "ws" )
     wsUri = wsUri.join(":")
     var conn = new WebSocket(wsUri + "/ws");
-    console.log(conn)
     conn.onopen = function () {
       conn.send(parent.location.host + pageId) // subscribe to this page
     }
