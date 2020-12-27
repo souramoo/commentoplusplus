@@ -827,9 +827,15 @@
       classRemove(textarea, "red-border");
     }
 
+    var anonName = "";
+
+    if($(ID_GUEST_DETAILS_INPUT + id)) {
+      anonName = $(ID_GUEST_DETAILS_INPUT + id).value
+    }
+
     var json = {
       "commenterToken": commenterToken,
-      "anonName": $(ID_GUEST_DETAILS_INPUT + id).value,
+      "anonName": anonName,
       "domain": parent.location.host,
       "path": pageId,
       "parentHex": id,
