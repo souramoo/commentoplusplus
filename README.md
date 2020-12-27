@@ -33,6 +33,15 @@ Changes from upstream:
 - [NEW FEATURE: Press enter to log in after entering your password](https://gitlab.com/commento/commento/-/merge_requests/167)
 - [FIXED: Deleted comments not returned in array](https://gitlab.com/commento/commento/-/merge_requests/170)
 
+New flags (add this onto the script tag loading commento.js to use them!):
+- `data-no-websockets="true"` - Disables websocket functionality in favour of HTTP polling to have the same live reload functionality in a situation where websockets aren't allowed (e.g. a reverse proxy)
+- `data-no-livereload="true"` - Disabled all hot reload functionality (this supercedes the above flag) - all comments are loaded once and only once on page load.
+
+Usage example:
+```
+<script defer src="https://chat.mookerj.ee/js/commento.js" data-no-websockets="true"></script>
+```
+
 (Have sent in merge requests, don't know when they'll be accepted, so here's a ready to use version!)
 
 ### Commento (original description)
