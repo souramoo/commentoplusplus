@@ -2154,11 +2154,13 @@
       append(loginBox, fieldContainer);
     }
 
-    /*if (popupBoxType === "signup") {
-      $(ID_LOGIN_BOX_NAME_INPUT).focus();
-    } else {
-      $(ID_LOGIN_BOX_PASSWORD_INPUT).focus();
-    }*/
+    var allInputs = Array.prototype.slice.call(document.querySelectorAll(".commento-input"));
+    for(var i = 0; i < allInputs.length; i++) {
+      if(allInputs[i].value.trim() === "") {
+        allInputs[i].focus();
+        break;
+      }
+    }
   }
 
 
