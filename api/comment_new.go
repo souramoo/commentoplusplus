@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 	"time"
+	"strings"
 )
 
 // Take `creationDate` as a param because comment import (from Disqus, for
@@ -45,12 +46,15 @@ func commentNew(commenterHex string, domain string, path string, parentHex strin
 		return "", errorInternal
 	}
 
+	hub.broadcast <- []byte(domain + path)
+
 	return commentHex, nil
 }
 
 func commentNewHandler(w http.ResponseWriter, r *http.Request) {
 	type request struct {
 		CommenterToken *string `json:"commenterToken"`
+		AnonName       *string `json:"anonName"`
 		Domain         *string `json:"domain"`
 		Path           *string `json:"path"`
 		ParentHex      *string `json:"parentHex"`
@@ -99,6 +103,15 @@ func commentNewHandler(w http.ResponseWriter, r *http.Request) {
 		if isSpam(*x.Domain, getIp(r), getUserAgent(r), "Anonymous", "", "", *x.Markdown) {
 			state = "flagged"
 		} else {
+			// if given an anonName, add it to a new commenter entry
+			if strings.TrimSpace(*x.AnonName) != "" {
+				commenterHex, err = commenterNew("undefined", strings.TrimSpace(*x.AnonName), "undefined", "undefined", "anon", "undefined");
+				if err != nil {
+					bodyMarshal(w, response{"success": false, "message": err.Error()})
+					return
+				}
+			}
+
 			if d.ModerateAllAnonymous || d.RequireModeration {
 				state = "unapproved"
 			} else {

@@ -1,8 +1,53 @@
-### Commento
+# Commento++
+
+![Commento++ in action](https://i.imgur.com/x4IA22n.gif)
+
+DEMO: https://demo.souradip.com/chat.html
+
+Commento++ is a platform that you can embed in your website to allow your readers to add comments. It's reasonably fast lightweight. Supports markdown, import from Disqus, voting, automated spam detection, moderation tools, sticky comments, thread locking, OAuth login, single sign-on, and email notifications.
+
+### Modified to Run on Heroku in Docker Container and autoupdate with GitLab upstream
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/souramoo/commentoplusplus)
+
+This repo is set up to pull updates from the [GitLab master of Commento](https://gitlab.com/commento/commento/) and merge them with [fidiego's heroku deploy script](https://github.com/fidiego/commento-heroku). It's also set to autodeploy when there's a new commit onto my heroku, so my version should stay constantly updated ;)
+
+Original source: https://gitlab.com/commento/commento/
+
+### Now with all my patches out of the box!
+
+Changes from upstream:
+- [NEW FEATURE: Auto refreshing comments with WebSockets for push updates](https://gitlab.com/commento/commento/-/merge_requests/168)
+- NEW FEATURE: Window title updates when there's new activity
+- NEW FEATURE: Permalinks, and a subtle yellow highlight animation for new comments when they come in live
+- NEW FEATURE: Smooth scrolling
+- NEW FEATURE: Hide +/- if no children
+- NEW FEATURE: Errors now slide down from the top rather than the ugly error system before
+- [NEW FEATURE: Guests can leave their name](https://gitlab.com/commento/commento/-/merge_requests/169)
+- [FIXED: Twitter profile photo bug](https://gitlab.com/commento/commento/-/merge_requests/159)
+- [FIXED: Duplicate comment bug on login](https://gitlab.com/commento/commento/-/merge_requests/160)
+- [FIXED: Add target="_blank" to all external links, while also adding "noopener" to prevent XSS](https://gitlab.com/commento/commento/-/merge_requests/161)
+- [FIXED: Allow anchor links onto same page](https://gitlab.com/commento/commento/-/merge_requests/162)
+- [NEW FEATURE: Comment moderation dashboard, to approve/delete comments across your entire domain from one place](https://gitlab.com/commento/commento/-/merge_requests/163)
+- [NEW FEATURE: MathJax support hook, will plug in to any MathJax library included on the same page commento is on](https://gitlab.com/commento/commento/-/merge_requests/164)
+- [NEW FEATURE: Press enter to log in after entering your password](https://gitlab.com/commento/commento/-/merge_requests/167)
+- [FIXED: Deleted comments not returned in array](https://gitlab.com/commento/commento/-/merge_requests/170)
+
+New flags (add this onto the script tag loading commento.js to use them!):
+- `data-no-websockets="true"` - Disables websocket functionality in favour of HTTP polling to have the same live reload functionality in a situation where websockets aren't allowed (e.g. a reverse proxy)
+- `data-no-livereload="true"` - Disabled all hot reload functionality (this supercedes the above flag) - all comments are loaded once and only once on page load.
+
+Usage example:
+```
+<script defer src="https://chat.mookerj.ee/js/commento.js" data-no-websockets="true"></script>
+```
+
+(Have sent in merge requests, don't know when they'll be accepted, so here's a ready to use version!)
+
+### Commento (original description)
 
 ##### [Homepage](https://commento.io) &nbsp;&ndash;&nbsp; [Demo](https://demo.commento.io) &nbsp;&ndash;&nbsp; [Documentation](https://docs.commento.io) &nbsp;&ndash;&nbsp; [Contributing](https://docs.commento.io/contributing/) &nbsp;&ndash;&nbsp; [#commento on Freenode](http://webchat.freenode.net/?channels=%23commento)
 
-Commento is a platform that you can embed in your website to allow your readers to add comments. It's reasonably fast lightweight. Supports markdown, import from Disqus, voting, automated spam detection, moderation tools, sticky comments, thread locking, OAuth login, single sign-on, and email notifications.
 
 ###### How is this different from Disqus, Facebook Comments, and the rest?
 

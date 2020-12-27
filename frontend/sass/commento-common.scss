@@ -38,3 +38,74 @@ blockquote {
   margin-left: 5px;
   margin-right: 5px;
 }
+
+@keyframes yellowfade {
+  from {
+    background: $yellow-0;
+  }
+  to {
+    background: transparent;
+  }
+}
+
+.commento-highlight {
+  animation: yellowfade 2s;
+}
+
+@media (max-width: 550px) {
+  .commento-guest-details-container {
+    width: 49% !important;
+  }
+  .commento-markdown-button {
+    margin-top: -49px !important;
+    float: left;
+  }
+}
+
+#commento-notice-container {
+  position: fixed;
+  top: 0;
+  padding: 0;
+  margin: 0;
+  z-index: 2;
+  left: 0;
+  width: 100%;
+}
+
+@keyframes slide-down {
+      0% { opacity: 0; transform: translateY(-100%); }   
+     30% { opacity: 1; transform: translateY(0); }
+     70% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-100%); }   
+}
+
+#commento-notice-container .commento-moderation-notice {
+  margin-top: 0 !important;
+  padding: 18px 0 9px;
+  background: $red-1;
+  color: $red-7 !important;
+  opacity:0;
+  transform: translateY(-100%);
+  animation: slide-down 5s;
+}
+
+.commento-clear {
+  clear: both;
+}
+
+.commento-avatar-img {
+  margin-right: 0 !important;
+}
+
+.commento-options {
+  width: auto !important;
+}
+
+.commento-permalink {
+  color: black;
+  font-weight: bold;
+  text-align: right;
+  width: 100%;
+  display: inline-block;
+  font-size: 70%;
+}

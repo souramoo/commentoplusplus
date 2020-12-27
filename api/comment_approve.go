@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-func commentApprove(commentHex string) error {
+func commentApprove(commentHex string, url string) error {
 	if commentHex == "" {
 		return errorMissingField
 	}
@@ -20,6 +20,8 @@ func commentApprove(commentHex string) error {
 		logger.Errorf("cannot approve comment: %v", err)
 		return errorInternal
 	}
+
+	hub.broadcast <- []byte(url)
 
 	return nil
 }
@@ -42,7 +44,7 @@ func commentApproveHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	domain, _, err := commentDomainPathGet(*x.CommentHex)
+	domain, path, err := commentDomainPathGet(*x.CommentHex)
 	if err != nil {
 		bodyMarshal(w, response{"success": false, "message": err.Error()})
 		return
@@ -59,7 +61,50 @@ func commentApproveHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = commentApprove(*x.CommentHex); err != nil {
+	if err = commentApprove(*x.CommentHex, domain + path); err != nil {
+		bodyMarshal(w, response{"success": false, "message": err.Error()})
+		return
+	}
+
+	bodyMarshal(w, response{"success": true})
+}
+
+func commentOwnerApproveHandler(w http.ResponseWriter, r *http.Request) {
+	type request struct {
+		OwnerToken *string `json:"ownerToken"`
+		CommentHex     *string `json:"commentHex"`
+	}
+
+	var x request
+        if err := bodyUnmarshal(r, &x); err != nil {
+                bodyMarshal(w, response{"success": false, "message": err.Error()})
+                return
+        }
+
+	domain, path, err := commentDomainPathGet(*x.CommentHex)
+	if err != nil {
+		bodyMarshal(w, response{"success": false, "message": err.Error()})
+		return
+	}
+
+        o, err := ownerGetByOwnerToken(*x.OwnerToken)
+        if err != nil {
+                bodyMarshal(w, response{"success": false, "message": err.Error()})
+                return
+        }
+
+        isOwner, err := domainOwnershipVerify(o.OwnerHex, domain)
+        if err != nil {
+                bodyMarshal(w, response{"success": false, "message": err.Error()})
+                return
+        }
+
+        if !isOwner {
+                bodyMarshal(w, response{"success": false, "message": errorNotAuthorised.Error()})
+                return
+        }
+
+	if err = commentApprove(*x.CommentHex, domain + path); err != nil {
 		bodyMarshal(w, response{"success": false, "message": err.Error()})
 		return
 	}
