@@ -37,7 +37,10 @@ Please [(donate)](https://paypal.me/souramoo) if you find my work helpful (this 
 ### Get started
 
 To start you just need to launch an instance. The button below will work for a free Heroku account:
+
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/souramoo/commentoplusplus)
+
+Otherwise, most of the below is the same as documented at https://docs.commento.io
 
 If you want to self-host, you will need a PostgreSQL server handy and then:
 1) Use this repo's Dockerfile if you're into that kind of thing
