@@ -709,6 +709,16 @@
     onclick(anonymousCheckbox, checkAnonymous, id);
 
     textarea.oninput = autoExpander(textarea);
+    // command+enter to submit
+    textarea.onkeydown = function(e) {
+      if(e.keyCode === 13 && (e.metaKey || e.ctrlKey)) {
+        if (edit === true) {
+          commentEdit(id);
+        } else {
+          submitAccountDecide(id);
+        }
+      }
+    }
     if (edit === true) {
       onclick(submitButton, commentEdit, id);
     } else {
