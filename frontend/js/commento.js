@@ -1513,7 +1513,8 @@
         message = i18n("Your comment was flagged as spam and is under moderation.");
       }
 
-      errorShow(messageCreate(message));
+      if(message != "")
+        errorShow(message);
     });
   }
 
