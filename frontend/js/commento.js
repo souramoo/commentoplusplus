@@ -76,6 +76,7 @@
   var noFonts;
   var hideDeleted;
   var autoInit;
+  var noWs = false, noLive = false;
   var isAuthenticated = false;
   var firstFetch = true;
   var comments = [];
@@ -2286,6 +2287,8 @@
         cssOverride = attrGet(scripts[i], "data-css-override");
 
         autoInit = attrGet(scripts[i], "data-auto-init");
+        noWs = attrGet(scripts[i], "data-no-websockets");
+        noLive = attrGet(scripts[i], "data-no-livereload");
 
         ID_ROOT = attrGet(scripts[i], "data-id-root");
         if (ID_ROOT === undefined) {
@@ -2385,24 +2388,22 @@
     });
   }
 
-  var connectInterval = -1;
-
   function connectWs() {
     var wsUri = origin.split(":")
     wsUri[0] = ( location.protocol === "https:" ? "wss" : "ws" )
     wsUri = wsUri.join(":")
     var conn = new WebSocket(wsUri + "/ws");
+    console.log(conn)
     conn.onopen = function () {
       conn.send(parent.location.host + pageId) // subscribe to this page
-      clearInterval(connectInterval);
     }
     conn.onmessage = function () {
       window.document.title = "(*) " + initialTitle;
       commentsGet(commentsRender, true)
     };
-    conn.onclose = function() {
+    conn.onclose = function(e) {
       console.log("Socket is closed. Reconnect will be attempted with an exponential backoff.", e.reason);
-      connectInterval = setInterval(connectWs, 1000);
+      setTimeout(connectWs, 1000);
     }
     conn.onerror = function(err) {
       console.error("Socket encountered error: ", err.message, "Closing socket");
@@ -2414,23 +2415,26 @@
     if (initted) {
       return;
     }
+    
+    dataTagsLoad();
 
-    if(window["WebSocket"]) {
-      connectWs();
-      // update times every 60 secs or so
-      window.setInterval(function(){
-        commentsRender()
-      }, 60000)
-    } else {
-      window.setInterval(function(){
-        commentsGet(commentsRender, true)
-      }, 5000)
+    if(!noLive) {
+      if(window["WebSocket"] && !noWs) {
+        connectWs();
+        // update times every 60 secs or so
+        window.setInterval(function(){
+          commentsRender()
+        }, 60000)
+      } else {
+        window.setInterval(function(){
+          commentsGet(commentsRender, true)
+        }, 5000)
+      }
+      activityWatcher();
     }
-    activityWatcher();
 
     initted = true;
 
-    dataTagsLoad();
 
     if (autoInit === "true" || autoInit === undefined) {
       global.main(undefined);
