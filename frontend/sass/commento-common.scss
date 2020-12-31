@@ -102,10 +102,16 @@ blockquote {
 }
 
 .commento-permalink {
-  color: black;
+  color: #50596cbf;
   font-weight: bold;
   text-align: right;
   width: 100%;
   display: inline-block;
   font-size: 70%;
+  margin-left: -16px;
+  visibility: hidden;
+}
+
+.commento-card:hover .commento-permalink {
+  visibility: visible;
 }

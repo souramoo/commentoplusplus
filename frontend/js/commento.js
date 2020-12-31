@@ -438,10 +438,10 @@
     classAdd(a, "logo");
     classAdd(text, "logo-text");
 
-    attrSet(a, "href", "https://commento.io");
+    attrSet(a, "href", "https://github.com/souramoo/commentoplusplus");
     attrSet(a, "target", "_blank");
 
-    text.innerText = "Commento";
+    text.innerText = "Commento++";
 
     append(a, text);
     append(aContainer, a);
@@ -644,7 +644,7 @@
     var guestDetails = $(ID_GUEST_DETAILS + id);
     var anonCheckbox = $(ID_ANONYMOUS_CHECKBOX + id);
 
-    if (anonCheckbox.checked) {
+    if (!anonCheckbox.checked) {
       classRemove(guestDetails, "make-invisible");
     } else {
       classAdd(guestDetails, "make-invisible");
@@ -690,7 +690,7 @@
     attrSet(anonymousCheckbox, "type", "checkbox");
     attrSet(anonymousCheckboxLabel, "for", ID_ANONYMOUS_CHECKBOX + id);
     attrSet(guestName, "type", "text");
-    attrSet(guestName, "placeholder", "Your Name (optional)");
+    attrSet(guestName, "placeholder", i18n("Your Name"));
 
     anonymousCheckboxLabel.innerText = i18n("Comment anonymously");
     if (edit === true) {
@@ -698,13 +698,11 @@
     } else {
       submitButton.innerText = i18n("Add Comment");
     }
-    markdownButton.innerHTML = i18n("<b>M &#8595;</b> &nbsp; Markdown");
+    markdownButton.innerHTML = i18n("<b>M &#8595;</b> &nbsp; Markdown Help?");
 
     if (anonymousOnly) {
       anonymousCheckbox.checked = true;
       anonymousCheckbox.setAttribute("disabled", true);
-    } else {
-      classAdd(guestNameContainer, "make-invisible");
     }
     onclick(anonymousCheckbox, checkAnonymous, id);
 
@@ -866,6 +864,8 @@
 
     var markdown = textarea.value;
 
+    $(ID_SUBMIT_BUTTON + id).disabled = true;
+
     if (markdown === "") {
       classAdd(textarea, "red-border");
       return;
@@ -874,8 +874,7 @@
     }
 
     var anonName = "";
-
-    if($(ID_GUEST_DETAILS_INPUT + id)) {
+    if($(ID_GUEST_DETAILS_INPUT + id) && !requireIdentification && !$(ID_ANONYMOUS_CHECKBOX + id).checked) {
       anonName = $(ID_GUEST_DETAILS_INPUT + id).value
     }
 
@@ -889,6 +888,7 @@
     };
 
     post(origin + "/api/comment/new", json, function(resp) {
+      $(ID_SUBMIT_BUTTON + id).disabled = false;
       if (!resp.success) {
         errorShow(resp.message);
         return;
@@ -912,14 +912,9 @@
         commenterHex = "anonymous";
       }
       
-      if (commenterHex === "anonymous" && $(ID_GUEST_DETAILS_INPUT + id).value.trim().length > 0) {
+      if (commenterHex === "anonymous" && !$(ID_ANONYMOUS_CHECKBOX + id).checked && $(ID_GUEST_DETAILS_INPUT + id) && $(ID_GUEST_DETAILS_INPUT + id).value.trim().length > 0) {
         commenterHex = id;
-        commenters[id] = { provider: "anon", name: $(ID_GUEST_DETAILS_INPUT + id).value.trim(), photo: "undefined", link: "" };
-      }
-
-      if (commenterHex === "anonymous" && $(ID_GUEST_DETAILS_INPUT + id).value.trim().length > 0) {
-        commenterHex = id;
-        commenters[id] = { provider: "anon", name: $(ID_GUEST_DETAILS_INPUT + id).value.trim(), photo: "undefined" };
+        commenters[id] = { provider: "anon", name: anonName, photo: "undefined", link: "" };
       }
 
       var comment = {
@@ -1375,8 +1370,6 @@
         errorHide();
       }
 
-      var text = $(ID_TEXT + commentHex);
-      text.innerText = i18n("[deleted]");
       var card = $(ID_CARD + commentHex);
       card.parentNode.removeChild(card)
       delete commentsMap[commentHex]
@@ -1749,14 +1742,14 @@
     var textarea = $(ID_TEXTAREA + id);
     var markdown = textarea.value;
 
-    if (markdown === "") {
+    if (markdown.trim() === "") {
       classAdd(textarea, "red-border");
       return;
     } else {
       classRemove(textarea, "red-border");
     }
 
-    if (!anonymousCheckbox.checked) {
+    if (!anonymousCheckbox.checked && $(ID_GUEST_DETAILS_INPUT + id).value.trim().length === 0) {
       submitAuthenticated(id);
       return;
     } else {
