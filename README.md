@@ -63,7 +63,7 @@ Alternatively you can use the pre-build images from:
 - https://gitlab.com/caroga/commentoplusplus-docker
 - https://hub.docker.com/r/caroga/commentoplusplus
 
-Instructions for configuring the docker image can be found here. Are you missing a version? Please contact @caroga [here](https://gitlab.com/caroga/commentoplusplus-docker).
+Instructions for configuring the docker image can be found [here](https://docs.commento.io/installation/self-hosting/on-your-server/docker.html). Are you missing a version? Please contact @caroga [here](https://gitlab.com/caroga/commentoplusplus-docker).
 
 ### Finally
 
