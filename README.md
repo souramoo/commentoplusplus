@@ -58,12 +58,36 @@ $ export COMMENTO_CDN_PREFIX=$COMMENTO_ORIGIN
 
 And then you can run the `commento` binary.
 
+#### Docker setup
+Alternatively you can use the pre-build images from:
+- https://gitlab.com/caroga/commentoplusplus-docker
+- https://hub.docker.com/r/caroga/commentoplusplus
+
+Instructions for configuring the docker image can be found [here](https://docs.commento.io/installation/self-hosting/on-your-server/docker.html). Are you missing a version? Please contact @caroga [here](https://gitlab.com/caroga/commentoplusplus-docker).
+
+### Finally
+
 Once you have created an account in your commento instance, it should give you instructions on how to embed this into your site! It should be as simple as:
 
 ```
 <script defer src="https://(server url)/js/commento.js"></script>
 <div id="commento"></div>
 ```
+
+### If you're running this behind nginx/another reverse proxy
+Remember to either forward the websockets through to commento in your nginx config, e.g.:
+
+```
+location / {
+    proxy_pass http://commento;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "Upgrade";
+    proxy_set_header Host $host;
+}
+```
+
+Or if you'd rather not do that, disable websockets in favour of HTTP polling by adding `data-no-websockets="true"` to the commento <script> tag (or `data-no-livereload="true"`` to only load comments on page load, see below!)
 
 
 ### More options to configure commento's frontend
