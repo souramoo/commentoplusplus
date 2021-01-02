@@ -65,6 +65,21 @@ Once you have created an account in your commento instance, it should give you i
 <div id="commento"></div>
 ```
 
+### If you're running this behind nginx/another reverse proxy
+Remember to either forward the websockets through to commento in your nginx config, e.g.:
+
+```
+location / {
+    proxy_pass http://commento;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "Upgrade";
+    proxy_set_header Host $host;
+}
+```
+
+Or if you'd rather not do that, disable websockets in favour of HTTP polling by adding `data-no-websockets="true"` to the commento <script> tag (or `data-no-livereload="true"`` to only load comments on page load, see below!)
+
 
 ### More options to configure commento's frontend
 
