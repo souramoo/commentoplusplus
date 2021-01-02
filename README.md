@@ -58,6 +58,15 @@ $ export COMMENTO_CDN_PREFIX=$COMMENTO_ORIGIN
 
 And then you can run the `commento` binary.
 
+#### Docker setup
+Alternatively you can use the pre-build images from:
+- https://gitlab.com/caroga/commentoplusplus-docker
+- https://hub.docker.com/r/caroga/commentoplusplus
+
+Instructions for configuring the docker image can be found [here](https://docs.commento.io/installation/self-hosting/on-your-server/docker.html). Are you missing a version? Please contact @caroga [here](https://gitlab.com/caroga/commentoplusplus-docker).
+
+### Finally
+
 Once you have created an account in your commento instance, it should give you instructions on how to embed this into your site! It should be as simple as:
 
 ```
