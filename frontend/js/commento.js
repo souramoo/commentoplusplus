@@ -644,13 +644,21 @@
     var guestDetails = $(ID_GUEST_DETAILS + id);
     var anonCheckbox = $(ID_ANONYMOUS_CHECKBOX + id);
 
-    if (!anonCheckbox.checked) {
-      classRemove(guestDetails, "make-invisible");
-    } else {
-      classAdd(guestDetails, "make-invisible");
+    if(!isAuthenticated) {
+      if (!anonCheckbox.checked) {
+        classRemove(guestDetails, "make-invisible");
+      } else {
+        classAdd(guestDetails, "make-invisible");
+      }
     }
   }
 
+  function removeGuestNameEntry() {
+    var names = document.getElementsByClassName("commento-guest-details-container");
+    for(var i = 0; i < names.length; i++) {
+      classAdd(names[i], "make-invisible");
+    }
+  }
 
   function textareaCreate(id, edit) {
     var textareaSuperContainer = create("div");
@@ -683,7 +691,6 @@
     classAdd(textareaSuperContainer, "button-margin");
     classAdd(guestName, "guest-details");
     classAdd(guestNameContainer, "guest-details-container");
-    classAdd(guestNameContainer, "round-check");
     classAdd(clearBr, "clear");
 
     attrSet(textarea, "placeholder", i18n("Add a comment"));
@@ -705,6 +712,9 @@
       anonymousCheckbox.setAttribute("disabled", true);
     }
     onclick(anonymousCheckbox, checkAnonymous, id);
+    if(isAuthenticated) {
+      classAdd(guestNameContainer, "make-invisible");
+    }
 
     textarea.oninput = autoExpander(textarea);
     // command+enter to submit
@@ -1788,6 +1798,7 @@
 
             if (commenterTokenGet() !== "anonymous") {
               remove($(ID_LOGIN));
+              removeGuestNameEntry();
             }
 
             if (id !== null) {
@@ -2028,6 +2039,7 @@
 
       selfLoad(resp.commenter, resp.email);
       allShow();
+      removeGuestNameEntry();
 
       remove($(ID_LOGIN));
       if (id !== null) {
