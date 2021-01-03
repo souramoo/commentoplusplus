@@ -5,7 +5,7 @@ BEGIN
   SET commentCount = commentCount - 1
   WHERE domain = old.domain AND path = old.path;
 
-  RETURN NEW;
+  RETURN OLD;
 END;
 $trigger$ LANGUAGE plpgsql;
 

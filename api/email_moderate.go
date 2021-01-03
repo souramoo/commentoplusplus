@@ -52,9 +52,9 @@ func emailModerateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if action == "approve" {
-		err = commentApprove(commentHex, domain + path)
+		err = commentApprove(commentHex, domain+path)
 	} else {
-		err = commentDelete(commentHex, domain + path)
+		err = commentDelete(commentHex, domain, path)
 	}
 
 	if err != nil {
