@@ -6,6 +6,7 @@ import (
 	"github.com/lunny/html2md"
 	"io/ioutil"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -103,6 +104,10 @@ func domainImportDisqus(domain string, url string) (int, error) {
 			continue
 		}
 
+		if post.Author.Username == "" {
+			continue
+		}
+
 		email := post.Author.Username + "@disqus.com"
 
 		if _, ok := commenterHex[email]; ok {
@@ -144,6 +149,11 @@ func domainImportDisqus(domain string, url string) (int, error) {
 		cHex := "anonymous"
 		if !post.Author.IsAnonymous {
 			cHex = commenterHex[post.Author.Username+"@disqus.com"]
+		} else if post.Author.Name != "" {
+			cHex, err = commenterNew("undefined", strings.TrimSpace(post.Author.Name), "undefined", "undefined", "anon", "undefined")
+			if err != nil {
+				return 0, err
+			}
 		}
 
 		parentHex := "root"

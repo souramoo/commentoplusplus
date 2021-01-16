@@ -157,6 +157,64 @@ body {
   }
 }
 
+.mod-comments-container {
+  display: flex;
+  justify-content: center;
+  border-radius: 3px;
+  margin-top: 24px;
+
+  .content {
+    display: table;
+    padding: 0px;
+    border: 1px solid $gray-2;
+    border-top: 0px solid transparent;
+    min-width: 550px;
+
+    .mod-comments-row {
+      display: table-row;
+      height: 42px;
+      border-top: 1px solid $gray-2;
+
+      .date,
+      .delete,
+      .comment {
+        box-shadow: none;
+        display: table-cell;
+        align-items: center;
+        margin: 0px 12px;
+        height: 100%;
+        padding: 8px;
+      }
+
+      .comment {
+      }
+
+      .date {
+        float: right;
+        color: $gray-4;
+      }
+
+      .delete {
+        color: $red-6;
+        cursor: pointer;
+      }
+
+      .delete:hover {
+        color: $red-7;
+      }
+
+      .approve {
+        color: $green-6;
+        cursor: pointer;
+      }
+
+      .approve:hover {
+        color: $green-7;
+      }
+    }
+  }
+}
+
 .dashboard-container {
   position: relative;
   top: 72px;

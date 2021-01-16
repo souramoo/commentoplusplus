@@ -6,9 +6,15 @@ import (
 	"net/http"
 	"os"
 )
+import _ "net/http/pprof"
+
+var debug string
 
 func routesServe() error {
 	router := mux.NewRouter()
+	if debug != "" {
+		router.PathPrefix("/debug/").Handler(http.DefaultServeMux)
+	}
 
 	subdir := pathStrip(os.Getenv("ORIGIN"))
 	if subdir != "" {

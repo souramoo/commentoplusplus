@@ -31,6 +31,7 @@ textarea {
   overflow: auto;
   min-height: 130px;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .commento-red-border {
@@ -91,15 +92,33 @@ textarea {
   }
 }
 
+.commento-guest-details {
+  width: -webkit-fill-available;
+  text-align: center;
+  height: 42px;
+}
+
+.commento-guest-details-container {
+  float: left;
+  margin: 6px 0px;
+  width: 40%;
+}
+
+.commento-make-invisible {
+  visibility: hidden;
+}
+
 .commento-markdown-button {
   color: $gray-6;
   margin: 0px 16px;
   font-size: 12px;
   text-transform: uppercase;
   border: none;
-  line-height: 58px;
+  line-height: 39px;
   font-weight: 400;
   cursor: pointer;
+  display: block;
+  clear: both;
 
   b {
     font-size: 12px;

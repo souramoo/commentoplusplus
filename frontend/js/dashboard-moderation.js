@@ -7,9 +7,66 @@
   global.moderationOpen = function() {
     $(".view").hide();
     $("#moderation-view").show();
+    var data = global.dashboard.$data;
+    var json = {
+      "ownerToken": global.cookieGet("commentoOwnerToken"),
+      "domain": data.domains[data.cd].domain
+    }
+    global.post(global.origin + "/api/comment/owner/list", json, function(resp) {
+      if (!resp.success) {
+        global.globalErrorShow(resp.message);
+        return
+      }
+      for(var i in resp.comments) {
+        resp.comments[i].creationDate = new Date(resp.comments[i].creationDate).toString()
+      }
+      Vue.set(data.domains[data.cd], "pending", resp.comments)
+      data.domains[data.cd].pendingCommenters = resp.commenters
+    });
   };
 
-  
+  global.moderatorRemoveComment = function(hex) {
+    var data = global.dashboard.$data;
+    var indexToRemove = -1;
+    for (var i in data.domains[data.cd].pending) {
+      if (data.domains[data.cd].pending[i].commentHex === hex) {
+        indexToRemove = i;
+      }
+    }
+    data.domains[data.cd].pending.splice(indexToRemove, 1);
+  }
+
+  // Approves a comment
+  global.moderatorApproveCommentHandler = function(hex) {
+    var json = {
+      "ownerToken": global.cookieGet("commentoOwnerToken"),
+      "commentHex": hex
+    }
+    global.post(global.origin + "/api/comment/owner/approve", json, function(resp) {
+      if (!resp.success) {
+        global.globalErrorShow(resp.message);
+        return
+      }
+      global.moderatorRemoveComment(hex)
+    })
+  }
+
+
+  // Deletes a comment
+  global.moderatorDeleteCommentHandler = function(hex) {
+    var json = {
+      "ownerToken": global.cookieGet("commentoOwnerToken"),
+      "commentHex": hex
+    }
+    global.post(global.origin + "/api/comment/owner/delete", json, function(resp) {
+      if (!resp.success) {
+        global.globalErrorShow(resp.message);
+        return
+      }
+      global.moderatorRemoveComment(hex)
+    })
+  }
+
   // Adds a moderator.
   global.moderatorNewHandler = function() {
     var data = global.dashboard.$data;

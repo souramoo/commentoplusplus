@@ -26,14 +26,14 @@ func emailModerateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	statement := `
-		SELECT domain
+		SELECT domain, path
 		FROM comments
 		WHERE commentHex = $1;
 	`
 	row := db.QueryRow(statement, commentHex)
 
-	var domain string
-	if err = row.Scan(&domain); err != nil {
+	var domain, path string
+	if err = row.Scan(&domain, &path); err != nil {
 		// TODO: is this the only error?
 		fmt.Fprintf(w, "error: no such comment found (perhaps it has been deleted?)")
 		return
@@ -52,9 +52,9 @@ func emailModerateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if action == "approve" {
-		err = commentApprove(commentHex)
+		err = commentApprove(commentHex, domain+path)
 	} else {
-		err = commentDelete(commentHex)
+		err = commentDelete(commentHex, domain, path)
 	}
 
 	if err != nil {
