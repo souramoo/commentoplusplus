@@ -21,15 +21,13 @@ func commenterPhotoHandler(w http.ResponseWriter, r *http.Request) {
 	if c.Provider == "google" {
 		if strings.HasSuffix(url, "photo.jpg") {
 			url += "?sz=38"
-		} else if strings.HasSuffix(url, "=s96-c") {
-			url = url[:len(url) - len("=s96-c")] + "=s38"
+		} else if strings.Contains(url, "=") {
+			url = strings.Split(url, "=")[0] + "=s38"
 		} else {
 			url += "=s38"
 		}
 	} else if c.Provider == "github" {
 		url += "&s=38"
-	} else if c.Provider == "twitter" {
-		// url += "?size=normal"
 	} else if c.Provider == "gitlab" {
 		url += "?width=38"
 	}
