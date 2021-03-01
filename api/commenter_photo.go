@@ -21,6 +21,8 @@ func commenterPhotoHandler(w http.ResponseWriter, r *http.Request) {
 	if c.Provider == "google" {
 		if strings.HasSuffix(url, "photo.jpg") {
 			url += "?sz=38"
+		} else if strings.Contains(url, "=") {
+			url = strings.Split(url, "=")[0] + "=s38"
 		} else {
 			url += "=s38"
 		}

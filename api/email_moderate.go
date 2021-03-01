@@ -15,15 +15,15 @@ func emailModerateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	statement := `
-		SELECT domain, deleted
+		SELECT domain, path, deleted
 		FROM comments
 		WHERE commentHex = $1;
 	`
 	row := db.QueryRow(statement, commentHex)
 
-	var domain string
+	var domain, path string
 	var deleted bool
-	if err := row.Scan(&domain, &deleted); err != nil {
+	if err := row.Scan(&domain, &path, &deleted); err != nil {
 		// TODO: is this the only error?
 		fmt.Fprintf(w, "error: no such comment found (perhaps it has been deleted?)")
 		return
@@ -72,9 +72,9 @@ func emailModerateHandler(w http.ResponseWriter, r *http.Request) {
 
 	switch action {
 	case "approve":
-		err = commentApprove(commentHex)
+		err = commentApprove(commentHex, domain + path)
 	case "delete":
-		err = commentDelete(commentHex, commenterHex)
+		err = commentDelete(commentHex, commenterHex, domain, path)
 	default:
 		err = errorInvalidAction
 	}

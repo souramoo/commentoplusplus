@@ -160,6 +160,7 @@
                 <ul class="tabs">
                   <li class="tab-link original current" data-tab="mod-tab-1">General</li>
                   <li class="tab-link" data-tab="mod-tab-2">Add/Remove Moderators</li>
+                  <li class="tab-link" data-tab="mod-tab-3">Pending Approvals</li>
                 </ul>
 
                 <div id="mod-tab-1" class="content original current">
@@ -248,6 +249,33 @@
                         <div class="email">{{email.email}}</div>
                         <div class="delete" v-on:click="window.commento.moderatorDeleteHandler(email.email)">Delete</div>
                         <div class="date">added {{email.timeAgo}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div id="mod-tab-3" class="content">
+                  <div class="normal-text">
+                    All of the pending comments awaiting moderation across your domain are shown here for convenience.
+                  </div>
+                  <div class="mod-comments-container">
+                    <div class="content">
+                      <div class="mod-comments-row">
+                        <div class="comment"><strong>Path</strong></div>
+                        <div class="comment"><strong>Date</strong></div>
+                        <div class="comment"><strong>User</strong></div>
+                        <div class="comment"><strong>Comment</strong></div>
+                        <div class="comment"><strong>Tools</strong></div>
+                        <div class="comment"><strong></strong></div>
+                      </div>
+                      <div class="mod-comments-row" v-for="comment in domains[cd].pending" v-if="domains[cd].pending.length > 0">
+                        <div class="comment"><a :href="'https://' + domains[cd].domain + '/' + comment.url">{{ comment.url }}</a></div>
+                        <div class="comment">{{ comment.creationDate }}</div>
+                        <div class="comment">{{ domains[cd].pendingCommenters[comment.commenterHex].name }}</div>
+                        <div class="comment"><span v-html="comment.html"></span></div>
+                        <div class="comment delete" v-on:click="window.commento.moderatorDeleteCommentHandler(comment.commentHex)">Delete</div>
+                        <div class="comment approve" v-on:click="window.commento.moderatorApproveCommentHandler(comment.commentHex)">Approve</div>
                       </div>
                     </div>
                   </div>

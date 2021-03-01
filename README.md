@@ -1,21 +1,130 @@
-### Commento
+# Commento++
 
-##### [Homepage](https://commento.io) &nbsp;&ndash;&nbsp; [Demo](https://demo.commento.io) &nbsp;&ndash;&nbsp; [Documentation](https://docs.commento.io) &nbsp;&ndash;&nbsp; [Contributing](https://docs.commento.io/contributing/) &nbsp;&ndash;&nbsp; [#commento on Freenode](http://webchat.freenode.net/?channels=%23commento)
+### 💬 Try it out and deploy your own
+[LIVE DEMO](https://demo.souradip.com/chat.html)
 
-Commento is a platform that you can embed in your website to allow your readers to add comments. It's reasonably fast lightweight. Supports markdown, import from Disqus, voting, automated spam detection, moderation tools, sticky comments, thread locking, OAuth login, single sign-on, and email notifications.
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/souramoo/commentoplusplus)
 
-###### How is this different from Disqus, Facebook Comments, and the rest?
+### ❓ About
+Commento++ is a free, open source, fast & lightweight comments box that you can embed in your static website instead of Disqus.
 
-Most other products in this space do not respect your privacy; showing ads is their primary business model and that nearly always comes at the users' cost. Commento has no ads; you're the customer, not the product. While Commento is [free software](https://www.gnu.org/philosophy/free-sw.en.html), in order to keep the service sustainable, the [hosted cloud version](https://commento.io) is not offered free of cost. Commento is also orders of magnitude lighter than alternatives.
+### ⚡ Features
+- Markdown support
+- Import from Disqus
+- Voting
+- Automated spam detection (Askimet integration)
+- Moderation tools
+- Sticky comments
+- Thread locking
+- OAuth login (Google, Github, Twitter) and single sign-on
+- Hot-reloading of comments
+- Email notifications.
 
-###### Why should I care about my readers' privacy?
+### 🤝 Support
+Please [(donate)](https://paypal.me/souramoo) if you find my work helpful (this will always remain free and open source)!
 
-For starters, your readers value their privacy. Not caring about them is disrespectful and you will end up alienating your audience; they won't come back. Disqus still isn't GDPR-compliant (according to their <a href="https://help.disqus.com/terms-and-policies/privacy-faq" title="At the time of writing (28 December 2018)" rel="nofollow">privacy policy</a>). Disqus adds megabytes to your page size; what happens when a random third-party script that is injected into your website turns malicious?
+### 📷 Screenshots
+![Commento++ in action](https://i.imgur.com/x4IA22n.gif)
 
-#### Installation
+### 🤔 How is this different from Disqus, Facebook Comments, and the rest?
 
-Read the [documentation to get started](https://docs.commento.io/installation/).
+- 🐱‍👤  Respects your privacy and no adverts
+- 💄 Prettier comments box compared to other FOSS alternatives
+- ⚡ Orders of magnitude lighter and faster than alternatives
+- 🕐 One click to deploy your own instance to a free Heroku account in seconds
+- 🔌 You can self-host too for maximum control!
 
-#### Contributing
+### Get started
 
-If this is your first contribution to Commento, please go through the [contribution guidelines](https://docs.commento.io/contributing/) before you begin. If you have any questions, join [#commento on Freenode](http://webchat.freenode.net/?channels=%23commento).
+To start you just need to launch an instance. The button below will work for a free Heroku account:
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/souramoo/commentoplusplus)
+
+Otherwise, most of the below is the same as documented at https://docs.commento.io
+
+If you want to self-host, you will need a PostgreSQL server handy and then:
+1) Use this repo's Dockerfile if you're into that kind of thing
+2) Download the plug and play pre-compiled version from the [releases](https://github.com/souramoo/commentoplusplus/releases)
+3) To build yourself, you can clone this repo (you will require `nodejs`, `yarn`, `golang` installed) and run `make prod` and you will generate `./build/prod/commento`
+
+
+To launch, you should configure the following environment variables below:
+```
+$ export COMMENTO_ORIGIN=http://commento.example.com:8080
+$ export COMMENTO_PORT=8080
+$ export COMMENTO_POSTGRES=postgres://username:password@postgres.example.com:5432/commento?sslmode=disable
+$ export COMMENTO_CDN_PREFIX=$COMMENTO_ORIGIN
+```
+
+And then you can run the `commento` binary.
+
+#### Docker setup
+Alternatively you can use the pre-build images from:
+- https://gitlab.com/caroga/commentoplusplus-docker
+- https://hub.docker.com/r/caroga/commentoplusplus
+
+Instructions for configuring the docker image can be found [here](https://docs.commento.io/installation/self-hosting/on-your-server/docker.html). Are you missing a version? Please contact @caroga [here](https://gitlab.com/caroga/commentoplusplus-docker).
+
+### Finally
+
+Once you have created an account in your commento instance, it should give you instructions on how to embed this into your site! It should be as simple as:
+
+```
+<script defer src="https://(server url)/js/commento.js"></script>
+<div id="commento"></div>
+```
+
+### If you're running this behind nginx/another reverse proxy
+Remember to either forward the websockets through to commento in your nginx config, e.g.:
+
+```
+location / {
+    proxy_pass http://commento;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "Upgrade";
+    proxy_set_header Host $host;
+}
+```
+
+Or if you'd rather not do that, disable websockets in favour of HTTP polling by adding `data-no-websockets="true"` to the commento <script> tag (or `data-no-livereload="true"`` to only load comments on page load, see below!)
+
+
+### More options to configure commento's frontend
+
+You can add the following to commento's script tag:
+
+- `data-css-override="http://server/styles.css"` - A URL to a CSS file with overriding styles. Defaults to no override and uses Commento's default theme.
+- `data-auto-init="false"` - Commento automatically initialises itself when the page is loaded. If you prefer to load Commento dynamically (for example, after the user clicks a button), you can disable this. You will be required to call `window.commento.main()` when you want to load Commento. By default, this is true.
+- `data-id-root="notcommento"` - By default, Commento looks for a `<div>` with `id="commento"`. If you want to load Commento in a different element, you can set this attribute to the ID of that element.
+- `data-no-fonts="true"` - By default, Commento uses the Source Sans Pro font to present a good design out-of-the-box. If you'd like to disable this so that Commento never loads the font files, you can set this to true. By default, this is true.
+- `data-hide-deleted` - By default, deleted comments with undeleted replies are shown with a "[deleted]" tag. If you'd like to disable this, setting this to true will hide deleted comments even if there are legitimate replies underneath. Deleted comments without any undeleted comments underneath are hidden irrespective of the value of this function. By default, this is false.
+- `data-no-websockets="true"` - Disables websocket functionality in favour of HTTP polling to have the same live reload functionality in a situation where websockets aren't allowed (e.g. a reverse proxy)
+- `data-no-livereload="true"` - Disabled all hot reload functionality (this supercedes the above flag) - all comments are loaded once and only once on page load.
+
+e.g. Usage example:
+```
+<script defer src="https://chat.mookerj.ee/js/commento.js" data-no-websockets="true"></script>
+```
+
+### How is this different to the original Commento?
+Original source is from @adtac at https://gitlab.com/commento/commento/ - this fork is largely a result of me getting carried away fixing a lot of bugs but the original maintainer seemingly disappearing!
+
+(Inconclusive) list of changes from upstream:
+- [NEW FEATURE: Auto refreshing comments with WebSockets for push updates](https://gitlab.com/commento/commento/-/merge_requests/168)
+- NEW FEATURE: Window title updates when there's new activity
+- NEW FEATURE: Permalinks, and a subtle yellow highlight animation for new comments when they come in live
+- NEW FEATURE: Smooth scrolling
+- NEW FEATURE: Hide +/- if no children
+- NEW FEATURE: Errors now slide down from the top rather than the ugly error system before
+- [NEW FEATURE: Guests can leave their name](https://gitlab.com/commento/commento/-/merge_requests/169)
+- [FIXED: Twitter profile photo bug](https://gitlab.com/commento/commento/-/merge_requests/159)
+- [FIXED: Duplicate comment bug on login](https://gitlab.com/commento/commento/-/merge_requests/160)
+- [FIXED: Add target="_blank" to all external links, while also adding "noopener" to prevent XSS](https://gitlab.com/commento/commento/-/merge_requests/161)
+- [FIXED: Allow anchor links onto same page](https://gitlab.com/commento/commento/-/merge_requests/162)
+- [NEW FEATURE: Comment moderation dashboard, to approve/delete comments across your entire domain from one place](https://gitlab.com/commento/commento/-/merge_requests/163)
+- [NEW FEATURE: MathJax support hook, will plug in to any MathJax library included on the same page commento is on](https://gitlab.com/commento/commento/-/merge_requests/164)
+- [NEW FEATURE: Press enter to log in after entering your password](https://gitlab.com/commento/commento/-/merge_requests/167)
+- [FIXED: Deleted comments not returned in array](https://gitlab.com/commento/commento/-/merge_requests/170)
+
+I've sent in merge requests for a lot of the above but I don't know when they'll be accepted, so here's a ready to use version with all batteries included to help out fellow bloggers!

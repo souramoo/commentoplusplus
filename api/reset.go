@@ -32,7 +32,7 @@ func reset(resetHex string, password string) (string, error) {
 
 	if entity == "owner" {
 		statement = `
-			UPDATE owners SET passwordHash = $1
+			UPDATE owners SET passwordHash = $1, confirmedEmail=true
 			WHERE ownerHex = $2;
 		`
 	} else {

@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func commentVote(commenterHex string, commentHex string, direction int) error {
+func commentVote(commenterHex string, commentHex string, direction int, url string) error {
 	if commentHex == "" || commenterHex == "" {
 		return errorMissingField
 	}
@@ -39,6 +39,8 @@ func commentVote(commenterHex string, commentHex string, direction int) error {
 		logger.Errorf("error inserting/updating votes: %v", err)
 		return errorInternal
 	}
+
+	hub.broadcast <- []byte(url)
 
 	return nil
 }
@@ -74,7 +76,13 @@ func commentVoteHandler(w http.ResponseWriter, r *http.Request) {
 		direction = -1
 	}
 
-	if err := commentVote(c.CommenterHex, *x.CommentHex, direction); err != nil {
+	domain, path, err := commentDomainPathGet(*x.CommentHex)
+        if err != nil {
+                bodyMarshal(w, response{"success": false, "message": err.Error()})
+                return
+        }
+
+	if err := commentVote(c.CommenterHex, *x.CommentHex, direction, domain + path); err != nil {
 		bodyMarshal(w, response{"success": false, "message": err.Error()})
 		return
 	}

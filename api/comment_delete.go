@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func commentDelete(commentHex string, deleterHex string) error {
+func commentDelete(commentHex string, deleterHex string, domain string, path string) error {
 	if commentHex == "" || deleterHex == "" {
 		return errorMissingField
 	}
@@ -27,6 +27,20 @@ func commentDelete(commentHex string, deleterHex string) error {
 		// TODO: make sure this is the error is actually non-existant commentHex
 		return errorNoSuchComment
 	}
+
+	// Since we're no longer actually deleting comments, we are no longer running the trigger function!
+	statement = `
+		UPDATE pages
+		SET commentCount = commentCount - 1
+		WHERE domain = $1 AND path = $2;
+	`
+	_, err = db.Exec(statement, domain, path)
+
+	if err != nil {
+		return errorNoSuchComment
+	}
+
+	hub.broadcast <- []byte(domain + path)
 
 	return nil
 }
@@ -55,7 +69,7 @@ func commentDeleteHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	domain, _, err := commentDomainPathGet(*x.CommentHex)
+	domain, path, err := commentDomainPathGet(*x.CommentHex)
 	if err != nil {
 		bodyMarshal(w, response{"success": false, "message": err.Error()})
 		return
@@ -72,7 +86,50 @@ func commentDeleteHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = commentDelete(*x.CommentHex, c.CommenterHex); err != nil {
+	if err = commentDelete(*x.CommentHex, *x.CommenterToken, domain, path); err != nil {
+		bodyMarshal(w, response{"success": false, "message": err.Error()})
+		return
+	}
+
+	bodyMarshal(w, response{"success": true})
+}
+
+func commentOwnerDeleteHandler(w http.ResponseWriter, r *http.Request) {
+	type request struct {
+		OwnerToken *string `json:"ownerToken"`
+		CommentHex *string `json:"commentHex"`
+	}
+
+	var x request
+	if err := bodyUnmarshal(r, &x); err != nil {
+		bodyMarshal(w, response{"success": false, "message": err.Error()})
+		return
+	}
+
+	domain, path, err := commentDomainPathGet(*x.CommentHex)
+	if err != nil {
+		bodyMarshal(w, response{"success": false, "message": err.Error()})
+		return
+	}
+
+	o, err := ownerGetByOwnerToken(*x.OwnerToken)
+	if err != nil {
+		bodyMarshal(w, response{"success": false, "message": err.Error()})
+		return
+	}
+
+	isOwner, err := domainOwnershipVerify(o.OwnerHex, domain)
+	if err != nil {
+		bodyMarshal(w, response{"success": false, "message": err.Error()})
+		return
+	}
+
+	if !isOwner {
+		bodyMarshal(w, response{"success": false, "message": errorNotAuthorised.Error()})
+		return
+	}
+
+	if err = commentDelete(*x.CommentHex, *x.OwnerToken, domain, path); err != nil {
 		bodyMarshal(w, response{"success": false, "message": err.Error()})
 		return
 	}

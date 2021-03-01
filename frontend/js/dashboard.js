@@ -70,7 +70,7 @@
       settings: settings,
 
       // list of domains dynamically loaded; obviously mutable
-      domains: [{show: false, viewsLast30Days: global.numberify(0), commentsLast30Days: global.numberify(0), moderators: []}],
+      domains: [{show: false, viewsLast30Days: global.numberify(0), commentsLast30Days: global.numberify(0), moderators: [], pending: [], pendingCommenters: []}],
 
       // configured oauth providers that will be filled in after a backend request
       configuredOauths: {},

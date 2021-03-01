@@ -23,12 +23,14 @@ func commenterNew(email string, name string, link string, photo string, provider
 		link = "https://" + link
 	}
 
-	if _, err := commenterGetByEmail(provider, email); err == nil {
-		return "", errorEmailAlreadyExists
-	}
+	if provider != "anon" {
+		if _, err := commenterGetByEmail(provider, email); err == nil {
+			return "", errorEmailAlreadyExists
+		}
 
-	if err := emailNew(email); err != nil {
-		return "", errorInternal
+		if err := emailNew(email); err != nil {
+			return "", errorInternal
+		}
 	}
 
 	commenterHex, err := randomHex(32)
@@ -43,6 +45,9 @@ func commenterNew(email string, name string, link string, photo string, provider
 			logger.Errorf("cannot generate hash from password: %v\n", err)
 			return "", errorInternal
 		}
+	}
+	if provider == "anon" {
+		passwordHash = []byte{}
 	}
 
 	statement := `

@@ -1,0 +1,21 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.9
+
+    working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - autoupdate
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "3c:e1:34:34:88:c6:c4:e0:b3:72:e5:dd:7d:bd:ef:d9"
+      - run: bash update_repo.sh -xe
+
