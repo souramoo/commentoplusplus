@@ -2,8 +2,8 @@ package main
 
 import (
 	"net/http"
-	"time"
 	"strings"
+	"time"
 )
 
 // Take `creationDate` as a param because comment import (from Disqus, for
@@ -97,7 +97,7 @@ func commentNewHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			// if given an anonName, add it to a new commenter entry
 			if strings.TrimSpace(*x.AnonName) != "" {
-				commenterHex, err = commenterNew("undefined", strings.TrimSpace(*x.AnonName), "undefined", "undefined", "anon", "undefined");
+				commenterHex, err = commenterNew("undefined", strings.TrimSpace(*x.AnonName), "undefined", "undefined", "anon", "undefined")
 				if err != nil {
 					bodyMarshal(w, response{"success": false, "message": err.Error()})
 					return
