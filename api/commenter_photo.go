@@ -48,7 +48,7 @@ func commenterPhotoHandler(w http.ResponseWriter, r *http.Request) {
 	// that exhaust memory.
 	limitedResp := &io.LimitedReader{R: resp.Body, N: 128 * 1024}
 
-	img, err := image.Decode(limitedResp)
+	img, _, err := image.Decode(limitedResp)
 	if err != nil {
 		fmt.Fprintf(w, "Image decode failed: %v\n", err)
 		return
