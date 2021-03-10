@@ -58,6 +58,18 @@ $ export COMMENTO_CDN_PREFIX=$COMMENTO_ORIGIN
 
 And then you can run the `commento` binary.
 
+#### Logging and graphing page views
+
+The logging defaults to off to preseve disk space, but you can specify the `COMMENTO_ENABLE_LOGGING` environment variable to true to enable each page view being logged and a nice graph generated on your dashboard. This will however use up a lot of space quickly if you have a high traffic website; you may want to consider a more fully-featured analytics solution for your website.
+
+e.g.
+
+```
+$ export COMMENTO_ENABLE_LOGGING=true
+```
+
+to turn this feature on.
+
 #### Docker setup
 Alternatively you can use the pre-build images from:
 - https://gitlab.com/caroga/commentoplusplus-docker

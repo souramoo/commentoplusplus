@@ -57,6 +57,8 @@ func configParse() error {
 		"GITLAB_KEY":    "",
 		"GITLAB_SECRET": "",
 		"GITLAB_URL":    "https://gitlab.com",
+
+		"ENABLE_LOGGING": "false",
 	}
 
 	if os.Getenv("COMMENTO_CONFIG_FILE") != "" {

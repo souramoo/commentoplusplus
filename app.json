@@ -42,6 +42,11 @@
     "COMMENTO_SMTP_USERNAME": {
       "description": "SMTP credentials and configuration the server should use to send emails. By default, all settings are empty and email features such as email notification and reset password are turned off.",
       "required": false
+    },
+    "COMMENTO_ENABLE_LOGGING": {
+      "description": "Should we log every page view? This will allow you to see stats but will fill up your free postgres database quite quickly, so defaults to false. Set to true to enable",
+      "required": false,
+      "value": "false"
     }
   }
 }
