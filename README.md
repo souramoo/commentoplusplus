@@ -138,5 +138,59 @@ Original source is from @adtac at https://gitlab.com/commento/commento/ - this f
 - [NEW FEATURE: MathJax support hook, will plug in to any MathJax library included on the same page commento is on](https://gitlab.com/commento/commento/-/merge_requests/164)
 - [NEW FEATURE: Press enter to log in after entering your password](https://gitlab.com/commento/commento/-/merge_requests/167)
 - [FIXED: Deleted comments not returned in array](https://gitlab.com/commento/commento/-/merge_requests/170)
+- [NEW FEATURE: Reinit widget functionality for Single Page Applications](https://gitlab.com/commento/commento/-/merge_requests/182)
 
 I've sent in merge requests for a lot of the above but I don't know when they'll be accepted, so here's a ready to use version with all batteries included to help out fellow bloggers!
+
+### How to use this in a SPA (Single Page Application)
+
+Commento++ runs a bit of code on page load to initialize the widget. This widget can be customized by using data attributes on the script tag. When using commento++ in a SPA you might want to change the pageId for the widget when navigating to a new blog post without a browser page load. Below you'll find an example for an Commento++ component in React:
+
+```js
+import React, { useEffect } from 'react'
+
+const Commento = ({ pageId }) => {
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !window.commento) {
+      // init empty object so commento.js script extends this with global functions
+      window.commento = {}
+      const script = document.createElement('script')
+      // Replace this with the url to your commento instance's commento.js script
+      script.src = `http://localhost:8080/js/commento.js`
+      script.defer = true
+      // Set default attributes for first load
+      script.setAttribute('data-auto-init', false)
+      script.setAttribute('data-page-id', pageId)
+      script.setAttribute('data-id-root', 'commento-box')
+      script.onload = () => {
+        // Tell commento.js to load the widget
+        window.commento.main()
+      }
+      document.getElementsByTagName('head')[0].appendChild(script)
+    } else if (typeof window !== 'undefined' && window.commento) {
+      // In-case the commento.js script has already been loaded reInit the widget with a new pageId
+      window.commento.reInit({
+        pageId: pageId,
+      })
+    }
+  }, [])
+
+  return <div id="commento-box" />
+}
+
+export default Commento
+```
+
+Commento initializes itself and extends the `window.commento` object. When you have an HTML element with the id `commento` this will live on the `window.commento` namespace. Replacing the HTML element (as SPAs do) the `window.commento` is reset to the new element, losing all extended functionality provided by the commento++ script. Make sure to provide a `data-id-root` other than `commento` for this to work, see `commento-box` in the example above. 
+
+The `window.commento.reInit` function can be called with the following updated options (all optional):
+
+```js
+{
+    pageId: "string", // eg: "path/to/page"
+    idRoot: "string", // eg: "new-element-id"
+    noFonts: "string", // Boolean string, "true" or "false"
+    hideDeleted: "string", // Boolean string, "true" or "false"
+    cssOverride: "string" // or null to reset to undefined
+}
+```
