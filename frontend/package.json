@@ -21,7 +21,7 @@
     "gulp-uglify": "3.0.0",
     "highlightjs": "9.10.0",
     "html-minifier": "3.5.7",
-    "jquery": "3.2.1",
+    "jquery": "3.5.0",
     "normalize-scss": "7.0.1",
     "sass": "1.5.1",
     "through2": "^3.0.1",
