@@ -122,7 +122,7 @@ func staticRouterInit(router *mux.Router) error {
 			contentType[p] = "text/html; charset=utf-8"
 		}
 
-		router.HandleFunc(p, func(w http.ResponseWriter, r *http.Request) {
+		router.HandleFunc(strings.Replace(p, subdir, "", 1), func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", contentType[r.URL.Path])
 			if compress {
 				w.Header().Set("Content-Encoding", "gzip")
