@@ -15,14 +15,34 @@ func domainNew(ownerHex string, name string, domain string) error {
 		return errorInvalidDomain
 	}
 
+	// TODO: option of disabling wildcards
+
+	// test if domain already exists
 	statement := `
+		SELECT COUNT(*) FROM
+		domains WHERE
+		canon($1) LIKE canon(domain) OR canon(domain) LIKE canon($1) ;
+	`
+	row := db.QueryRow(statement, domain)
+        var err error
+	var count int
+
+        if err = row.Scan(&count); err != nil {
+                return errorInvalidDomain
+        }
+
+	if count > 0 {
+		return errorDomainAlreadyExists
+	}
+
+	statement = `
 		INSERT INTO
 		domains (ownerHex, name, domain, creationDate)
 		VALUES  ($1,       $2,   $3,     $4          );
 	`
-	_, err := db.Exec(statement, ownerHex, name, domain, time.Now().UTC())
+	_, err = db.Exec(statement, ownerHex, name, domain, time.Now().UTC())
 	if err != nil {
-		// TODO: Make sure this is really the error.
+		// TODO: This should not happen given the above check, so this is likely not the error. Be more informative?
 		return errorDomainAlreadyExists
 	}
 

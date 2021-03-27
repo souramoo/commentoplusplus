@@ -19,7 +19,7 @@ func commentCount(domain string, paths []string) (map[string]int, error) {
 	statement := `
 		SELECT path, commentCount
 		FROM pages
-		WHERE domain = $1 AND path = ANY($2);
+		WHERE canon($1) LIKE canon(domain) AND path = ANY($2);
 	`
 	rows, err := db.Query(statement, domain, pq.Array(paths))
 	if err != nil {

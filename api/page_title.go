@@ -16,7 +16,7 @@ func pageTitleUpdate(domain string, path string) (string, error) {
 	statement := `
 		UPDATE pages
 		SET title = $3
-		WHERE domain = $1 AND path = $2;
+		WHERE canon($1) LIKE canon(domain) AND path = $2;
 	`
 	_, err = db.Exec(statement, domain, path, title)
 	if err != nil {

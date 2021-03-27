@@ -58,7 +58,7 @@ func domainGet(dmn string) (domain, error) {
 	statement := `
 		SELECT ` + domainsRowColumns + `
 		FROM domains
-		WHERE domain = $1;
+		WHERE canon($1) LIKE canon(domain);
 	`
 	row := db.QueryRow(statement, dmn)
 

@@ -32,7 +32,7 @@ func commentDelete(commentHex string, deleterHex string, domain string, path str
 	statement = `
 		UPDATE pages
 		SET commentCount = commentCount - 1
-		WHERE domain = $1 AND path = $2;
+		WHERE canon($1) LIKE canon(domain) AND path = $2;
 	`
 	_, err = db.Exec(statement, domain, path)
 

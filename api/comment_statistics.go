@@ -10,7 +10,7 @@ func commentStatistics(domain string) ([]int64, error) {
 			FROM generate_series(0, 30, 1) AS offs
 		) gen LEFT OUTER JOIN comments
 		ON gen.date = to_char(date_trunc('day', comments.creationDate), 'YYYY-MM-DD') AND
-		   comments.domain=$1
+		   canon($1) LIKE canon(comments.domain)
 		GROUP BY gen.date
 		ORDER BY gen.date;
 	`

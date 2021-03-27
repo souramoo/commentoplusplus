@@ -12,7 +12,7 @@ func domainClear(domain string) error {
 	statement := `
 		DELETE FROM votes
 		USING comments
-		WHERE comments.commentHex = votes.commentHex AND comments.domain = $1;
+		WHERE comments.commentHex = votes.commentHex AND canon($1) LIKE canon(comments.domain);
 	`
 	_, err := db.Exec(statement, domain)
 	if err != nil {

@@ -24,7 +24,7 @@ func commentList(commenterHex string, domain string, path string, includeUnappro
 			creationDate
 		FROM comments
 		WHERE
-			comments.domain = $1 AND
+			canon($1) LIKE canon(comments.domain) AND
 			comments.path = $2
 	`
 
@@ -224,7 +224,7 @@ func commentListApprovals(domain string) ([]comment, map[string]commenter, error
 			creationDate
 		FROM comments
 		WHERE
-			comments.domain = $1 AND deleted = false AND
+			canon($1) LIKE canon(comments.domain) AND deleted = false AND
 			( state = 'unapproved' OR state = 'flagged' );
 	`
 

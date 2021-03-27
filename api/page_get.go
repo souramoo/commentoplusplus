@@ -13,7 +13,7 @@ func pageGet(domain string, path string) (page, error) {
 	statement := `
 		SELECT isLocked, commentCount, stickyCommentHex, title
 		FROM pages
-		WHERE domain=$1 AND path=$2;
+		WHERE canon($1) LIKE canon(domain) AND path=$2;
 	`
 	row := db.QueryRow(statement, domain, path)
 
