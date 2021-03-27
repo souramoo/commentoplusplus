@@ -27,7 +27,7 @@ func domainNew(ownerHex string, name string, domain string) error {
 	statement := `
 		SELECT COUNT(*) FROM
 		domains WHERE
-		canon($1) LIKE canon(domain) OR canon(domain) LIKE canon($1) ;
+		canon(regexp_replace($1, '[%]', '')) LIKE canon(domain) OR canon(domain) LIKE canon($1);
 	`
 	row := db.QueryRow(statement, domain)
         var err error
