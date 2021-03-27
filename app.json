@@ -48,5 +48,10 @@
       "required": false,
       "value": "false"
     }
+    "COMMENTO_ENABLE_WILDCARDS": {
+      "description": "Allows use of wildcards in domain names in the admin dashboard, defaults to true. Set to false to disable (e.g. if you share your commento instance with more than one admin/allow new registrations)",
+      "required": false,
+      "value": "true"
+    }
   }
 }

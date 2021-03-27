@@ -70,6 +70,20 @@ $ export COMMENTO_ENABLE_LOGGING=true
 
 to turn this feature on.
 
+#### Wildcard domain support
+A new feature added recently, with better edge-case handling of domain names, etc.
+
+This feature however will open up your commento instance to abuse if it is shared between a lot of people (e.g. people registering `e%` to register *every domain beginning with e*...)
+
+As most of commento++ instances are serving one user only, I have assumed you will be sensible about this and enabled wildcard domain support by default. 
+
+If you want the old behaviour, you can disable this with an environment variable:
+
+```
+$ export COMMENTO_ENABLE_WILDCARDS=false
+```
+
+
 #### Docker setup
 Alternatively you can use the pre-build images from:
 - https://gitlab.com/caroga/commentoplusplus-docker
@@ -139,6 +153,7 @@ Original source is from @adtac at https://gitlab.com/commento/commento/ - this f
 - [NEW FEATURE: Press enter to log in after entering your password](https://gitlab.com/commento/commento/-/merge_requests/167)
 - [FIXED: Deleted comments not returned in array](https://gitlab.com/commento/commento/-/merge_requests/170)
 - [NEW FEATURE: Reinit widget functionality for Single Page Applications](https://gitlab.com/commento/commento/-/merge_requests/182)
+- NEW FEATURE: Wildcards possible in domain name (so can serve %.example.com)
 
 I've sent in merge requests for a lot of the above but I don't know when they'll be accepted, so here's a ready to use version with all batteries included to help out fellow bloggers!
 

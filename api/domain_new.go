@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strings"
 	"time"
+	"os"
 )
 
 func domainNew(ownerHex string, name string, domain string) error {
@@ -15,7 +16,12 @@ func domainNew(ownerHex string, name string, domain string) error {
 		return errorInvalidDomain
 	}
 
-	// TODO: option of disabling wildcards
+	// if asked to disable wildcards, then don't allow them...
+	if os.Getenv("ENABLE_WILDCARDS") == "false" {
+		if strings.Contains(domain, "%") || strings.Contains(domain, "_") {
+                	return errorInvalidDomain
+        	}
+	}
 
 	// test if domain already exists
 	statement := `

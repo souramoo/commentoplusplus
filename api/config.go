@@ -59,6 +59,7 @@ func configParse() error {
 		"GITLAB_URL":    "https://gitlab.com",
 
 		"ENABLE_LOGGING": "false",
+		"ENABLE_WILDCARDS": "true",
 	}
 
 	if os.Getenv("COMMENTO_CONFIG_FILE") != "" {
