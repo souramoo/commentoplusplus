@@ -20,6 +20,20 @@ body {
     border-radius: 3px;
     padding: 24px;
     margin: 20px;
+    padding-bottom: 0;
+
+    #form2 {
+      text-align: right;
+      margin-top: 33px;
+    }
+
+    #form2 button {
+      background: #ffffff;
+      width: 30%;
+      border: 1px solid #ffffff;
+      color: #898989;
+      box-shadow: none;
+    }
 
     .form-title {
       font-size: 28px;

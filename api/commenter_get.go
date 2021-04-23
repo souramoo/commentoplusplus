@@ -9,7 +9,8 @@ var commentersRowColumns string = `
 	commenters.link,
 	commenters.photo,
 	commenters.provider,
-	commenters.joinDate
+	commenters.joinDate,
+	commenters.deleted
 `
 
 func commentersRowScan(s sqlScanner, c *commenter) error {
@@ -21,6 +22,7 @@ func commentersRowScan(s sqlScanner, c *commenter) error {
 		&c.Photo,
 		&c.Provider,
 		&c.JoinDate,
+		&c.Deleted,
 	)
 }
 
@@ -42,6 +44,13 @@ func commenterGetByHex(commenterHex string) (commenter, error) {
 		return commenter{}, errorNoSuchCommenter
 	}
 
+	if c.Deleted == true {
+		c.Email = "undefined"
+		c.Name = "[deleted]"
+		c.Link = "undefined"
+		c.Photo = "undefined"
+	}
+
 	return c, nil
 }
 
@@ -61,6 +70,13 @@ func commenterGetByEmail(provider string, email string) (commenter, error) {
 	if err := commentersRowScan(row, &c); err != nil {
 		// TODO: is this the only error?
 		return commenter{}, errorNoSuchCommenter
+	}
+
+	if c.Deleted == true {
+		c.Email = "undefined"
+		c.Name = "[deleted]"
+		c.Link = "undefined"
+		c.Photo = "undefined"
 	}
 
 	return c, nil
@@ -87,6 +103,13 @@ func commenterGetByCommenterToken(commenterToken string) (commenter, error) {
 
 	if c.CommenterHex == "none" {
 		return commenter{}, errorNoSuchToken
+	}
+
+	if c.Deleted == true {
+		c.Email = "undefined"
+		c.Name = "[deleted]"
+		c.Link = "undefined"
+		c.Photo = "undefined"
 	}
 
 	return c, nil

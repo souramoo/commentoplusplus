@@ -39,6 +39,31 @@
     });
   }
 
+  global.delete = function(event) {
+    event.preventDefault();
+    if (confirm("Are you sure you wish to delete your commenter account? This will remove your name from all of your comments. Press OK to go ahead with this.")) {
+
+      $(".err").text("");
+      $(".msg").text("");
+
+
+      var json = {
+        "commenterToken": global.paramGet("commenterToken")
+      };
+
+      global.buttonDisable("#save-button");
+      global.post(global.origin + "/api/commenter/delete", json, function(resp) {
+        if (!resp.success) {
+          $(".err").text(resp.message);
+          return;
+        }
+
+        $(".msg").text("Successfully deleted your account!");
+      });
+    }
+  }
+
+
   global.profilePrefill = function() {
     $(".err").text("");
     $(".msg").text("");
@@ -49,6 +74,7 @@
     global.post(global.origin + "/api/commenter/self", json, function(resp) {
       $("#loading").hide();
       $("#form").show();
+      $("#form2").show();
       if (!resp.success) {
         $(".err").text(resp.message);
         return;

@@ -14,7 +14,7 @@ func commenterLogin(email string, password string) (string, error) {
 	statement := `
 		SELECT commenterHex, passwordHash
 		FROM commenters
-		WHERE email = $1 AND provider = 'commento';
+		WHERE email = $1 AND provider = 'commento' AND deleted=false;
 	`
 	row := db.QueryRow(statement, email)
 

@@ -1,0 +1,2 @@
+ALTER TABLE commenters
+  ADD deleted BOOLEAN NOT NULL DEFAULT FALSE;

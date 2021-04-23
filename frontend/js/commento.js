@@ -1175,6 +1175,9 @@
           avatar.style["font-weight"] = "bold";
         } else {
           avatar.innerHTML = commenter.name[0].toUpperCase();
+          if(commenter.name === "[deleted]") {
+            avatar.innerHTML = "?";
+          }
         }
 
         classAdd(avatar, "avatar");

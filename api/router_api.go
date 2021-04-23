@@ -6,7 +6,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-var hub *Hub;
+var hub *Hub
 
 func apiRouterInit(router *mux.Router) error {
 	router.HandleFunc("/api/owner/new", ownerNewHandler).Methods("POST")
@@ -35,6 +35,7 @@ func apiRouterInit(router *mux.Router) error {
 	router.HandleFunc("/api/commenter/self", commenterSelfHandler).Methods("POST")
 	router.HandleFunc("/api/commenter/update", commenterUpdateHandler).Methods("POST")
 	router.HandleFunc("/api/commenter/photo", commenterPhotoHandler).Methods("GET")
+	router.HandleFunc("/api/commenter/delete", commenterDeleteHandler).Methods("POST")
 
 	router.HandleFunc("/api/forgot", forgotHandler).Methods("POST")
 	router.HandleFunc("/api/reset", resetHandler).Methods("POST")

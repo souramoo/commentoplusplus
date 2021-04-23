@@ -24,6 +24,11 @@ func commenterUpdate(commenterHex string, email string, name string, link string
 		photo = "https://" + photo
 	}
 
+	// reserved "name"
+	if name == "[deleted]" {
+		return errorReservedName
+	}
+
 	statement := `
 		UPDATE commenters
 		SET email = $3, name = $4, link = $5, photo = $6
