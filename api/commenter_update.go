@@ -2,11 +2,10 @@ package main
 
 import (
 	"net/http"
-	"strings"
 )
 
 func commenterUpdate(commenterHex string, email string, name string, link string, photo string, provider string) error {
-	if email == "" || name == "" || photo == "" || provider == "" {
+	if email == "" || name == "" || provider == "" {
 		return errorMissingField
 	}
 
@@ -17,6 +16,12 @@ func commenterUpdate(commenterHex string, email string, name string, link string
 		link = "undefined"
 	} else if link != "undefined" && !isHttpsUrl(link) {
 		link = "https://" + link
+	}
+
+	if photo == "" {
+		photo = "undefined"
+	} else if photo != "undefined" && !isHttpsUrl(photo) {
+		photo = "https://" + photo
 	}
 
 	statement := `
@@ -60,10 +65,6 @@ func commenterUpdateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	*x.Email = c.Email
-
-	if strings.TrimSpace(*x.Photo) == "" {
-		*x.Photo = c.Photo
-	}
 
 	if err = commenterUpdate(c.CommenterHex, *x.Email, *x.Name, *x.Link, *x.Photo, c.Provider); err != nil {
 		bodyMarshal(w, response{"success": false, "message": err.Error()})
