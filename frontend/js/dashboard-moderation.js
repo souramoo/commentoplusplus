@@ -18,10 +18,21 @@
         return
       }
       for(var i in resp.comments) {
-        resp.comments[i].creationDate = new Date(resp.comments[i].creationDate).toString()
+        resp.comments[i].creationDate = new Date(resp.comments[i].creationDate).toLocaleString()
       }
       Vue.set(data.domains[data.cd], "pending", resp.comments)
       data.domains[data.cd].pendingCommenters = resp.commenters
+    });
+    global.post(global.origin + "/api/comment/owner/listAll", json, function(resp) {
+      if (!resp.success) {
+        global.globalErrorShow(resp.message);
+        return
+      }
+      for(var i in resp.comments) {
+        resp.comments[i].creationDate = new Date(resp.comments[i].creationDate).toLocaleString()
+      }
+      Vue.set(data.domains[data.cd], "commentsAll", resp.comments)
+      Vue.set(data.domains[data.cd], "commentersAll", resp.commenters)
     });
   };
 
