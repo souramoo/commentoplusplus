@@ -69,6 +69,8 @@ func fileLoad(f string) ([]byte, error) {
 func staticRouterInit(router *mux.Router) error {
 	var err error
 
+	subdir := pathStrip(os.Getenv("ORIGIN"))
+
 	if err = footerInit(); err != nil {
 		logger.Errorf("error initialising static router: %v", err)
 		return err
@@ -121,11 +123,12 @@ func staticRouterInit(router *mux.Router) error {
 		}
 
 		router.HandleFunc(p, func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Content-Type", contentType[r.URL.Path])
+			realPath := strings.Replace(r.URL.Path, subdir, "", 1)
+			w.Header().Set("Content-Type", contentType[realPath])
 			if compress {
 				w.Header().Set("Content-Encoding", "gzip")
 			}
-			w.Write(asset[r.URL.Path])
+			w.Write(asset[realPath])
 		})
 	}
 
