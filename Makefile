@@ -63,6 +63,7 @@ devel-templates: templates
 	cp -r $(TEMPLATES_DEVEL_BUILD_DIR)/* $(TEMPLATES_DEVEL_ROOT_DIR)
 
 devel-db: db
+	mkdir -p $(DB_DEVEL_ROOT_DIR)
 	cp -r $(DB_DEVEL_BUILD_DIR)/* $(DB_DEVEL_ROOT_DIR)
 
 prod-frontend: frontend
