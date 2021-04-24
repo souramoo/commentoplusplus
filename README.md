@@ -83,6 +83,17 @@ If you want the old behaviour, you can disable this with an environment variable
 $ export COMMENTO_ENABLE_WILDCARDS=false
 ```
 
+#### Disabling SMTP Host verification check
+
+Commento++ allows configuration of the tlsConfig for both SMTPS as well as StartTLS for email sending.
+For context, this is required for the [https://cloudron.io/](Cloudron) app package.
+
+To skip SMTP hostname verification, use:
+
+```
+$ export SMTP_SKIP_HOST_VERIFY=true
+```
+
 
 #### Docker setup
 Alternatively you can use the pre-build images from:

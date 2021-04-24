@@ -52,6 +52,11 @@
       "description": "Allows use of wildcards in domain names in the admin dashboard, defaults to true. Set to false to disable (e.g. if you share your commento instance with more than one admin/allow new registrations)",
       "required": false,
       "value": "true"
+    },
+    "COMMENTO_SMTP_SKIP_HOST_VERIFY": {
+      "description": "Allows skipping of host verification for SMTP email sending, defaults to false. Set to true to enable (e.g. for the Cloudron app package)",
+      "required": false,
+      "value": "false"
     }
   }
 }
