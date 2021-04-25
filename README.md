@@ -138,7 +138,7 @@ You can add the following to commento's script tag:
 - `data-hide-deleted` - By default, deleted comments with undeleted replies are shown with a "[deleted]" tag. If you'd like to disable this, setting this to true will hide deleted comments even if there are legitimate replies underneath. Deleted comments without any undeleted comments underneath are hidden irrespective of the value of this function. By default, this is false.
 - `data-no-websockets="true"` - Disables websocket functionality in favour of HTTP polling to have the same live reload functionality in a situation where websockets aren't allowed (e.g. a reverse proxy)
 - `data-no-livereload="true"` - Disabled all hot reload functionality (this supercedes the above flag) - all comments are loaded once and only once on page load.
-
+- `data-auto-sso="true"` - Enable auto SSO redirect (without popup login block) when clicked on "Login" button or "Add comment" if you are not authorized.
 e.g. Usage example:
 ```
 <script defer src="https://chat.mookerj.ee/js/commento.js" data-no-websockets="true"></script>
