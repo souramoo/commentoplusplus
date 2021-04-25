@@ -76,6 +76,7 @@
   var noFonts;
   var hideDeleted;
   var autoInit;
+  var autoSSO = false;
   var noWs = false, noLive = false;
   var isAuthenticated = false;
   var firstFetch = true;
@@ -158,7 +159,7 @@
     if (attr === undefined) {
       return undefined;
     }
-    
+
     return attr.value;
   }
 
@@ -530,7 +531,7 @@
       if(!critical) {
         append($(ID_NOTICE_CONTAINER), messageEl);
         setTimeout(function(){
-          messageEl.remove(); 
+          messageEl.remove();
         }, 5000)
       } else {
         append($(ID_ROOT), messageEl);
@@ -879,6 +880,7 @@
 
     if (markdown === "") {
       classAdd(textarea, "red-border");
+      $(ID_SUBMIT_BUTTON + id).disabled = false;
       return;
     } else {
       classRemove(textarea, "red-border");
@@ -917,12 +919,12 @@
       if(message !== "") {
         errorShow(message);
       }
-      
+
       var commenterHex = selfHex;
       if (commenterHex === undefined || commenterToken === "anonymous") {
         commenterHex = "anonymous";
       }
-      
+
       if (commenterHex === "anonymous" && !$(ID_ANONYMOUS_CHECKBOX + id).checked && $(ID_GUEST_DETAILS_INPUT + id) && $(ID_GUEST_DETAILS_INPUT + id).value.trim().length > 0) {
         commenterHex = id;
         commenters[id] = { provider: "anon", name: anonName, photo: "undefined", link: "" };
@@ -1135,7 +1137,7 @@
       permalink.href = "#commento-" + comment.commentHex;
       permalink.innerText = "permalink";
       permalink.onclick = function() {
-        window.location.hash = "#commento-" + comment.commentHex; loadHash(); commentsRender(); 
+        window.location.hash = "#commento-" + comment.commentHex; loadHash(); commentsRender();
       }
 
       collapse.title = i18n("Collapse children");
@@ -1289,7 +1291,7 @@
       if (isModerator && comment.state !== "approved") {
         append(options, approve);
       }
-      
+
       if (!comment.deleted && (!isModerator && stickyCommentHex === comment.commentHex)) {
         append(options, sticky);
       }
@@ -1935,22 +1937,27 @@
     });
 
     if (configuredOauths["sso"]) {
-      var button = create("button");
+      if (autoSSO && numOauthConfigured === 0 && configuredOauths["commento"] === false){
+        global.commentoAuth({"provider": "sso", "id": id});
+        setTimeout(global.loginBoxClose, 250);
+      } else {
+        var button = create("button");
 
-      classAdd(button, "button");
-      classAdd(button, "sso-button");
+        classAdd(button, "button");
+        classAdd(button, "sso-button");
 
-      button.innerText = i18n("Single Sign-On");
+        button.innerText = i18n("Single Sign-On");
 
-      onclick(button, global.commentoAuth, {"provider": "sso", "id": id});
+        onclick(button, global.commentoAuth, {"provider": "sso", "id": id});
 
-      append(ssoButton, button);
-      append(ssoButtonContainer, ssoButton);
-      append(loginBox, ssoSubtitle);
-      append(loginBox, ssoButtonContainer);
+        append(ssoButton, button);
+        append(ssoButtonContainer, ssoButton);
+        append(loginBox, ssoSubtitle);
+        append(loginBox, ssoButtonContainer);
 
-      if (numOauthConfigured > 0 || configuredOauths["commento"]) {
-        append(loginBox, hr1);
+        if (numOauthConfigured > 0 || configuredOauths["commento"]) {
+          append(loginBox, hr1);
+        }
       }
     }
 
@@ -2097,7 +2104,7 @@
   global.passwordAsk = function(id) {
     var loginBox = $(ID_LOGIN_BOX);
     var subtitle = $(ID_LOGIN_BOX_EMAIL_SUBTITLE);
-    
+
     remove($(ID_LOGIN_BOX_EMAIL_BUTTON));
     remove($(ID_LOGIN_BOX_LOGIN_LINK_CONTAINER));
     remove($(ID_LOGIN_BOX_FORGOT_LINK_CONTAINER));
@@ -2329,7 +2336,7 @@
     global.popupRender(id);
 
     classAdd(mainArea, "blurred");
-    
+
     attrSet(loginBoxContainer, "style", "");
 
     // window.location.hash = ID_LOGIN_BOX_CONTAINER;
@@ -2353,6 +2360,8 @@
         autoInit = attrGet(scripts[i], "data-auto-init");
         noWs = attrGet(scripts[i], "data-no-websockets");
         noLive = attrGet(scripts[i], "data-no-livereload");
+
+        autoSSO = attrGet(scripts[i], "data-auto-sso") === "true";
 
         ID_ROOT = attrGet(scripts[i], "data-id-root");
         if (ID_ROOT === undefined) {
@@ -2509,7 +2518,7 @@
     if (initted) {
       return;
     }
-    
+
     dataTagsLoad();
 
     if(!noLive) {
