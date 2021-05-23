@@ -1033,7 +1033,7 @@
 
 
   function scorify(score) {
-    if (score !== 1) {
+    if (score !== 1 && score !== -1) {
       return score + i18n(" points");
     } else {
       return score + i18n(" point");
