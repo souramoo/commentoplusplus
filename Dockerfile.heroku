@@ -44,6 +44,7 @@ COPY --from=frontend-build /commento/frontend/build/prod/js /commento/js
 COPY --from=frontend-build /commento/frontend/build/prod/css /commento/css
 COPY --from=frontend-build /commento/frontend/build/prod/images /commento/images
 COPY --from=frontend-build /commento/frontend/build/prod/fonts /commento/fonts
+COPY --from=frontend-build /commento/frontend/build/prod/i18n /commento/i18n
 COPY --from=frontend-build /commento/frontend/build/prod/*.html /commento/
 COPY --from=templates-db-build /commento/templates/build/prod/templates /commento/templates/
 COPY --from=templates-db-build /commento/db/build/prod/db /commento/db/
