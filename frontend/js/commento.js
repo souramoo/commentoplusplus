@@ -103,6 +103,12 @@
   var locale = navigator && navigator.language;
   var strings = global.strings || {};
 
+  var sortPolicyNames = {
+    "score-desc": "",
+    "creationdate-desc": "",
+    "creationdate-asc": "",
+  };
+
   function $(id) {
     return document.getElementById(id);
   }
@@ -750,13 +756,6 @@
 
     return textareaSuperContainer;
   }
-
-
-  var sortPolicyNames = {
-    "score-desc": i18n("Upvotes"),
-    "creationdate-desc": i18n("Newest"),
-    "creationdate-asc": i18n("Oldest"),
-  };
 
 
   function sortPolicyApply(policy) {
@@ -2400,6 +2399,12 @@
 
 
   global.main = function(callback) {
+    sortPolicyNames = {
+      "score-desc": i18n("Upvotes"),
+      "creationdate-desc": i18n("Newest"),
+      "creationdate-asc": i18n("Oldest"),
+    };
+
     root = $(ID_ROOT);
     if (root === null) {
       console.log("[commento] error: no root element with ID '" + ID_ROOT + "' found");
