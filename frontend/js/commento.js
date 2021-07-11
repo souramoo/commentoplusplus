@@ -2455,6 +2455,7 @@
   global.reInit = function(options) {
     pageId = options.pageId || pageId;
     ID_ROOT = options.idRoot || ID_ROOT;
+    root = $(ID_ROOT);
     noFonts = options.noFonts || noFonts;
     hideDeleted = options.hideDeleted || hideDeleted;
     cssOverride = options.cssOverride || cssOverride;
