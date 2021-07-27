@@ -58,9 +58,11 @@ func smtpSendMail(toAddress string, toName string, contentType string, subject s
 		return err
 	}
 
-	err = c.Auth(smtpAuth)
-	if err != nil {
-		return err
+	if smtpAuth != nil {
+		err = c.Auth(smtpAuth)
+		if err != nil {
+			return err
+		}
 	}
 
 	err = c.Mail(from.Address)
