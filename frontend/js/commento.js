@@ -447,6 +447,7 @@
 
     attrSet(a, "href", "https://github.com/souramoo/commentoplusplus");
     attrSet(a, "target", "_blank");
+    attrSet(a, "rel", "noreferrer");
 
     text.innerText = "Commento++";
 
