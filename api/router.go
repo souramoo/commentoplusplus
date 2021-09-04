@@ -28,12 +28,24 @@ func routesServe() error {
 	methods := handlers.AllowedMethods([]string{"GET", "POST"})
 
 	addrPort := os.Getenv("BIND_ADDRESS") + ":" + os.Getenv("PORT")
-
-	logger.Infof("starting server on %s\n", addrPort)
-	if err := http.ListenAndServe(addrPort, handlers.CORS(origins, headers, methods)(router)); err != nil {
-		logger.Errorf("cannot start server: %v", err)
+	ssl := os.Getenv("SSL")
+	if ssl == "true" {
+		cert := os.Getenv("SSL_CERT")
+		key := os.Getenv("SSL_KEY")
+		if cert == "" || key == "" {
+			return fmt.Errorf("missing cert %s or key %s file", cert, key)
+		}
+		logger.Infof("starting SSL server on %s\n", addrPort)
+		if err := http.ListenAndServeTLS(addrPort, cert, key, handlers.CORS(origins, headers, methods)(router)); err != nil {
+			logger.Errorf("cannot start server: %v", err)
 		return err
+		}
+	} else {
+		logger.Infof("starting server on %s\n", addrPort)
+		if err := http.ListenAndServe(addrPort, handlers.CORS(origins, headers, methods)(router)); err != nil {
+			logger.Errorf("cannot start server: %v", err)
+			return err
+		}
 	}
-
 	return nil
 }
