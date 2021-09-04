@@ -28,7 +28,9 @@ func configParse() error {
 		"BIND_ADDRESS": "127.0.0.1",
 		"PORT":         "8080",
 		"ORIGIN":       "",
-
+		"SSL": 				"false",
+		"SSL_CERT": 		"",
+		"SSL_KEY": 			"",
 		"CDN_PREFIX": "",
 
 		"FORBID_NEW_OWNERS": "false",
