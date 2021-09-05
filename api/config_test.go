@@ -32,6 +32,21 @@ func TestConfigParseBasics(t *testing.T) {
 		return
 	}
 
+	if os.Getenv("SSL") != "false" {
+		t.Errorf("expected SSL=false, but SSL=%s instead", os.Getenv("SSL"))
+		return
+	}
+
+	if os.Getenv("SSL_CERT") != "" {
+		t.Errorf("expected SSL_CERT=, but SSL_CERT=%s instead", os.Getenv("SSL_CERT"))
+		return
+	}
+
+	if os.Getenv("SSL_KEY") != "" {
+		t.Errorf("expected SSL_KEY=, but SSL_KEY=%s instead", os.Getenv("SSL_KEY"))
+		return
+	}
+
 	// This test feels kinda stupid, but whatever.
 	if os.Getenv("PORT") != "8080" {
 		t.Errorf("expected PORT=8080, but PORT=%s instead", os.Getenv("PORT"))

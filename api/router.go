@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -22,25 +23,26 @@ func routesServe() error {
 	if err := staticRouterInit(router); err != nil {
 		return err
 	}
-
 	origins := handlers.AllowedOrigins([]string{"*"})
 	headers := handlers.AllowedHeaders([]string{"X-Requested-With"})
 	methods := handlers.AllowedMethods([]string{"GET", "POST"})
 
 	addrPort := os.Getenv("BIND_ADDRESS") + ":" + os.Getenv("PORT")
 	ssl := os.Getenv("SSL")
-	if ssl == "true" {
+	if ssl == "true" { // SSL
 		cert := os.Getenv("SSL_CERT")
 		key := os.Getenv("SSL_KEY")
 		if cert == "" || key == "" {
-			return fmt.Errorf("missing cert %s or key %s file", cert, key)
+			myerr := fmt.Errorf("missing cert %s or key %s file", cert, key)
+			logger.Errorf("cannot start server: %v", myerr)
+			return myerr
 		}
 		logger.Infof("starting SSL server on %s\n", addrPort)
 		if err := http.ListenAndServeTLS(addrPort, cert, key, handlers.CORS(origins, headers, methods)(router)); err != nil {
-			logger.Errorf("cannot start server: %v", err)
-		return err
+			logger.Errorf("cannot start SSL server: %v", err)
+			return err
 		}
-	} else {
+	} else { // Non-SSL
 		logger.Infof("starting server on %s\n", addrPort)
 		if err := http.ListenAndServe(addrPort, handlers.CORS(origins, headers, methods)(router)); err != nil {
 			logger.Errorf("cannot start server: %v", err)
