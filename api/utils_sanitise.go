@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"regexp"
 	"strings"
 )
@@ -47,7 +48,12 @@ func isHttpsUrl(in string) bool {
 
 func addHttpIfAbsent(in string) string {
 	if !strings.HasPrefix(in, "http://") && !strings.HasPrefix(in, "https://") {
-		return "http://" + in
+		ssl := os.Getenv("SSL")
+		if ssl == "true" {
+			return "https://" + in
+		} else {
+			return "http://" + in
+		}
 	}
 
 	return in

@@ -1,9 +1,16 @@
 package main
 
-import ()
+import ("os")
 
 func pageTitleUpdate(domain string, path string) (string, error) {
-	title, err := htmlTitleGet("http://" + domain + path)
+	ssl := os.Getenv("SSL")
+	pre := ""
+	if ssl == "true" {
+		pre = "https://"
+	} else {
+		pre = "http://"
+	}
+	title, err := htmlTitleGet(pre + domain + path)
 	if err != nil {
 		// This could fail due to a variety of reasons that we can't control such
 		// as the user's URL 404 or something, so let's not pollute the error log
