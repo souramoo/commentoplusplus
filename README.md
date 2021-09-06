@@ -126,6 +126,16 @@ location / {
 
 Or if you'd rather not do that, disable websockets in favour of HTTP polling by adding `data-no-websockets="true"` to the commento <script> tag (or `data-no-livereload="true"`` to only load comments on page load, see below!)
 
+### SSL Support
+Commento++ supports native SSL without use of an nginx proxy. Three properties are required for Native SSL:
+
+- COMMENTO_SSL
+- COMMENTO_SSL_CERT
+- COMMENTO_SSL_KEY
+
+`COMMENTO_SSL=true` enables native SSL. Default is false.
+
+If `COMMENTO_SSL=true` then `COMMENTO_SSL_CERT` and `COMMENTO_SSL_KEY` must be set to the path to a valid SSL Certificate and Key pair.
 
 ### More options to configure commento's frontend
 
