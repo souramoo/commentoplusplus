@@ -1133,7 +1133,7 @@
       contents.id = ID_CONTENTS + comment.commentHex;
       name.id = ID_NAME + comment.commentHex;
       permalink.href = "#commento-" + comment.commentHex;
-      permalink.innerText = "permalink";
+      permalink.innerText = i18n("permalink");
       permalink.onclick = function() {
         window.location.hash = "#commento-" + comment.commentHex; loadHash(); commentsRender(); 
       }
