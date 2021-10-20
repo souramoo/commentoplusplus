@@ -295,7 +295,7 @@
                         <div class="comment cccc"><strong>Comment</strong></div>
                       </div>
                       <div class="mod-comments-row" v-for="comment in domains[cd].commentsAll" v-if="domains[cd].commentsAll.length > 0">
-                        <div class="comment"><a :href="'https://' + domains[cd].domain + '/' + comment.url">{{ comment.url }}</a></div>
+                        <div class="comment"><a :href="'https://' + domains[cd].domain + comment.url">{{ comment.url }}</a></div>
                         <div class="comment">{{ comment.creationDate }}</div>
                         <div class="comment">{{ domains[cd].commentersAll[comment.commenterHex].name }}</div>
                         <div class="comment cccc"><span v-html="comment.html"></span></div>
