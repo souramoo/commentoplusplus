@@ -1,7 +1,12 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
     id: make_image
-    args: ['build', '--tag=gcr.io/$PROJECT_ID/${_APP}:$SHORT_SHA', '.']
+    args: [
+      'build',
+      '--tag=gcr.io/$PROJECT_ID/${_APP}:$SHORT_SHA',
+      '--tag=gcr.io/$PROJECT_ID/${_APP}:latest',
+      '.'
+    ]
 
   # push to gcr
   - name: 'gcr.io/cloud-builders/docker'
