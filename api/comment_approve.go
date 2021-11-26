@@ -1,7 +1,11 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"net/http"
+	"strconv"
+	"time"
 )
 
 func commentApprove(commentHex string, url string) error {
@@ -24,6 +28,20 @@ func commentApprove(commentHex string, url string) error {
 	hub.broadcast <- []byte(url)
 
 	return nil
+}
+
+func UpdateUrlLastModTime(path string) {
+	url := "https://omega-dot-getmega-app.appspot.com/twirp/consoleapi.pb.Website/UpdateUrlLastModTime"
+
+	payload := map[string]string{"url": path, "last_mod": strconv.FormatInt(time.Now().Unix(), 10)}
+
+	jsonPayload, _ := json.Marshal(payload)
+
+	_, err := http.Post(url, "application/json", bytes.NewBuffer(jsonPayload))
+
+	if err != nil {
+		return
+	}
 }
 
 func commentApproveHandler(w http.ResponseWriter, r *http.Request) {
@@ -61,7 +79,7 @@ func commentApproveHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = commentApprove(*x.CommentHex, domain + path); err != nil {
+	if err = commentApprove(*x.CommentHex, domain+path); err != nil {
 		bodyMarshal(w, response{"success": false, "message": err.Error()})
 		return
 	}
@@ -72,14 +90,14 @@ func commentApproveHandler(w http.ResponseWriter, r *http.Request) {
 func commentOwnerApproveHandler(w http.ResponseWriter, r *http.Request) {
 	type request struct {
 		OwnerToken *string `json:"ownerToken"`
-		CommentHex     *string `json:"commentHex"`
+		CommentHex *string `json:"commentHex"`
 	}
 
 	var x request
-        if err := bodyUnmarshal(r, &x); err != nil {
-                bodyMarshal(w, response{"success": false, "message": err.Error()})
-                return
-        }
+	if err := bodyUnmarshal(r, &x); err != nil {
+		bodyMarshal(w, response{"success": false, "message": err.Error()})
+		return
+	}
 
 	domain, path, err := commentDomainPathGet(*x.CommentHex)
 	if err != nil {
@@ -87,24 +105,24 @@ func commentOwnerApproveHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-        o, err := ownerGetByOwnerToken(*x.OwnerToken)
-        if err != nil {
-                bodyMarshal(w, response{"success": false, "message": err.Error()})
-                return
-        }
+	o, err := ownerGetByOwnerToken(*x.OwnerToken)
+	if err != nil {
+		bodyMarshal(w, response{"success": false, "message": err.Error()})
+		return
+	}
 
-        isOwner, err := domainOwnershipVerify(o.OwnerHex, domain)
-        if err != nil {
-                bodyMarshal(w, response{"success": false, "message": err.Error()})
-                return
-        }
+	isOwner, err := domainOwnershipVerify(o.OwnerHex, domain)
+	if err != nil {
+		bodyMarshal(w, response{"success": false, "message": err.Error()})
+		return
+	}
 
-        if !isOwner {
-                bodyMarshal(w, response{"success": false, "message": errorNotAuthorised.Error()})
-                return
-        }
+	if !isOwner {
+		bodyMarshal(w, response{"success": false, "message": errorNotAuthorised.Error()})
+		return
+	}
 
-	if err = commentApprove(*x.CommentHex, domain + path); err != nil {
+	if err = commentApprove(*x.CommentHex, domain+path); err != nil {
 		bodyMarshal(w, response{"success": false, "message": err.Error()})
 		return
 	}
