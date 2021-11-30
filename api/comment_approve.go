@@ -2,9 +2,8 @@ package main
 
 import (
 	"bytes"
-	"encoding/json"
+	"fmt"
 	"net/http"
-	"strconv"
 	"time"
 )
 
@@ -27,17 +26,21 @@ func commentApprove(commentHex string, url string) error {
 
 	hub.broadcast <- []byte(url)
 
+	_, path, er := commentDomainPathGet(commentHex)
+	if er != nil {
+		return nil
+	}
+	updateUrlLastModTime(path)
+
 	return nil
 }
 
-func UpdateUrlLastModTime(path string) {
+func updateUrlLastModTime(path string) {
 	url := "https://omega-dot-getmega-app.appspot.com/twirp/consoleapi.pb.Website/UpdateUrlLastModTime"
 
-	payload := map[string]string{"url": path, "last_mod": strconv.FormatInt(time.Now().Unix(), 10)}
+	jsonStr := fmt.Sprintf("{\"url_entries\": {\"url\": %s, \"last_mod\": %s)}}", path, time.Now().Format(time.RFC3339))
 
-	jsonPayload, _ := json.Marshal(payload)
-
-	_, err := http.Post(url, "application/json", bytes.NewBuffer(jsonPayload))
+	_, err := http.Post(url, "application/json", bytes.NewBuffer([]byte(jsonStr)))
 
 	if err != nil {
 		return
