@@ -24,7 +24,10 @@ func commentEdit(commentHex string, markdown string, url string) (string, error)
 	}
 
 	hub.broadcast <- []byte(url)
-	updateUrlLastModTime(url)
+	err = updateUrlLastModTime(url)
+	if err != nil {
+		return "", err
+	}
 
 	return html, nil
 }

@@ -48,7 +48,12 @@ func commentNew(commenterHex string, domain string, path string, parentHex strin
 
 	hub.broadcast <- []byte(domain + path)
 
-	updateUrlLastModTime(domain + path)
+	if state == "approved" {
+		err := updateUrlLastModTime(domain + path)
+		if err != nil {
+			return "", err
+		}
+	}
 
 	return commentHex, nil
 }

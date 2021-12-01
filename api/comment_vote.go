@@ -41,7 +41,10 @@ func commentVote(commenterHex string, commentHex string, direction int, url stri
 	}
 
 	hub.broadcast <- []byte(url)
-	updateUrlLastModTime(url)
+	err = updateUrlLastModTime(url)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

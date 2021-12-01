@@ -23,7 +23,10 @@ func commentApprove(commentHex string, url string) error {
 
 	hub.broadcast <- []byte(url)
 
-	updateUrlLastModTime(url)
+	err = updateUrlLastModTime(url)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
