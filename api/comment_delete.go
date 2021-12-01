@@ -42,6 +42,8 @@ func commentDelete(commentHex string, deleterHex string, domain string, path str
 
 	hub.broadcast <- []byte(domain + path)
 
+	updateUrlLastModTime(domain + path)
+
 	return nil
 }
 

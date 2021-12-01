@@ -1,10 +1,7 @@
 package main
 
 import (
-	"bytes"
-	"fmt"
 	"net/http"
-	"time"
 )
 
 func commentApprove(commentHex string, url string) error {
@@ -26,25 +23,9 @@ func commentApprove(commentHex string, url string) error {
 
 	hub.broadcast <- []byte(url)
 
-	_, path, er := commentDomainPathGet(commentHex)
-	if er != nil {
-		return nil
-	}
-	updateUrlLastModTime(path)
+	updateUrlLastModTime(url)
 
 	return nil
-}
-
-func updateUrlLastModTime(path string) {
-	url := "https://omega-dot-getmega-app.appspot.com/twirp/consoleapi.pb.Website/UpdateUrlLastModTime"
-
-	jsonStr := fmt.Sprintf("{\"url_entries\": {\"url\": %s, \"last_mod\": %s)}}", path, time.Now().Format(time.RFC3339))
-
-	_, err := http.Post(url, "application/json", bytes.NewBuffer([]byte(jsonStr)))
-
-	if err != nil {
-		return
-	}
 }
 
 func commentApproveHandler(w http.ResponseWriter, r *http.Request) {

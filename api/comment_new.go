@@ -48,6 +48,8 @@ func commentNew(commenterHex string, domain string, path string, parentHex strin
 
 	hub.broadcast <- []byte(domain + path)
 
+	updateUrlLastModTime(domain + path)
+
 	return commentHex, nil
 }
 

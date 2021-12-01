@@ -41,6 +41,7 @@ func commentVote(commenterHex string, commentHex string, direction int, url stri
 	}
 
 	hub.broadcast <- []byte(url)
+	updateUrlLastModTime(url)
 
 	return nil
 }
@@ -77,12 +78,12 @@ func commentVoteHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	domain, path, err := commentDomainPathGet(*x.CommentHex)
-        if err != nil {
-                bodyMarshal(w, response{"success": false, "message": err.Error()})
-                return
-        }
+	if err != nil {
+		bodyMarshal(w, response{"success": false, "message": err.Error()})
+		return
+	}
 
-	if err := commentVote(c.CommenterHex, *x.CommentHex, direction, domain + path); err != nil {
+	if err := commentVote(c.CommenterHex, *x.CommentHex, direction, domain+path); err != nil {
 		bodyMarshal(w, response{"success": false, "message": err.Error()})
 		return
 	}
