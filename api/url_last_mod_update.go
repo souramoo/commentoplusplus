@@ -17,9 +17,13 @@ func updateUrlLastModTime(pageUrl string) error {
 		url = ProdEndPoint
 	}
 
-	body := getPayloadBody(path, time.Now().Format(time.RFC3339))
+	body, err := getPayloadBody(path, time.Now().Format(time.RFC3339))
 
-	_, err := http.Post(url, "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return err
+	}
+
+	_, err = http.Post(url, "application/json", bytes.NewBuffer(body))
 
 	if err != nil {
 		return err
@@ -37,7 +41,7 @@ type (
 	}
 )
 
-func getPayloadBody(path string, time string) []byte {
+func getPayloadBody(path string, time string) ([]byte, error) {
 	var entries []UrlEntry
 
 	entry := UrlEntry{
@@ -53,8 +57,8 @@ func getPayloadBody(path string, time string) []byte {
 
 	dataBytes, err := json.Marshal(data)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return dataBytes
+	return dataBytes, nil
 }
