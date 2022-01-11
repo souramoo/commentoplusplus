@@ -42,6 +42,11 @@ func commentDelete(commentHex string, deleterHex string, domain string, path str
 
 	hub.broadcast <- []byte(domain + path)
 
+	err = updateUrlLastModTime(domain + path)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
