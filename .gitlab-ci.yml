@@ -7,7 +7,7 @@ stages:
   - docker-registry-tags
 
 variables:
-  GIT_DEPTH: 10
+  GIT_DEPTH: "10"
   GO_VERSION: "1.15"
 
 build-src:
