@@ -1,11 +1,7 @@
 name: Build CI
 
 on:
-  push:
-    branches-ignore:
-      - master
-    tags-ignore:
-      - "*"
+  workflow_dispatch:
 
 jobs:
   build-frontend:

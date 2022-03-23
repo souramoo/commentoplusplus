@@ -1,11 +1,7 @@
 name: Test CI
 
 on:
-  push:
-    branches-ignore:
-      - master
-    tags-ignore:
-      - "*"
+  workflow_dispatch:
 
 jobs:
   test-api:
