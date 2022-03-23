@@ -1,6 +1,6 @@
 module gitlab.com/commento/commento/api
 
-go 1.12
+go 1.15
 
 require (
 	cloud.google.com/go v0.79.0 // indirect
