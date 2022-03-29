@@ -131,6 +131,8 @@ func commentNewHandler(w http.ResponseWriter, r *http.Request) {
 		state = "unapproved"
 	} else if commenterHex == "anonymous" && d.ModerateAllAnonymous {
 		state = "unapproved"
+	} else if *x.CommenterToken == "anonymous" && d.ModerateAllAnonymous {
+		state = "unapproved"
 	} else if d.AutoSpamFilter && isSpam(*x.Domain, getIp(r), getUserAgent(r), commenterName, commenterEmail, commenterLink, *x.Markdown) {
 		state = "flagged"
 	} else {
