@@ -25,15 +25,15 @@ clean:
 # later down the line).
 
 devel-go:
-	GO111MODULE=on go mod vendor
-	GO111MODULE=on go build -mod=vendor -v -o $(GO_DEVEL_BUILD_BINARY) -ldflags "-X main.version=$(shell git describe --tags) -X main.debug=true"
+	GO111MODULE=on CGO_ENABLED=0 go mod vendor
+	GO111MODULE=on CGO_ENABLED=0 go build -mod=vendor -v -o $(GO_DEVEL_BUILD_BINARY) -ldflags "-X main.version=$(shell git describe --tags) -X main.debug=true"
 
 prod-go:
-	GO111MODULE=on go mod vendor
-	GO111MODULE=on go build -mod=vendor -v -o $(GO_PROD_BUILD_BINARY) -ldflags "-X main.version=$(shell git describe --tags)"
+	GO111MODULE=on CGO_ENABLED=0 go mod vendor
+	GO111MODULE=on CGO_ENABLED=0 go build -mod=vendor -v -o $(GO_PROD_BUILD_BINARY) -ldflags "-X main.version=$(shell git describe --tags)"
 
 test-go:
-	GO111MODULE=on go mod vendor
+	GO111MODULE=on CGO_ENABLED=0 go mod vendor
 	go test -v .
 
 $(shell mkdir -p $(GO_DEVEL_BUILD_DIR) $(GO_PROD_BUILD_DIR))
