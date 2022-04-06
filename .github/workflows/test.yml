@@ -34,7 +34,7 @@ jobs:
       - name: Test
         run: make --directory=api test
         env:
-          COMMENTO_POSTGRES: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
+          COMMENTO_POSTGRES: postgres://postgres:postgres@127.0.0.1:5432/postgres?sslmode=disable
           COMMENTO_ORIGIN: http://commento.example.com:8080
           COMMENTO_PORT: 8080
           COMMENTO_CDN_PREFIX: http://commento.example.com:8080
