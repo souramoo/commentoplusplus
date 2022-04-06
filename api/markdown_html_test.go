@@ -16,7 +16,7 @@ func TestMarkdownToHtmlBasics(t *testing.T) {
 
 		"XSS: <script src='http://example.com/script.js'></script> Foo": "<p>XSS:  Foo</p>",
 
-		"Regular [Link](http://example.com)": "<p>Regular <a href=\"http://example.com\" rel=\"nofollow\">Link</a></p>",
+		"Regular [Link](http://example.com)": "<p>Regular <a href=\"http://example.com\" rel=\"nofollow noopener\" target=\"_blank\">Link</a></p>",
 
 		"XSS [Link](data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pgo=)": "<p>XSS <tt>Link</tt></p>",
 
