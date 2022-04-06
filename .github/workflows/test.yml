@@ -32,8 +32,10 @@ jobs:
       - name: Test
         run: make --directory=api test
         env:
-          POSTGRES_HOST: postgres
-          POSTGRES_PORT: 5432
+          COMMENTO_POSTGRES: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
+          COMMENTO_ORIGIN: http://commento.example.com:8080
+          COMMENTO_PORT: 8080
+          COMMENTO_CDN_PREFIX: http://commento.example.com:8080
 
       - name: Lint
         run: cd api && test -z "$(go fmt)"
