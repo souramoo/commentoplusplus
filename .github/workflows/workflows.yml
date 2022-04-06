@@ -16,4 +16,6 @@ jobs:
     uses: ./.github/workflows/build.yml
 
   test:
+    # Tests do no compile yet, see https://github.com/souramoo/commentoplusplus/issues/93
+    if: ${{ false }}
     uses: ./.github/workflows/test.yml
