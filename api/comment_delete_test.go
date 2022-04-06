@@ -12,7 +12,7 @@ func TestCommentDeleteBasics(t *testing.T) {
 	commentHex, _ := commentNew(commenterHex, "example.com", "/path.html", "root", "**foo**", "approved", time.Now().UTC())
 	commentNew(commenterHex, "example.com", "/path.html", commentHex, "**bar**", "approved", time.Now().UTC())
 
-	if err := commentDelete(commentHex, commenterHex); err != nil {
+	if err := commentDelete(commentHex, commenterHex, "example.com", "/path.html"); err != nil {
 		t.Errorf("unexpected error deleting comment: %v", err)
 		return
 	}
@@ -28,7 +28,7 @@ func TestCommentDeleteBasics(t *testing.T) {
 func TestCommentDeleteEmpty(t *testing.T) {
 	failTestOnError(t, setupTestEnv())
 
-	if err := commentDelete("", "test-commenter-hex"); err == nil {
+	if err := commentDelete("", "test-commenter-hex", "example.com", "/path.html"); err == nil {
 		t.Errorf("expected error deleting comment with empty commentHex")
 		return
 	}

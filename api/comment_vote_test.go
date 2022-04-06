@@ -14,7 +14,7 @@ func TestCommentVoteBasics(t *testing.T) {
 
 	c0, _ := commentNew(cr0, "example.com", "/path.html", "root", "**foo**", "approved", time.Now().UTC())
 
-	if err := commentVote(cr0, c0, 1); err != errorSelfVote {
+	if err := commentVote(cr0, c0, 1, "example.com/path.html"); err != errorSelfVote {
 		t.Errorf("expected err=errorSelfVote got err=%v", err)
 		return
 	}
@@ -24,22 +24,12 @@ func TestCommentVoteBasics(t *testing.T) {
 		return
 	}
 
-	if err := commentVote(cr1, c0, -1); err != nil {
+	if err := commentVote(cr1, c0, -1, "example.com/path.html"); err != nil {
 		t.Errorf("unexpected error voting: %v", err)
 		return
 	}
 
-	if err := commentVote(cr2, c0, -1); err != nil {
-		t.Errorf("unexpected error voting: %v", err)
-		return
-	}
-
-	if c, _, _ := commentList("temp", "example.com", "/path.html", false); c[0].Score != -2 {
-		t.Errorf("expected c[0].Score = -2 got c[0].Score = %d", c[0].Score)
-		return
-	}
-
-	if err := commentVote(cr1, c0, -1); err != nil {
+	if err := commentVote(cr2, c0, -1, "example.com/path.html"); err != nil {
 		t.Errorf("unexpected error voting: %v", err)
 		return
 	}
@@ -49,7 +39,17 @@ func TestCommentVoteBasics(t *testing.T) {
 		return
 	}
 
-	if err := commentVote(cr1, c0, 0); err != nil {
+	if err := commentVote(cr1, c0, -1, "example.com/path.html"); err != nil {
+		t.Errorf("unexpected error voting: %v", err)
+		return
+	}
+
+	if c, _, _ := commentList("temp", "example.com", "/path.html", false); c[0].Score != -2 {
+		t.Errorf("expected c[0].Score = -2 got c[0].Score = %d", c[0].Score)
+		return
+	}
+
+	if err := commentVote(cr1, c0, 0, "example.com/path.html"); err != nil {
 		t.Errorf("unexpected error voting: %v", err)
 		return
 	}

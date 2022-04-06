@@ -12,7 +12,7 @@ func TestCommentApproveBasics(t *testing.T) {
 
 	commentHex, _ := commentNew(commenterHex, "example.com", "/path.html", "root", "**foo**", "unapproved", time.Now().UTC())
 
-	if err := commentApprove(commentHex); err != nil {
+	if err := commentApprove(commentHex, "example.com/path.html"); err != nil {
 		t.Errorf("unexpected error approving comment: %v", err)
 		return
 	}
@@ -26,7 +26,7 @@ func TestCommentApproveBasics(t *testing.T) {
 func TestCommentApproveEmpty(t *testing.T) {
 	failTestOnError(t, setupTestEnv())
 
-	if err := commentApprove(""); err == nil {
+	if err := commentApprove("", "example.com/path.html"); err == nil {
 		t.Errorf("expected error not found approving comment with empty commentHex")
 		return
 	}
