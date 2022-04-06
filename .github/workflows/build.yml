@@ -1,0 +1,43 @@
+name: Build CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-frontend:
+    name: Build frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Build devel
+        run: make --directory=frontend devel
+
+      - name: Build prod
+        run: make --directory=frontend prod
+
+  build-api:
+    name: Build API
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Build devel
+        run: make --directory=api devel
+
+      - name: Build prod
+        run: make --directory=api prod

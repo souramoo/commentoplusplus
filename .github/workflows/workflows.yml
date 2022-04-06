@@ -1,0 +1,14 @@
+name: CI
+
+on:  push
+
+env:
+  GO_VERSION: "1.15"
+  NODE_VERSION: "12.x"
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+
+  test:
+    uses: ./.github/workflows/test.yml

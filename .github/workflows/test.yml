@@ -1,0 +1,38 @@
+name: Test CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-api:
+    name: Test API
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Test
+        run: make --directory=api test
+        env:
+          POSTGRES_HOST: postgres
+          POSTGRES_PORT: 5432
+
+      - name: Lint
+        run: cd api && test -z "$(go fmt)"
