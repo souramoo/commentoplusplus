@@ -44,3 +44,6 @@ jobs:
           automatic_release_tag: "${{ steps.semvers.outputs.tag }}"
           files: |
             build/release.tar.gz
+            
+      - name: Push docker image
+        uses: ./.github/workflows/docker-image.yml
