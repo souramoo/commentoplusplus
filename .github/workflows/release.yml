@@ -22,16 +22,24 @@ jobs:
         
       - name: Make archive
         run: cd build/prod && tar zcvf ../release.tar.gz ./
-        
-      - name: Get current date
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+
+      - name: 'Get Previous tag'
+        id: previoustag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          
+      - name: 'Get next minor version'
+        id: semvers
+        uses: "WyriHaximus/github-action-next-semvers@v1"
+        with:
+          version: ${{ steps.previoustag.outputs.tag }}
         
       - name: Publish as release
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
-          automatic_release_tag: "${{ steps.date.outputs.date }}"
+          automatic_release_tag: "${{ steps.semvers.outputs.tag }}"
           files: |
             build/release.tar.gz
