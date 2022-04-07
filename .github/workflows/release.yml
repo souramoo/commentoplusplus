@@ -23,11 +23,15 @@ jobs:
       - name: Make archive
         run: cd build/prod && tar zcvf ../release.tar.gz ./
         
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        
       - name: Publish as release
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
-          automatic_release_tag: "latest"
+          automatic_release_tag: "${{ steps.date.outputs.date }}"
           files: |
             build/release.tar.gz
