@@ -24,7 +24,7 @@ func TestMarkdownToHtmlBasics(t *testing.T) {
 
 		"**bold** *italics*": "<p><strong>bold</strong> <em>italics</em></p>",
 
-		"http://example.com/autolink": "<p><a href=\"http://example.com/autolink\" rel=\"nofollow\">http://example.com/autolink</a></p>",
+		"http://example.com/autolink": "<p><a href=\"http://example.com/autolink\" rel=\"nofollow noopener\" target=\"_blank\">http://example.com/autolink</a></p>",
 
 		"<b>not bold</b>": "<p>not bold</p>",
 	}
