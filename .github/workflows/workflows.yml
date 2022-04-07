@@ -12,6 +12,3 @@ jobs:
 
   test:
     uses: ./.github/workflows/test.yml
-    
-  docker:
-    uses: ./.github/workflows/docker-image.yml
