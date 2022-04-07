@@ -30,9 +30,11 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Get current date
-      id: date
-      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+    - name: 'Get Previous tag'
+      id: previoustag
+      uses: "WyriHaximus/github-action-get-previous-tag@v1"
+      env:
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         
     - name: Build image and push to Docker Hub and GitHub Container Registry
       uses: docker/build-push-action@v2
@@ -40,9 +42,9 @@ jobs:
         context: .
         tags: |
           caroga/commentoplusplus:latest
-          caroga/commentoplusplus:"${{ steps.date.outputs.date }}"
+          caroga/commentoplusplus:"${{ steps.previoustag.outputs.tag }}"
           ghcr.io/souramoo/commentoplusplus:latest
-          ghcr.io/souramoo/commentoplusplus:"${{ steps.date.outputs.date }}"
+          ghcr.io/souramoo/commentoplusplus:"${{ steps.previoustag.outputs.tag }}"
         # build on feature branches, push only on main branch
         push: ${{ github.ref == 'refs/heads/main' }}
         platforms: amd64,arm,arm64,riscv64
