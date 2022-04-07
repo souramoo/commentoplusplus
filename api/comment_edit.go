@@ -42,10 +42,10 @@ func commentEditHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	domain, path, err := commentDomainPathGet(*x.CommentHex)
-        if err != nil {
-                bodyMarshal(w, response{"success": false, "message": err.Error()})
-                return
-        }
+	if err != nil {
+		bodyMarshal(w, response{"success": false, "message": err.Error()})
+		return
+	}
 
 	c, err := commenterGetByCommenterToken(*x.CommenterToken)
 	if err != nil {
@@ -64,7 +64,7 @@ func commentEditHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	html, err := commentEdit(*x.CommentHex, *x.Markdown, domain + path)
+	html, err := commentEdit(*x.CommentHex, *x.Markdown, domain+path)
 	if err != nil {
 		bodyMarshal(w, response{"success": false, "message": err.Error()})
 		return

@@ -29,9 +29,9 @@ func configParse() error {
 		"PORT":         "8080",
 		"ORIGIN":       "",
 
-		"SSL":	"false",
+		"SSL":      "false",
 		"SSL_CERT": "",
-		"SSL_KEY": "",
+		"SSL_KEY":  "",
 
 		"CDN_PREFIX": "",
 
@@ -63,7 +63,7 @@ func configParse() error {
 		"GITLAB_SECRET": "",
 		"GITLAB_URL":    "https://gitlab.com",
 
-		"ENABLE_LOGGING": "false",
+		"ENABLE_LOGGING":   "false",
 		"ENABLE_WILDCARDS": "true",
 	}
 

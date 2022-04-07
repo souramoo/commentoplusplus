@@ -72,7 +72,7 @@ func emailModerateHandler(w http.ResponseWriter, r *http.Request) {
 
 	switch action {
 	case "approve":
-		err = commentApprove(commentHex, domain + path)
+		err = commentApprove(commentHex, domain+path)
 	case "delete":
 		err = commentDelete(commentHex, commenterHex, domain, path)
 	default:

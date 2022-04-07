@@ -1,6 +1,8 @@
 package main
 
-import ("os")
+import (
+	"os"
+)
 
 func pageTitleUpdate(domain string, path string) (string, error) {
 	ssl := os.Getenv("SSL")

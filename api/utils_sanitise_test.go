@@ -23,7 +23,7 @@ func TestEmailStripBasics(t *testing.T) {
 
 func TestAddHttpIfAbsent(t *testing.T) {
 	tests := map[string]string{
-		"http://example.com": "http://example.com",
+		"http://example.com":  "http://example.com",
 		"https://example.com": "https://example.com",
 		"example.com":         "http://example.com",
 		"example.com/":        "https://example.com/",

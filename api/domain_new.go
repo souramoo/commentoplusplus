@@ -2,9 +2,9 @@ package main
 
 import (
 	"net/http"
+	"os"
 	"strings"
 	"time"
-	"os"
 )
 
 func domainNew(ownerHex string, name string, domain string) error {
@@ -19,8 +19,8 @@ func domainNew(ownerHex string, name string, domain string) error {
 	// if asked to disable wildcards, then don't allow them...
 	if os.Getenv("ENABLE_WILDCARDS") == "false" {
 		if strings.Contains(domain, "%") || strings.Contains(domain, "_") {
-                	return errorInvalidDomain
-        	}
+			return errorInvalidDomain
+		}
 	}
 
 	// test if domain already exists
@@ -30,12 +30,12 @@ func domainNew(ownerHex string, name string, domain string) error {
 		canon(regexp_replace($1, '[%]', '')) LIKE canon(domain) OR canon(domain) LIKE canon($1);
 	`
 	row := db.QueryRow(statement, domain)
-        var err error
+	var err error
 	var count int
 
-        if err = row.Scan(&count); err != nil {
-                return errorInvalidDomain
-        }
+	if err = row.Scan(&count); err != nil {
+		return errorInvalidDomain
+	}
 
 	if count > 0 {
 		return errorDomainAlreadyExists
