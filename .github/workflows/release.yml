@@ -1,0 +1,32 @@
+name: Publish Release from master
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-frontend:
+    name: Build frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Build prod
+        run: make prod
+        
+      - name: Make archive
+        run: cd build/prod && tar zcvf release.tar.gz ./
+        
+      - name: Publish as release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            build/prod/release.tar.gz
