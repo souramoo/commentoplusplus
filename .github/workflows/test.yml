@@ -40,6 +40,4 @@ jobs:
           COMMENTO_CDN_PREFIX: http://commento.example.com:8080
 
       - name: Lint
-        run: |
-          cd api
-          bash -c 'test -z "$(go fmt)"'
+        run: cd api && test -z "$(go fmt)"
