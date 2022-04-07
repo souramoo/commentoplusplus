@@ -49,4 +49,4 @@ jobs:
           ghcr.io/souramoo/commentoplusplus:${{ steps.previoustag.outputs.tag }}
         # build on feature branches, push only on main branch
         push: ${{ github.ref == 'refs/heads/main' }}
-        platforms: amd64,arm,arm64,riscv64
+        platforms: amd64,arm64
