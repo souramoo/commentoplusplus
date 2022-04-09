@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"time"
 	"strings"
+	"time"
 )
 
 func versionPrint() error {
@@ -44,7 +44,7 @@ func versionCheckStart() error {
 			}
 
 			type response struct {
-				Latest    string `json:"tag_name"`
+				Latest string `json:"tag_name"`
 			}
 
 			r := response{}
