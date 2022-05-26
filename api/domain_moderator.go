@@ -42,7 +42,7 @@ func isDomainModerator(domain string, email string) (bool, error) {
 		SELECT EXISTS (
 			SELECT 1
 			FROM moderators
-			WHERE domain=$1 AND email=$2
+			WHERE $1 LIKE domain AND email=$2
 		);
 	`
 	row := db.QueryRow(statement, domain, email)
