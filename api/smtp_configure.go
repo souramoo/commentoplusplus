@@ -1,12 +1,10 @@
 package main
 
 import (
-	"net/smtp"
 	"os"
 )
 
 var smtpConfigured bool
-var smtpAuth smtp.Auth
 
 func smtpConfigure() error {
 	username := os.Getenv("SMTP_USERNAME")
@@ -25,11 +23,8 @@ func smtpConfigure() error {
 		return errorMissingSmtpAddress
 	}
 
-	logger.Infof("configuring smtp: %s", host)
 	if username == "" || password == "" {
 		logger.Warningf("no SMTP username/password set, Commento will assume they aren't required")
-	} else {
-		smtpAuth = smtp.PlainAuth("", username, password, host)
 	}
 	smtpConfigured = true
 	return nil
