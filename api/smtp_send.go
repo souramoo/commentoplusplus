@@ -31,7 +31,7 @@ func smtpSendMail(toAddress string, toName string, contentType string, subject s
 	email.SetFrom(fromAddress.String())
 	email.AddTo(to.String())
 	email.SetSubject(subject)
-	email.SetBody(mail.TextPlain, body)
+	email.SetBody(mail.TextHTML, body)
 
 	if email.Error != nil {
 		return email.Error
