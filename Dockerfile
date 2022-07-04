@@ -15,7 +15,7 @@ RUN make ${RELEASE} -j$(($(nproc) + 1))
 
 
 # frontend build (html, js, css, images)
-FROM node:${NODE_VERSION}-alpine AS frontend-build
+FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} AS frontend-build
 RUN apk add --no-cache bash make python2 g++
 
 ARG RELEASE
