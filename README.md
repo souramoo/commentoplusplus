@@ -3,7 +3,9 @@
 ### 💬 Try it out and deploy your own
 [LIVE DEMO](https://demo.souradip.com/chat.html)
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/souramoo/commentoplusplus)
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/souramoo/commentoplusplus) 
+
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/hame0C)
 
 ### ❓ About
 Commento++ is a free, open source, fast & lightweight comments box that you can embed in your static website instead of Disqus.
@@ -36,9 +38,15 @@ Please [(donate)](https://paypal.me/souramoo) if you find my work helpful (this 
 
 ### Get started
 
-To start you just need to launch an instance. The button below will work for a free Heroku account:
+To start you just need to launch an instance.
+
+The button below will work for a Heroku account:
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/souramoo/commentoplusplus)
+
+The button below will work for a free Railway account:
+
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/hame0C)
 
 Otherwise, most of the below is the same as documented at https://docs.commento.io
 
