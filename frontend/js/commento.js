@@ -1952,6 +1952,11 @@
       if (numOauthConfigured > 0 || configuredOauths["commento"]) {
         append(loginBox, hr1);
       }
+      
+      if (numOauthConfigured === 0 && configuredOauths["commento"] === false){
+        global.commentoAuth({"provider": "sso", "id": id});
+        setTimeout(global.loginBoxClose, 250);
+      }
     }
 
     if (numOauthConfigured > 0) {
