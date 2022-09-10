@@ -716,8 +716,8 @@
     markdownButton.innerHTML = i18n("<b>M &#8595;</b> &nbsp; Markdown Help?");
 
     if (anonymousOnly) {
-      anonymousCheckbox.checked = true;
-      anonymousCheckbox.setAttribute("disabled", true);
+      anonymousCheckbox.checked = false;
+      anonymousCheckbox.setAttribute("enabled", true);
     }
     onclick(anonymousCheckbox, checkAnonymous, id);
     if(isAuthenticated) {
@@ -1033,7 +1033,9 @@
 
 
   function scorify(score) {
-    if (score !== 1 && score !== -1) {
+    if (anonymousOnly) {
+      return "";
+    } else if (score !== 1 && score !== -1) {
       return score + i18n(" points");
     } else {
       return score + i18n(" point");
@@ -1267,7 +1269,7 @@
         append(options, collapse);
       }
 
-      if (!comment.deleted  && (!isFrozen && !isLocked)) {
+      if (!comment.deleted  && (!anonymousOnly) && (!isFrozen && !isLocked)) {
         append(options, downvote);
         append(options, upvote);
       }
