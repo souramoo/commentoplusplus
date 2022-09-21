@@ -64,4 +64,8 @@ tags
 # Persistent undo
 [._]*.un~
 
+#dev files
+run-dev.sh
+index.html
+
 # End of https://www.gitignore.io/api/vim,osx
