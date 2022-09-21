@@ -19,7 +19,6 @@ func isToxic(markdown string) bool {
 	}
 
 	pl := os.Getenv("PERSPECTIVE_LIMIT")
-
 	perspectiveLimit, err := strconv.ParseFloat(pl, 32)
 
 	if err != nil {
@@ -27,11 +26,13 @@ func isToxic(markdown string) bool {
 		return true
 	}
 
+	perspectiveLang := os.Getenv("PERSPECTIVE_LANGUAGE")
+
 	url := "https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=" + perspectiveKey
 	method := "POST"
 
 	payload := strings.NewReader(`{comment: {text: "` + markdown + `"},
-       languages: ["de"],
+       languages: ["` + perspectiveLang + `"],
        requestedAttributes: {TOXICITY:{}} }`)
 
 	client := &http.Client{}
@@ -58,11 +59,13 @@ func isToxic(markdown string) bool {
 
 	jsonParsed, err := gabs.ParseJSON(body)
 	if err != nil {
-		panic(err)
+		logger.Errorf("error: cannot parsePerspective result", err)
+		return true
 	}
 
 	var value float64
 	var ok bool
+	var resp bool
 
 	value, ok = jsonParsed.Path("attributeScores.TOXICITY.summaryScore.value").Data().(float64)
 
@@ -71,7 +74,6 @@ func isToxic(markdown string) bool {
 		return true
 	}
 
-	var resp bool
 	if value > perspectiveLimit {
 		resp = true
 	} else {

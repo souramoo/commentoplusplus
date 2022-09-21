@@ -50,8 +50,9 @@ func configParse() error {
 
 		"AKISMET_KEY": "",
 
-		"PERSPECTIVE_KEY":   "",
-		"PERSPECTIVE_LIMIT": "0.5",
+		"PERSPECTIVE_KEY":      "",
+		"PERSPECTIVE_LIMIT":    "0.5",
+		"PERSPECTIVE_LANGUAGE": "en",
 
 		"GOOGLE_KEY":    "",
 		"GOOGLE_SECRET": "",
