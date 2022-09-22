@@ -14,7 +14,7 @@ Commento++ is a free, open source, fast & lightweight comments box that you can 
 - Markdown support
 - Import from Disqus
 - Voting
-- Automated spam detection (Askimet integration)
+- Automated spam detection (Askimet and Perspective integration)
 - Moderation tools
 - Sticky comments
 - Thread locking
@@ -62,6 +62,7 @@ $ export COMMENTO_ORIGIN=http://commento.example.com:8080
 $ export COMMENTO_PORT=8080
 $ export COMMENTO_POSTGRES=postgres://username:password@postgres.example.com:5432/commento?sslmode=disable
 $ export COMMENTO_CDN_PREFIX=$COMMENTO_ORIGIN
+
 ```
 
 And then you can run the `commento` binary.
@@ -91,6 +92,27 @@ If you want the old behaviour, you can disable this with an environment variable
 $ export COMMENTO_ENABLE_WILDCARDS=false
 ```
 
+#### Perspective spam detection 
+To enable Perspective (https://www.perspectiveapi.com/) spam detection add following environment variables:
+
+```
+$ export COMMENTO_PERSPECTIVE_KEY=YOUR_API_KEY_FROM_PERSPECTIVE
+$ export COMMENTO_PERSPECTIVE_LIMIT=0.5
+$ export COMMENTO_PERSPECTIVE_LANGUAGE=en
+```
+
+COMMENTO_PERSPECTIVE_KEY:
+To create a new Perspective API key follow the instructions at https://developers.perspectiveapi.com/s/docs-get-started
+
+COMMENTO_PERSPECTIVE_LIMIT:
+The limit defines the minimum value for the Perspective probability summary score. Everything above the value will be flagged in Commentoplus. (Default 0.5)
+
+COMMENTO_PERSPECTIVE_LANGUAGE:
+Configure the language to your requirements. (Default: en)
+
+Make sure that you have enabled the automatic spam detection in the dashboard.
+
+
 #### Disabling SMTP Host verification check
 
 Commento++ allows configuration of the tlsConfig for both SMTPS as well as StartTLS for email sending.
@@ -109,6 +131,7 @@ Alternatively you can use the pre-build images from:
 - https://hub.docker.com/r/caroga/commentoplusplus
 
 Instructions for configuring the docker image can be found [here](https://docs.commento.io/installation/self-hosting/on-your-server/docker.html). Are you missing a version? Please contact @caroga [here](https://gitlab.com/caroga/commentoplusplus-docker).
+
 
 ### Finally
 
@@ -183,6 +206,7 @@ Original source is from @adtac at https://gitlab.com/commento/commento/ - this f
 - [FIXED: Deleted comments not returned in array](https://gitlab.com/commento/commento/-/merge_requests/170)
 - [NEW FEATURE: Reinit widget functionality for Single Page Applications](https://gitlab.com/commento/commento/-/merge_requests/182)
 - NEW FEATURE: Wildcards possible in domain name (so can serve %.example.com)
+- NEW FEATURE: Support of the Perspective API for spam detection (https://www.perspectiveapi.com/)
 
 I've sent in merge requests for a lot of the above but I don't know when they'll be accepted, so here's a ready to use version with all batteries included to help out fellow bloggers!
 
