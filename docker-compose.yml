@@ -14,7 +14,7 @@ services:
     networks:
       - db_network
   db:
-    image: postgres
+    image: postgres:12.4
     environment:
       POSTGRES_DB: commento
       POSTGRES_USER: postgres
