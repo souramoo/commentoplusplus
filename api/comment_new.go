@@ -94,6 +94,8 @@ func commentNewHandler(w http.ResponseWriter, r *http.Request) {
 		commenterHex, commenterName, commenterEmail, commenterLink = "anonymous", "Anonymous", "", ""
 		if isSpam(*x.Domain, getIp(r), getUserAgent(r), "Anonymous", "", "", *x.Markdown) {
 			state = "flagged"
+		} else if isToxic(*x.Markdown) {
+			state = "flagged"
 		} else {
 			// if given an anonName, add it to a new commenter entry
 			if strings.TrimSpace(*x.AnonName) != "" {
@@ -116,6 +118,7 @@ func commentNewHandler(w http.ResponseWriter, r *http.Request) {
 			bodyMarshal(w, response{"success": false, "message": err.Error()})
 			return
 		}
+
 		commenterHex, commenterName, commenterEmail, commenterLink = c.CommenterHex, c.Name, c.Email, c.Link
 		for _, mod := range d.Moderators {
 			if mod.Email == c.Email {
@@ -134,6 +137,8 @@ func commentNewHandler(w http.ResponseWriter, r *http.Request) {
 	} else if *x.CommenterToken == "anonymous" && d.ModerateAllAnonymous {
 		state = "unapproved"
 	} else if d.AutoSpamFilter && isSpam(*x.Domain, getIp(r), getUserAgent(r), commenterName, commenterEmail, commenterLink, *x.Markdown) {
+		state = "flagged"
+	} else if d.AutoSpamFilter && isToxic(*x.Markdown) {
 		state = "flagged"
 	} else {
 		state = "approved"
