@@ -1,7 +1,7 @@
 # Build-time variables
 ARG RELEASE=prod
 ARG ALPINE_VERSION=3.15
-ARG GOLANG_VERSION=1.15
+ARG GOLANG_VERSION=1.18
 ARG NODE_VERSION=16
 
 # backend build (api server)
