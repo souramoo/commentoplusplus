@@ -7,11 +7,12 @@ require (
 	github.com/Jeffail/gabs v1.4.0
 	github.com/adtac/go-akismet v0.0.0-20181220032308-0ca9e1023047
 	github.com/disintegration/imaging v1.6.2
+	github.com/go-test/deep v1.0.8 // indirect
 	github.com/gomodule/oauth1 v0.0.0-20181215000758-9a59ed3b0a84
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
 	github.com/gorilla/websocket v1.4.2
-	github.com/lib/pq v1.10.0
+	github.com/lib/pq v1.10.4
 	github.com/lunny/html2md v0.0.0-20181018071239-7d234de44546
 	github.com/microcosm-cc/bluemonday v1.0.16
 	github.com/op/go-logging v0.0.0-20160315200505-970db520ece7
