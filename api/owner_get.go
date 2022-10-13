@@ -1,7 +1,5 @@
 package main
 
-import ()
-
 var ownersRowColumns string = `
 	owners.ownerHex,
 	owners.email,
@@ -55,27 +53,6 @@ func ownerGetByOwnerToken(ownerToken string) (owner, error) {
 		);
 	`
 	row := db.QueryRow(statement, ownerToken)
-
-	var o owner
-	if err := ownersRowScan(row, &o); err != nil {
-		logger.Errorf("cannot scan owner: %v\n", err)
-		return owner{}, errorInternal
-	}
-
-	return o, nil
-}
-
-func ownerGetByOwnerHex(ownerHex string) (owner, error) {
-	if ownerHex == "" {
-		return owner{}, errorMissingField
-	}
-
-	statement := `
-		SELECT ` + ownersRowColumns + `
-		FROM owners
-		WHERE ownerHex = $1;
-	`
-	row := db.QueryRow(statement, ownerHex)
 
 	var o owner
 	if err := ownersRowScan(row, &o); err != nil {

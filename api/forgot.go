@@ -55,9 +55,7 @@ func forgot(email string, entity string) error {
 		return err
 	}
 
-	var statement string
-
-	statement = `
+	statement := `
 		INSERT INTO
 		resetHexes (resetHex, hex, entity, sendDate)
 		VALUES     ($1,       $2,  $3,     $4      );

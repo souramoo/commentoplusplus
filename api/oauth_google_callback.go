@@ -1,10 +1,10 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
-	"golang.org/x/oauth2"
-	"io/ioutil"
+	"io"
 	"net/http"
 )
 
@@ -18,16 +18,20 @@ func googleCallbackHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := googleConfig.Exchange(oauth2.NoContext, code)
+	token, err := googleConfig.Exchange(context.Background(), code)
 	if err != nil {
 		fmt.Fprintf(w, "Error: %s", err.Error())
 		return
 	}
 
 	resp, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
+	if err != nil {
+		fmt.Fprintf(w, "Error: %s", err.Error())
+		return
+	}
 	defer resp.Body.Close()
 
-	contents, err := ioutil.ReadAll(resp.Body)
+	contents, err := io.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Fprintf(w, "Error: %s", errorCannotReadResponse.Error())
 		return
