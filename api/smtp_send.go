@@ -2,10 +2,11 @@ package main
 
 import (
 	"crypto/tls"
-	"github.com/xhit/go-simple-mail/v2"
 	stdmail "net/mail"
 	"os"
 	"strconv"
+
+	mail "github.com/xhit/go-simple-mail/v2"
 )
 
 func smtpSendMail(toAddress string, toName string, contentType string, subject string, body string) error {
@@ -17,7 +18,14 @@ func smtpSendMail(toAddress string, toName string, contentType string, subject s
 	server.Username = os.Getenv("SMTP_USERNAME")
 	server.Password = os.Getenv("SMTP_PASSWORD")
 
-	server.TLSConfig = &tls.Config{InsecureSkipVerify: os.Getenv("SMTP_SKIP_HOST_VERIFY") == "true"}
+	if os.Getenv("USE_STARTTLS") == "true" {
+		server.Encryption = mail.EncryptionSTARTTLS
+	}
+
+	server.TLSConfig = &tls.Config{
+		InsecureSkipVerify: os.Getenv("SMTP_SKIP_HOST_VERIFY") == "true",
+		ServerName:         os.Getenv("SMTP_HOST"),
+	}
 
 	smtpClient, err := server.Connect()
 
