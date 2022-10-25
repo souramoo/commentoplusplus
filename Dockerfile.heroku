@@ -3,7 +3,7 @@
 
 # 1. duplicate most of original docker image: https://gitlab.com/commento/commento/blob/master/Dockerfile
 # backend build (api server)
-FROM golang:1.15-alpine AS api-build
+FROM golang:1.18-alpine AS api-build
 RUN apk add --no-cache --update bash make git curl
 
 COPY ./api /go/src/commento/api/

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 	"os"
 	"strconv"
@@ -51,7 +51,7 @@ func isToxic(markdown string) bool {
 	}
 	defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		logger.Errorf("error: cannot validate comment using Perspective: %v", err)
 		return true

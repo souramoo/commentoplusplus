@@ -6,31 +6,9 @@ import (
 	"text/template"
 )
 
-var headerTemplate *template.Template
-
-type headerPlugs struct {
-	FromAddress string
-	ToName      string
-	ToAddress   string
-	Subject     string
-}
-
 var templates map[string]*template.Template
 
 func smtpTemplatesLoad() error {
-	var err error
-	headerTemplate, err = template.New("header").Parse(`MIME-Version: 1.0
-From: Commento <{{.FromAddress}}>
-To: {{.ToName}} <{{.ToAddress}}>
-Content-Type: text/plain; charset=UTF-8
-Subject: {{.Subject}}
-
-`)
-	if err != nil {
-		logger.Errorf("cannot parse header template: %v", err)
-		return errorMalformedTemplate
-	}
-
 	names := []string{
 		"confirm-hex",
 		"reset-hex",

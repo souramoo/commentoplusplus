@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io/ioutil"
 	"os"
 	"testing"
 )
@@ -9,7 +8,7 @@ import (
 func TestConfigFileLoadBasics(t *testing.T) {
 	failTestOnError(t, setupTestEnv())
 
-	f, err := ioutil.TempFile("", "commento")
+	f, err := os.CreateTemp("", "commento")
 	if err != nil {
 		t.Errorf("error creating temporary file: %v", err)
 		return
@@ -57,7 +56,7 @@ func TestConfigFileLoadBasics(t *testing.T) {
 func TestConfigFileLoadInvalid(t *testing.T) {
 	failTestOnError(t, setupTestEnv())
 
-	f, err := ioutil.TempFile("", "commento")
+	f, err := os.CreateTemp("", "commento")
 	if err != nil {
 		t.Errorf("error creating temporary file: %v", err)
 		return

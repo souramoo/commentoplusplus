@@ -1,23 +1,17 @@
 package main
 
 import (
-	"github.com/gorilla/mux"
-	"io/ioutil"
 	"mime"
 	"net/http"
 	"os"
 	"path"
 	"strings"
+
+	"github.com/gorilla/mux"
 )
 
 func redirectLogin(w http.ResponseWriter, r *http.Request) {
-	http.Redirect(w, r, os.Getenv("ORIGIN")+"/login", 301)
-}
-
-type staticPlugs struct {
-	Origin    string
-	CdnPrefix string
-	Footer    string
+	http.Redirect(w, r, os.Getenv("ORIGIN")+"/login", http.StatusMovedPermanently)
 }
 
 var asset map[string][]byte = make(map[string][]byte)
@@ -26,7 +20,7 @@ var footer string
 var compress bool
 
 func fileDetemplate(f string) ([]byte, error) {
-	contents, err := ioutil.ReadFile(f)
+	contents, err := os.ReadFile(f)
 	if err != nil {
 		logger.Errorf("cannot read file %s: %v", f, err)
 		return []byte{}, err
@@ -77,7 +71,7 @@ func staticRouterInit(router *mux.Router) error {
 	}
 
 	for _, dir := range []string{"/js", "/css", "/images", "/fonts", "/i18n"} {
-		files, err := ioutil.ReadDir(os.Getenv("STATIC") + dir)
+		files, err := os.ReadDir(os.Getenv("STATIC") + dir)
 		if err != nil {
 			logger.Errorf("cannot read directory %s%s: %v", os.Getenv("STATIC"), dir, err)
 			return err
@@ -115,7 +109,7 @@ func staticRouterInit(router *mux.Router) error {
 		}
 	}
 
-	for p, _ := range asset {
+	for p := range asset {
 		if path.Ext(p) != "" {
 			contentType[p] = mime.TypeByExtension(path.Ext(p))
 		} else {

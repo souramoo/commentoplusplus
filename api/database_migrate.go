@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io/ioutil"
 	"os"
 	"strings"
 )
@@ -15,7 +14,7 @@ func migrate() error {
 }
 
 func migrateFromDir(dir string) error {
-	files, err := ioutil.ReadDir(dir)
+	files, err := os.ReadDir(dir)
 	if err != nil {
 		logger.Errorf("cannot read directory for migrations: %v", err)
 		return err
@@ -51,7 +50,7 @@ func migrateFromDir(dir string) error {
 		if strings.HasSuffix(file.Name(), ".sql") {
 			if !filenames[file.Name()] {
 				f := dir + string(os.PathSeparator) + file.Name()
-				contents, err := ioutil.ReadFile(f)
+				contents, err := os.ReadFile(f)
 				if err != nil {
 					logger.Errorf("cannot read file %s: %v", file.Name(), err)
 					return err

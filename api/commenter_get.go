@@ -1,7 +1,5 @@
 package main
 
-import ()
-
 var commentersRowColumns string = `
 	commenters.commenterHex,
 	commenters.email,
@@ -44,7 +42,7 @@ func commenterGetByHex(commenterHex string) (commenter, error) {
 		return commenter{}, errorNoSuchCommenter
 	}
 
-	if c.Deleted == true {
+	if c.Deleted {
 		c.Email = "undefined"
 		c.Name = "[deleted]"
 		c.Link = "undefined"
@@ -72,7 +70,7 @@ func commenterGetByEmail(provider string, email string) (commenter, error) {
 		return commenter{}, errorNoSuchCommenter
 	}
 
-	if c.Deleted == true {
+	if c.Deleted {
 		c.Email = "undefined"
 		c.Name = "[deleted]"
 		c.Link = "undefined"
@@ -105,7 +103,7 @@ func commenterGetByCommenterToken(commenterToken string) (commenter, error) {
 		return commenter{}, errorNoSuchToken
 	}
 
-	if c.Deleted == true {
+	if c.Deleted {
 		c.Email = "undefined"
 		c.Name = "[deleted]"
 		c.Link = "undefined"

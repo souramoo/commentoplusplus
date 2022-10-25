@@ -5,11 +5,6 @@ import (
 	"os"
 )
 
-type domainExportErrorPlugs struct {
-	Origin string
-	Domain string
-}
-
 func smtpDomainExportError(to string, toName string, domain string) error {
 	var body bytes.Buffer
 	templates["data-export-error"].Execute(&body, &domainExportPlugs{Origin: os.Getenv("ORIGIN")})

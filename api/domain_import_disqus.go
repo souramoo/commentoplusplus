@@ -3,11 +3,12 @@ package main
 import (
 	"compress/gzip"
 	"encoding/xml"
-	"github.com/lunny/html2md"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/lunny/html2md"
 )
 
 type disqusThread struct {
@@ -31,11 +32,6 @@ type disqusThreadId struct {
 
 type disqusParentId struct {
 	XMLName xml.Name `xml:"parent"`
-	Id      string   `xml:"http://disqus.com/disqus-internals id,attr"`
-}
-
-type disqusPostId struct {
-	XMLName xml.Name `xml:"post"`
 	Id      string   `xml:"http://disqus.com/disqus-internals id,attr"`
 }
 
@@ -77,7 +73,7 @@ func domainImportDisqus(domain string, url string) (int, error) {
 		return 0, errorInternal
 	}
 
-	contents, err := ioutil.ReadAll(zr)
+	contents, err := io.ReadAll(zr)
 	if err != nil {
 		logger.Errorf("cannot read gzip contents uncompressed: %v", err)
 		return 0, errorInternal
