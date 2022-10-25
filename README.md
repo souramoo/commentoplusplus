@@ -124,6 +124,13 @@ To skip SMTP hostname verification, use:
 $ export SMTP_SKIP_HOST_VERIFY=true
 ```
 
+#### STARTTLS
+If you have any issues with email sending relating to not using STARTTLS, consider:
+
+```
+$ export USE_STARTTLS=true
+```
+
 
 #### Docker setup
 Alternatively you can use the pre-build images from:
