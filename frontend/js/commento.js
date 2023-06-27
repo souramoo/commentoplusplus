@@ -706,6 +706,7 @@
     attrSet(anonymousCheckboxLabel, "for", ID_ANONYMOUS_CHECKBOX + id);
     attrSet(guestName, "type", "text");
     attrSet(guestName, "placeholder", i18n("Your Name"));
+    attrSet(markdownButton, "role", "button");
 
     anonymousCheckboxLabel.innerText = i18n("Comment anonymously");
     if (edit === true) {
