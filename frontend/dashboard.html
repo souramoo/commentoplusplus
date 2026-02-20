@@ -161,8 +161,9 @@
                 <ul class="tabs">
                   <li class="tab-link original current" data-tab="mod-tab-1">General</li>
                   <li class="tab-link" data-tab="mod-tab-2">Add/Remove Moderators</li>
-                  <li class="tab-link" data-tab="mod-tab-3">Pending Approvals</li>
-                  <li class="tab-link" data-tab="mod-tab-4">All comments</li>
+                  <li class="tab-link" data-tab="mod-tab-3">Domain Owners</li>
+                  <li class="tab-link" data-tab="mod-tab-4">Pending Approvals</li>
+                  <li class="tab-link" data-tab="mod-tab-5">All comments</li>
                 </ul>
 
                 <div id="mod-tab-1" class="content original current">
@@ -256,8 +257,36 @@
                   </div>
                 </div>
 
-
                 <div id="mod-tab-3" class="content">
+                  <div class="normal-text">
+                    Domain owners have full administrative access to this domain. They can manage settings, moderators, and other owners. Add other owners to allow them to manage this domain from their dashboard.<br><br>
+
+                    Only add trusted users as domain owners, as they will have full control over this domain.
+                  </div>
+                  <div class="commento-email-container" style="flex-direction: column;">
+                    <div class="commento-email">
+                      <input class="commento-input" type="text" id="new-domain-owner" placeholder="Owner Email">
+                      <button id="new-domain-owner-button" class="commento-email-button" onclick="window.commento.domainOwnerAddHandler()">Add owner</button>
+                    </div>
+                    <div class="row no-border commento-round-check" style="margin-top: 10px;">
+                      <input type="checkbox" id="new-domain-owner-add-moderator" checked>
+                      <label for="new-domain-owner-add-moderator">Also add as moderator</label>
+                    </div>
+                  </div>
+                  <hr/>
+                  <div class="mod-emails-container">
+                    <div class="content">
+                      <div class="mod-email" v-for="owner in domains[cd].owners" v-if="domains[cd].owners && domains[cd].owners.length > 0">
+                        <div class="email">{{owner.email}} <span v-if="owner.name">({{owner.name}})</span></div>
+                        <div class="delete" v-on:click="window.commento.domainOwnerRemoveHandler(owner.ownerHex)" v-if="domains[cd].owners.length > 1">Remove</div>
+                        <div class="date">added {{owner.timeAgo}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div id="mod-tab-4" class="content">
                   <div class="normal-text">
                     All of the pending comments awaiting moderation across your domain are shown here for convenience.
                   </div>
@@ -283,7 +312,7 @@
                   </div>
                 </div>
 
-                <div id="mod-tab-4" class="content">
+                <div id="mod-tab-5" class="content">
                   <div class="normal-text">
                     All of the comments across your domain .
                   </div>

@@ -98,6 +98,13 @@
           resp.domains[i].moderators[j].timeAgo = global.timeSince(
             Date.parse(resp.domains[i].moderators[j].addDate));
         }
+
+        if (resp.domains[i].owners) {
+          for (var j = 0; j < resp.domains[i].owners.length; j++) {
+            resp.domains[i].owners[j].timeAgo = global.timeSince(
+              Date.parse(resp.domains[i].owners[j].addDate));
+          }
+        }
       }
 
       global.vs("domains", resp.domains);

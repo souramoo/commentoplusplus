@@ -149,4 +149,86 @@
     }
   }
 
+
+  // Adds a domain owner.
+  global.domainOwnerAddHandler = function() {
+    var data = global.dashboard.$data;
+    var email = $("#new-domain-owner").val();
+    var addAsModerator = $("#new-domain-owner-add-moderator").is(":checked");
+    
+    var json = {
+      "ownerToken": global.cookieGet("commentoOwnerToken"),
+      "domain": data.domains[data.cd].domain,
+      "email": email,
+    }
+
+    var idx = -1;
+    if (data.domains[data.cd].owners) {
+      for (var i = 0; i < data.domains[data.cd].owners.length; i++) {
+        if (data.domains[data.cd].owners[i].email === email) {
+          idx = i;
+          break;
+        }
+      }
+    }
+
+    if (idx === -1) {
+      global.buttonDisable("#new-domain-owner-button");
+      global.post(global.origin + "/api/domain/owner/add", json, function(resp) {
+        global.buttonEnable("#new-domain-owner-button");
+
+        if (!resp.success) {
+          global.globalErrorShow(resp.message);
+          return
+        }
+
+        global.globalOKShow("Added a new domain owner!");
+        $("#new-domain-owner").val("");
+        $("#new-domain-owner").focus();
+
+        // Also add as moderator if checkbox is checked
+        if (addAsModerator) {
+          var modJson = {
+            "ownerToken": global.cookieGet("commentoOwnerToken"),
+            "domain": data.domains[data.cd].domain,
+            "email": email,
+          };
+          global.post(global.origin + "/api/domain/moderator/new", modJson, function(modResp) {
+            if (!modResp.success && modResp.message !== "Already a moderator.") {
+              global.globalErrorShow("Failed to add a moderator: " + modResp.message);
+            }
+
+            global.domainRefresh();
+          });
+        }
+      });
+    } else {
+      global.globalErrorShow("Already a domain owner.");
+    }
+  }
+
+
+  // Removes a domain owner.
+  global.domainOwnerRemoveHandler = function(ownerHex) {
+    var data = global.dashboard.$data;
+    
+    var json = {
+      "ownerToken": global.cookieGet("commentoOwnerToken"),
+      "domain": data.domains[data.cd].domain,
+      "removeOwnerHex": ownerHex,
+    }
+
+    global.post(global.origin + "/api/domain/owner/remove", json, function(resp) {
+      if (!resp.success) {
+        global.globalErrorShow(resp.message);
+        return
+      }
+
+      // Refresh the domain list to get updated owners
+      global.domainRefresh(function() {
+        global.globalOKShow("Removed domain owner!");
+      });
+    });
+  }
+
 } (window.commento, document));
