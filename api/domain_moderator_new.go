@@ -15,7 +15,25 @@ func domainModeratorNew(domain string, email string) error {
 		return errorInternal
 	}
 
+	// Check if already a moderator
 	statement := `
+		SELECT EXISTS (
+			SELECT 1 FROM moderators
+			WHERE domain=$1 AND email=$2
+		);
+	`
+	row := db.QueryRow(statement, domain, email)
+	var exists bool
+	if err := row.Scan(&exists); err != nil {
+		logger.Errorf("cannot check if already moderator: %v", err)
+		return errorInternal
+	}
+
+	if exists {
+		return errorAlreadyModerator
+	}
+
+	statement = `
 		INSERT INTO
 		moderators (domain, email, addDate)
 		VALUES     ($1,     $2,    $3     );

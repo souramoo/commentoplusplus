@@ -26,3 +26,17 @@ func TestDomainModeratorNewEmpty(t *testing.T) {
 		return
 	}
 }
+
+func TestDomainModeratorNewDuplicate(t *testing.T) {
+	failTestOnError(t, setupTestEnv())
+
+	if err := domainModeratorNew("example.com", "test@example.com"); err != nil {
+		t.Errorf("unexpected error creating new domain moderator: %v", err)
+		return
+	}
+
+	if err := domainModeratorNew("example.com", "test@example.com"); err != errorAlreadyModerator {
+		t.Errorf("expected errorAlreadyModerator when adding duplicate moderator, got: %v", err)
+		return
+	}
+}
