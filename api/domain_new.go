@@ -43,13 +43,20 @@ func domainNew(ownerHex string, name string, domain string) error {
 
 	statement = `
 		INSERT INTO
-		domains (ownerHex, name, domain, creationDate)
-		VALUES  ($1,       $2,   $3,     $4          );
+		domains (name, domain, creationDate)
+		VALUES  ($1,   $2,     $3          );
 	`
-	_, err = db.Exec(statement, ownerHex, name, domain, time.Now().UTC())
+	now := time.Now().UTC()
+	_, err = db.Exec(statement, name, domain, now)
 	if err != nil {
 		// TODO: This should not happen given the above check, so this is likely not the error. Be more informative?
 		return errorDomainAlreadyExists
+	}
+
+	// Add the owner to the domainOwners junction table
+	if err = domainOwnerAdd(domain, ownerHex, now); err != nil {
+		logger.Errorf("cannot add owner to domain: %v", err)
+		return errorInternal
 	}
 
 	return nil

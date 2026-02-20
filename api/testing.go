@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/op/go-logging"
 )
@@ -133,6 +134,20 @@ func clearTables() error {
 	return nil
 }
 
+func createTestOwner() error {
+	statement := `
+		INSERT INTO owners (ownerHex, email, name, passwordHash, confirmedEmail, joinDate)
+		VALUES ($1, $2, $3, $4, $5, $6);
+	`
+	_, err := db.Exec(statement, "temp-owner-hex", "test@test.com", "Test Owner", "dummy-hash", true, time.Now().UTC())
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "cannot create test owner: %v", err)
+		return err
+	}
+
+	return nil
+}
+
 var setupComplete bool
 
 func setupTestEnv() error {
@@ -159,6 +174,10 @@ func setupTestEnv() error {
 	}
 
 	if err := clearTables(); err != nil {
+		return err
+	}
+
+	if err := createTestOwner(); err != nil {
 		return err
 	}
 

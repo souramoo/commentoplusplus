@@ -16,8 +16,9 @@ func TestOwnerListBasics(t *testing.T) {
 		return
 	}
 
-	if len(owners) != 2 {
-		t.Errorf("expected number of owners to be 2 got %d", len(owners))
+	// We expect three owners here because one owner is already created in setupTestEnv.
+	if len(owners) != 3 {
+		t.Errorf("expected number of owners to be 3 got %d", len(owners))
 		return
 	}
 
@@ -61,8 +62,9 @@ func TestOwnerListEmpty(t *testing.T) {
 		return
 	}
 
-	if len(owners) != 0 {
-		t.Errorf("expected number of owners to be 0 got %d", len(owners))
+	// We expect one owner here because one owner is already created in setupTestEnv.
+	if len(owners) != 1 {
+		t.Errorf("expected number of owners to be 1 got %d", len(owners))
 		return
 	}
 }

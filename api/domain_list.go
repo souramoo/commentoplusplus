@@ -12,7 +12,9 @@ func domainList(ownerHex string) ([]domain, error) {
 	statement := `
 		SELECT ` + domainsRowColumns + `
 		FROM domains
-		WHERE ownerHex=$1;
+		WHERE domains.domain IN (
+			SELECT domain FROM domainOwners WHERE ownerHex = $1
+		);
 	`
 	rows, err := db.Query(statement, ownerHex)
 	if err != nil {
@@ -30,6 +32,11 @@ func domainList(ownerHex string) ([]domain, error) {
 		}
 
 		d.Moderators, err = domainModeratorList(d.Domain)
+		if err != nil {
+			return []domain{}, err
+		}
+
+		d.Owners, err = domainOwnerList(d.Domain)
 		if err != nil {
 			return []domain{}, err
 		}

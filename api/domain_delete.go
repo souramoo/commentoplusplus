@@ -48,6 +48,16 @@ func domainDelete(domain string) error {
 		return errorInternal
 	}
 
+	statement = `
+		DELETE FROM domainOwners
+		WHERE domainOwners.domain = $1;
+	`
+	_, err = db.Exec(statement, domain)
+	if err != nil {
+		logger.Errorf("cannot delete domain from domainOwners: %v", err)
+		return errorInternal
+	}
+
 	// comments, votes, and pages are handled by domainClear
 	if err = domainClear(domain); err != nil {
 		logger.Errorf("cannot clear domain: %v", err)

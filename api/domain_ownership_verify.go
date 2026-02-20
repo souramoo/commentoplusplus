@@ -10,8 +10,9 @@ func domainOwnershipVerify(ownerHex string, domain string) (bool, error) {
 	statement := `
 		SELECT EXISTS (
 			SELECT 1
-			FROM domains
-			WHERE ownerHex=$1 AND $2 LIKE domain
+			FROM domainOwners
+			INNER JOIN domains ON domainOwners.domain = domains.domain
+			WHERE domainOwners.ownerHex=$1 AND $2 LIKE domains.domain
 		);
 	`
 	row := db.QueryRow(statement, ownerHex, domain)
