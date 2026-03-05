@@ -17,6 +17,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-commento}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - 5432:${POSTGRES_PORT:-5444}
     networks:
       - db_network
     volumes:
