@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"reflect"
 )
@@ -16,7 +16,7 @@ func bodyUnmarshal(r *http.Request, x interface{}) error {
 }
 
 func bodyUnmarshalOptionalFields(r *http.Request, x interface{}, optionalFields []string) error {
-	b, err := ioutil.ReadAll(r.Body)
+	b, err := io.ReadAll(r.Body)
 	if err != nil {
 		logger.Errorf("cannot read POST body: %v\n", err)
 		return errorInternal

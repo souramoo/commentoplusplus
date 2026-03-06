@@ -3,10 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"golang.org/x/oauth2"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"os"
+
+	"golang.org/x/oauth2"
 )
 
 func gitlabCallbackHandler(w http.ResponseWriter, r *http.Request) {
@@ -33,7 +34,7 @@ func gitlabCallbackHandler(w http.ResponseWriter, r *http.Request) {
 	logger.Infof("%v", resp.StatusCode)
 	defer resp.Body.Close()
 
-	contents, err := ioutil.ReadAll(resp.Body)
+	contents, err := io.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Fprintf(w, "Error: %s", errorCannotReadResponse.Error())
 		return

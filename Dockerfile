@@ -1,12 +1,12 @@
 # Build-time variables
 ARG RELEASE=prod
 ARG ALPINE_VERSION=3.15
-ARG GOLANG_VERSION=1.15
+ARG GOLANG_VERSION=1.26
 ARG NODE_VERSION=16
 
 # backend build (api server)
 FROM golang:${GOLANG_VERSION}-alpine AS api-build
-RUN apk add --no-cache bash dep make git curl g++
+RUN apk add --no-cache bash make git curl g++
 
 ARG RELEASE
 COPY ./api /go/src/commento/api/

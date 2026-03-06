@@ -1,13 +1,13 @@
 package main
 
 import (
-	"github.com/gorilla/mux"
-	"io/ioutil"
 	"mime"
 	"net/http"
 	"os"
 	"path"
 	"strings"
+
+	"github.com/gorilla/mux"
 )
 
 func redirectLogin(w http.ResponseWriter, r *http.Request) {
@@ -26,7 +26,7 @@ var footer string
 var compress bool
 
 func fileDetemplate(f string) ([]byte, error) {
-	contents, err := ioutil.ReadFile(f)
+	contents, err := os.ReadFile(f)
 	if err != nil {
 		logger.Errorf("cannot read file %s: %v", f, err)
 		return []byte{}, err
@@ -77,7 +77,7 @@ func staticRouterInit(router *mux.Router) error {
 	}
 
 	for _, dir := range []string{"/js", "/css", "/images", "/fonts", "/i18n"} {
-		files, err := ioutil.ReadDir(os.Getenv("STATIC") + dir)
+		files, err := os.ReadDir(os.Getenv("STATIC") + dir)
 		if err != nil {
 			logger.Errorf("cannot read directory %s%s: %v", os.Getenv("STATIC"), dir, err)
 			return err
