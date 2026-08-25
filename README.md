@@ -7,6 +7,8 @@
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/hame0C)
 
+[![Deploy on RepoCloud](https://d16t0pc4846x52.cloudfront.net/deploylobe.svg)](https://repocloud.io/details/Commento++/)
+
 ### ❓ About
 Commento++ is a free, open source, fast & lightweight comments box that you can embed in your static website instead of Disqus.
 
@@ -47,6 +49,10 @@ The button below will work for a Heroku account:
 The button below will work for a free Railway account:
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/hame0C)
+
+Or deploy instantly on RepoCloud:
+
+[![Deploy on RepoCloud](https://d16t0pc4846x52.cloudfront.net/deploylobe.svg)](https://repocloud.io/details/Commento++/)
 
 Otherwise, most of the below is the same as documented at https://docs.commento.io
 
