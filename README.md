@@ -48,6 +48,13 @@ The button below will work for a free Railway account:
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/hame0C)
 
+You can also deploy with one click using the official [Easypanel](https://easypanel.io) template:
+
+[![Deploy on Easypanel][easypanel-btn]][easypanel-deploy]
+
+[easypanel-btn]: https://easypanel.io/img/deploy-on-easypanel-40.svg
+[easypanel-deploy]: https://easypanel.io/templates/commentoplusplus
+
 Otherwise, most of the below is the same as documented at https://docs.commento.io
 
 If you want to self-host, you will need a PostgreSQL server handy and then:
